@@ -1,7 +1,37 @@
+// import React from 'react';
+// import Mana from '../../MtgGame/Components/Mana';
+// import '../StyleSheets/WaitingRoomHeader.css';
+// import Grid from 'material-ui';
+// import { withStyles } from 'material-ui';
+
+
+// const WaitingRoomHeader = (props) => {
+//     return (
+//         <Grid container >
+//             <Grid item xs={1} ><Mana color='B' /></Grid>
+//             <Grid item xs={1} ><Mana color='W' /></Grid>
+//             <Grid item xs={1} ><Mana color='R' /></Grid>
+//             <Grid item xs={1} ><Mana color='U' /></Grid>
+//             <Grid item xs={1} ><Mana color='G' /></Grid>
+//             <Grid item xs={2} >Five Color Lobby</Grid>
+//             <Grid item xs={1} ><Mana color='B' /></Grid>
+//             <Grid item xs={1} ><Mana color='W' /></Grid>
+//             <Grid item xs={1} ><Mana color='R' /></Grid>
+//             <Grid item xs={1} ><Mana color='U' /></Grid>
+//             <Grid item xs={1} ><Mana color='G' /></Grid>
+//         </Grid>
+//     );
+// }
+// export default withStyles(styles)(WaitingRoomHeader);
+
+
+
+
 import React from 'react';
 import { Col } from 'react-bootstrap'
 import Mana from '../../MtgGame/Components/Mana';
 import '../StyleSheets/WaitingRoomHeader.css';
+
 
 const WaitingRoomHeader = (props) => {
     return (
@@ -21,4 +51,5 @@ const WaitingRoomHeader = (props) => {
         
     );
 }
+
 export default WaitingRoomHeader;

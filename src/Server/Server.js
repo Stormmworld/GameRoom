@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
   })
 
   socket.on('AddChatPlayer', function (player) {
-    --console.log(player);
+    //console.log(player);
     fetch(apiPath + '/api/WaitingRoom/AddChatPlayer', {
       method: 'post',
       headers: {
@@ -48,7 +48,7 @@ io.on('connection', function (socket) {
     })
       .then((resp) => resp.json())
       .then(function (data) {
-        --console.log(data);
+        //console.log(data);
         io.emit('chatPlayers', data.WaitingRoom.Players);
         io.emit('pendingGames', data.WaitingRoom.Games);
         io.emit('messages', data.WaitingRoom.Messages);
@@ -75,7 +75,7 @@ io.on('connection', function (socket) {
     fetch(apiPath + "/api/Player/CreatePlayer?DisplayName=" + newPlayer.DisplayName + "&FirstName=" + newPlayer.FirstName + "&LastName=" + newPlayer.LastName)
       .then((resp) => resp.json())
       .then(function (data) {
-        console.log(data);
+        //console.log(data);
         socket.emit('PlayerData', data);
       })
       .catch(function (e) { console.log('error creating player data ' + e); });

@@ -33,6 +33,7 @@
     "bootstrap": "^4.1.1",
     "i": "^0.3.6",
     "jquery": "^3.3.1",
+    "material-ui": "^0.20.1",
     "npm": "^6.1.0",
     "react-redux-socket": "^2.2.3",
     "redux": "^4.0.0",
