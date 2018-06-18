@@ -12,6 +12,20 @@ namespace FiveColorApi.Controllers
 {
     public class GameController : ApiController
     {
+        [HttpPost]
+        public GameResponse ActivateEffect([FromBody] ActivateEffectRequest request)
+        {
+            Game game = (Game)MemoryCacher.GetValue(request.GameId);
+            game.ActivateEffect();
+            return new GameResponse(game);
+        }
+        [HttpPost]
+        public GameResponse CastSpell([FromBody] CastSpellRequest request)
+        {
+            Game game = (Game)MemoryCacher.GetValue(request.GameId);
+            game.CastSpell(request.PlayerId, request.CardId, request.Targets);
+            return new GameResponse(game);
+        }
         [HttpGet]
         public GameResponse CreateGame([FromUri] CreateGameRequest request)
         {
@@ -52,10 +66,16 @@ namespace FiveColorApi.Controllers
             return new GameResponse(game);
         }
         [HttpGet]
+        public GameResponse ResolveStack([FromUri] ResolveStackRequest request)
+        {
+            Game game = (Game)MemoryCacher.GetValue(request.GameId);
+            game.ResolveStack();
+            return new GameResponse(game);
+        }
+        [HttpGet]
         public GameResponse RetrieveGame([FromUri] RetrieveGameRequest request)
         {
             Game game = (Game)MemoryCacher.GetValue(request.Id);
-
             return new GameResponse(game);
         }
         [HttpGet]

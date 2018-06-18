@@ -3,6 +3,8 @@ namespace FiveColorApi.Model
 {
     public class Stats
     {
+        [JsonProperty(PropertyName = "DamagePrevention")]
+        public int DamagePrevention { get; set; }
         [JsonProperty(PropertyName = "DeckName")]
         public string DeckName { get; set; }
         [JsonProperty(PropertyName = "Id")]

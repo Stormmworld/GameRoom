@@ -8,6 +8,8 @@
         PreventDamage,
         DrawXCards,
         Destroy,
+        Untap,
+        Tap,
     }
     public enum Format
     {

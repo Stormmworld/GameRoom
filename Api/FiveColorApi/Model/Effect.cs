@@ -6,6 +6,9 @@ namespace FiveColorApi.Model
 {
     public class Effect
     {
+        #region Properties
+        [JsonProperty(PropertyName = "Action")]
+        public Action Action { get; set; }
         [JsonProperty(PropertyName = "Optional")]
         public bool Optional { get; set; }
         [JsonProperty(PropertyName = "Triggers")]
@@ -14,7 +17,8 @@ namespace FiveColorApi.Model
         public Owner TargetOwner { get; set; }
         [JsonProperty(PropertyName = "TargetType")]
         public TargetType TargetType { get; set; }
-        [JsonProperty(PropertyName = "Action")]
-        public Action Action { get; set; }
+        [JsonProperty(PropertyName = "Value")]
+        public int Value  { get; set; }
+        #endregion
     }
 }
