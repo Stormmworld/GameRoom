@@ -13,7 +13,7 @@ namespace FiveColorApi.Classes
     {
         #region Properties
         [JsonProperty(PropertyName = "ActiveStack")]
-        public List<StackEntry> ActiveStack { get; set; }
+        public List<StackEntry> ActiveStack { get; set; }        
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
         [JsonProperty(PropertyName = "LandsPlayedThisturn")]
@@ -51,19 +51,7 @@ namespace FiveColorApi.Classes
             var currentPlayer = Players.FirstOrDefault(o => o.Stats.Id == Phase.CurrentPlayerId);
             if(currentPlayer == null)
                 throw new Exception("Player not found");
-
-            if (currentPlayer.Library.Count < Rules.DrawCount)
-            {
-                currentPlayer.LoseCondition = LoseCondition.NocardsInLibrary;
-                throw new Exception("Death");
-            }
-
-            for (int i = 0; i < Rules.DrawCount; i++)
-            {
-                var currentCard = currentPlayer.Library[0];
-                currentPlayer.Hand.Add(currentCard);
-                currentPlayer.Library.RemoveAt(0);
-            }
+            PlayerDrawsXCards(currentPlayer, Rules.DrawCount);
         }
         public void EndPhase()
         {
@@ -165,6 +153,20 @@ namespace FiveColorApi.Classes
                     if(card.Effects.FirstOrDefault(o=>o.Triggers.Contains(Trigger.Upkeep)) != null)
                             retVal.Add(card);
             return retVal;
+        }
+        public void PlayerDrawsXCards(Player player, int drawCount)
+        {
+            if (player.Library.Count < drawCount)
+                player.LoseCondition = LoseCondition.NocardsInLibrary;
+            else
+            {
+            for (int i = 0; i < drawCount; i++)
+            {
+                var currentCard = player.Library[0];
+                player.Hand.Add(currentCard);
+                player.Library.RemoveAt(0);
+            }
+            }
         }
         public void ResolveStack()
         {
@@ -301,6 +303,8 @@ namespace FiveColorApi.Classes
         }
         private void ProcessDrawXCardsEffect(int playerId, Effect effect)
         {//target player draws x cards
+            Player targetPlayer = Players.FirstOrDefault(o => o.Stats.Id == playerId);
+            PlayerDrawsXCards(targetPlayer, 1);
         }
         private void ProcessDamageEffect(Effect effect)
         {//proccess damage effect 
