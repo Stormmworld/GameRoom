@@ -7,5 +7,6 @@ namespace FiveColorApi.Classes.Request
 {
     public class ActivateEffectRequest
     {
+        public string GameId { get; set; }
     }
 }
