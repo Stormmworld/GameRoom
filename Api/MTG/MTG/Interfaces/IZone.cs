@@ -1,4 +1,5 @@
-﻿using MTG.Model;
+﻿
+using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
 

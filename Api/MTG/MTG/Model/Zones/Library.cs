@@ -1,4 +1,5 @@
 ﻿using MTG.Interfaces;
+using MTGModel.Objects;
 using System.Collections.Generic;
 
 namespace MTG.Model.Zones
@@ -36,6 +37,19 @@ namespace MTG.Model.Zones
         {
             Cards = new List<Card>();
             ShowTopCard = false;
+        }
+        #endregion
+
+        #region Methods
+        public List<Card> Draw(int drawCount)
+        {
+            List<Card> drawnCards = new List<Card>();
+            for (int i = 0; i < drawCount; i++)
+            {
+                drawnCards.Add(Cards[0]);
+                Cards.RemoveAt(0);
+            }
+            return drawnCards;
         }
         #endregion
     }

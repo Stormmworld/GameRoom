@@ -1,6 +1,6 @@
 ﻿using MTG.Enumerations;
 
-namespace MTG.Model
+namespace MTGModel.Objects
 {
     public class Mana
     {

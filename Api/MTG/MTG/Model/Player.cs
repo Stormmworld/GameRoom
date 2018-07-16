@@ -1,9 +1,47 @@
-﻿using System;
+﻿using MTG.Model.Zones;
+using MTG.Model.Objects;
+using System;
+using MTG.Helpers;
+using MTG.Enumerations;
+using System.Collections.Generic;
 
 namespace MTG.Model
 {
     public class Player
     {
+        #region Properties
+        public int AdditionalTurnCount { get; set; }
+        public Battlefield Battlefield { get; set; }
+        public Command Command { get; set; }
+        public bool Conceded { get; set; }
+        public Deck Deck { get; private set; }
+        public int DrawExtraCards
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public bool ForceLose { get; set; }
+        public Graveyard Graveyard { get; set; }
+        public Hand Hand { get; set; }
+        public Library Library { get; set; }
+        public int Life { get; set; }
+        public bool FailedDraw { get; set; }
+        public string LoseMessage { get; set; }
+        public ManaPool ManaPool { get; set; }
+        public int PoisonCounters { get; set; }
+        public List<GamePhases> SkipPhases { get; set; }
+        #endregion
+
+        #region Constructors
+        public Player()
+        {
+            ResetPlayer();
+        }
+        #endregion
+
+        #region Methods
         public bool CheckLoseConditions()
         {
             /*
@@ -35,7 +73,53 @@ namespace MTG.Model
                 104.3k In a tournament, a player may lose the game as a result of a penalty given by a judge. 
                         See rule 100.6.
              */
-            throw new NotImplementedException();
+            if (Conceded)//104.3a 
+                LoseMessage = @"Conceded the game";
+            else if (Life <= 0)//104.3b 
+                LoseMessage = @"No life remaining.";
+            else if (Library.Cards.Count == 0 && FailedDraw)//104.3c 
+                LoseMessage = @"Not enough cards in current library to complete the required draw.";
+            else if (PoisonCounters >= 10)//104.3d 
+                LoseMessage = @"Poisoned to death (" + PoisonCounters +" counters)";
+            else if (ForceLose)//104.3e 
+                LoseMessage = @"Lost the game";
+            return !string.IsNullOrEmpty(LoseMessage);
         }
+        public void DrawCards(int drawCount)
+        {
+            if ((drawCount + DrawExtraCards) > Library.Cards.Count)
+            {
+                FailedDraw = true;
+                Hand.Cards.AddRange(Library.Draw(Library.Cards.Count));
+            }
+            else
+                Hand.Cards.AddRange(Library.Draw(drawCount + DrawExtraCards));
+        }
+        public void EmptyManaPool()
+        {
+            ManaPool.EmptyManaPool();
+        }
+        public void ResetPlayer()
+        {
+            AdditionalTurnCount = 0;
+            Battlefield = new Battlefield();
+            Command = new Command();
+            Graveyard = new Graveyard();
+            Hand = new Hand();
+            Library = new Library();
+            Life = 20;
+            LoseMessage = @"";
+            ManaPool = new ManaPool();
+            if (Deck != null)
+                SelectDeck(Deck);
+            else
+                Deck = new Deck();
+        }
+        public void SelectDeck(Deck deck)
+        {
+            Deck = deck;
+            Library.Cards = CardHelper.ShuffleCards(Deck.CloneCards(), 3);
+        }
+        #endregion
     }
 }

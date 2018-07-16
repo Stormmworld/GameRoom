@@ -1,50 +1,6 @@
 ﻿
 namespace MTG.Enumerations
 {
-    public enum CardType
-    {
-        None,
-        Artifact,
-        Creature,
-        Enchantment,
-        Instant,
-        Land,
-        Planeswalker,
-        Sorcery,
-        Tribal,
-        Plane,
-        Phenomena,
-        Vanguard,
-        Scheme,
-        Conspiracy
-    }
-    public enum Colors
-    {
-        None,
-        Black,
-        Blue,
-        Colorless,
-        Green,
-        Red,
-        White
-    }
-    public enum TargetScope
-    {
-        None,
-        All,
-        Single,
-        Specified_Number,
-    }
-    public enum TargetType
-    {
-        None,
-        AllPlayers,
-        Artifact,
-        Creature,
-        Land,
-        Permanent,
-        Player,
-    }
     public enum AbilityType
     {
         None,
@@ -178,5 +134,70 @@ namespace MTG.Enumerations
         Afflict,
         Ascend,
         Assist,
+    }
+    public enum CardType
+    {
+        None,
+        Artifact,
+        Creature,
+        Enchantment,
+        Instant,
+        Land,
+        Planeswalker,
+        Sorcery,
+        Tribal,
+        Plane,
+        Phenomena,
+        Vanguard,
+        Scheme,
+        Conspiracy
+    }
+    public enum Colors
+    {
+        None,
+        Black,
+        Blue,
+        Colorless,
+        Green,
+        Red,
+        White
+    }
+    public enum GamePhases
+    {
+        None = 0,
+        Beginning_Untap = 1,
+        Beginning_Upkeep = 2,
+        Beginning_Draw = 3,
+        PreCombat_Main = 4,
+        Combat_Beginning = 5,
+        Combat_DeclareAttackers = 6,
+        Combat_DeclareDefenders = 7,
+        Combat_Damage = 8,
+        Combat_Ending = 9,
+        PostCombat_Main = 10,
+        Ending_End = 11,
+        Ending_Cleanup = 12
+    }
+    public enum GameType
+    {
+        None,
+        Melee
+    }
+    public enum TargetScope
+    {
+        None,
+        All,
+        Single,
+        Specified_Number,
+    }
+    public enum TargetType
+    {
+        None,
+        AllPlayers,
+        Artifact,
+        Creature,
+        Land,
+        Permanent,
+        Player,
     }
 }

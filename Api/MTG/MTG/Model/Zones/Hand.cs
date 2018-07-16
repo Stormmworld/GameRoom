@@ -1,5 +1,6 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
+using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
 

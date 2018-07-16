@@ -1,13 +1,50 @@
-﻿using System;
+﻿using MTG.Enumerations;
+using MTG.Model.Game;
+using MTG.Model.Zones;
+using System;
+using System.Collections.Generic;
 
 namespace MTG.Model
 {
     public class ActiveGame
     {
         #region Properties
+        public int ActivePlayerIndex { get; set; }
+        public GamePhases ActivePhase { get; set; }
+        public Ante Ante { get; set; }
+        public int DrawExtraCards
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public Exile Exile { get; set; }
+        public GameType GameType { get; private set; }
+        public GamePhases OverrideNextPhase { get; set; }
+        public List<Player> Players { get; set; }
+        public List<GamePhases> SkipPhases { get; set; }
+        public Stack Stack { get; set; }
+        #endregion
+
+        #region Constructors
+        public ActiveGame()
+        {
+            ActivePlayerIndex = 0;
+            Ante = new Ante();
+            Exile = new Exile();
+            Players = new List<Player>();
+            Stack = new Stack();
+            OverrideNextPhase = GamePhases.None;
+        }
         #endregion
 
         #region Methods
+        public void EmptyManaPools()
+        {
+            foreach (Player player in Players)
+                player.EmptyManaPool();
+        }
         public void ProcessPhase()
         {
             /*
@@ -45,6 +82,60 @@ namespace MTG.Model
                         proceed past it as though it didn’t exist. See rule 614.10.
                 500.11. No game events can occur between turns, phases, or steps.
              */
+            switch (ActivePhase)
+            {
+                case GamePhases.Beginning_Untap:
+                    Phases.BegginingPhase_UntapStep(this);
+                    break;
+                case GamePhases.Beginning_Upkeep:
+                    Phases.BegginingPhase_UpkeepStep(this);
+                    break;
+                case GamePhases.Beginning_Draw:
+                    Phases.BegginingPhase_DrawStep(this);
+                    break;
+                case GamePhases.PreCombat_Main:
+                    Phases.PreCombatMainPhase(this);
+                    break;
+                case GamePhases.Combat_Beginning:
+                    Phases.CombatPhase_BeginningStep(this);
+                    break;
+                case GamePhases.Combat_DeclareAttackers:
+                    Phases.CombatPhase_DeclareAttackersStep(this);
+                    break;
+                case GamePhases.Combat_DeclareDefenders:
+                    Phases.CombatPhase_DeclareBlockersStep(this);
+                    break;
+                case GamePhases.Combat_Damage:
+                    Phases.CombatPhase_CombatDamageStep(this);
+                    break;
+                case GamePhases.Combat_Ending:
+                    Phases.CombatPhase_EndStep(this);
+                    break;
+                case GamePhases.PostCombat_Main:
+                    Phases.PostCombatMainPhase(this);
+                    break;
+                case GamePhases.Ending_End:
+                    Phases.EndingPhase_EndStep(this);
+                    break;
+                case GamePhases.Ending_Cleanup:
+                    Phases.EndingPhase_CleanupStep(this);
+                    break;
+            }
+            EmptyManaPools();
+        }
+        public void SetGameType(GameType gameType)
+        {
+            //Apply any game type specific settings
+            GameType = gameType;
+            switch (GameType)
+            {
+                case GameType.Melee:
+                    break;
+            }
+        }
+        public void RestartGame()
+        {
+            //reset all remaining players to new game
             throw new NotImplementedException();
         }
         #endregion

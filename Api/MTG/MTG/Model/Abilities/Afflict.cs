@@ -12,7 +12,7 @@ namespace MTG.Model.Abilities
                     creature becomes blocked, defending player loses N life.”
             702.129b If a creature has multiple instances of afflict, each triggers separately.
         */
-        public void ProcessAfflict(AbilityArgs args)
+        public void Process(AbilityArgs args)
         {
             
             throw new NotImplementedException();

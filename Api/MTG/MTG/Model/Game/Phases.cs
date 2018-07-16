@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MTG.Enumerations;
+using System;
 
 namespace MTG.Model.Game
 {
-    public class Phases
+    public static class Phases
     {
-        public void BegginingPhase_UntapStep()
+        public static void BegginingPhase_UntapStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Untap_step
@@ -20,7 +21,7 @@ namespace MTG.Model.Game
                         (See rule 503, “Upkeep Step.”)
              */
         }
-        public void BegginingPhase_UpkeepStep()
+        public static void BegginingPhase_UpkeepStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Upkeep_step
@@ -34,20 +35,20 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void BegginingPhase_DrawStep()
+        public static void BegginingPhase_DrawStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Draw_step
                 504.1. First, the active player draws a card. This turn-based action doesn’t use the stack.
                 504.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
-            throw new NotImplementedException();
+            game.Players[game.ActivePlayerIndex].DrawCards(1 + game.DrawExtraCards);
         }
-        public void PreCombatMainPhase()
+        public static void PreCombatMainPhase(ActiveGame game)
         {
-            MainPhase(true);
+            MainPhase(true, game);
         }
-        public void CombatPhase_BeginningStep()
+        public static void CombatPhase_BeginningStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_of_combat_step
@@ -59,7 +60,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void CombatPhase_DeclareAttackersStep()
+        public static void CombatPhase_DeclareAttackersStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Declare_attackers_step
@@ -163,7 +164,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void CombatPhase_DeclareBlockersStep()
+        public static void CombatPhase_DeclareBlockersStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Declare_blockers_step
@@ -285,7 +286,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void CombatPhase_CombatDamageStep()
+        public static void CombatPhase_CombatDamageStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Combat_damage_step
@@ -307,7 +308,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void CombatPhase_EndStep()
+        public static void CombatPhase_EndStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/End_of_combat_step
@@ -317,11 +318,11 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void PostCombatMainPhase()
+        public static void PostCombatMainPhase(ActiveGame game)
         {
-            MainPhase(false);
+            MainPhase(false, game);
         }
-        public void EndingPhase_EndStep()
+        public static void EndingPhase_EndStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Ending_phase#End_step
@@ -341,7 +342,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        public void EndingPhase_CleanupStep()
+        public static void EndingPhase_CleanupStep(ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Ending_phase#Cleanup_step
@@ -352,7 +353,7 @@ namespace MTG.Model.Game
              */
             throw new NotImplementedException();
         }
-        private void MainPhase(bool preCombat)
+        private static void MainPhase(bool preCombat, ActiveGame game)
         {
             /*
              * https://mtg.gamepedia.com/Main_phase
@@ -381,6 +382,80 @@ namespace MTG.Model.Game
                         (See rule 305, “Lands.”)
              */
             throw new NotImplementedException();
+        }
+        private static void NextPhase(ActiveGame game)
+        {
+            if (game.OverrideNextPhase != GamePhases.None)
+            {
+                game.ActivePhase = game.OverrideNextPhase;
+                game.OverrideNextPhase = GamePhases.None;
+            }
+            else
+            {
+                switch (game.ActivePhase)
+                {
+                    case GamePhases.Beginning_Untap:
+                        game.ActivePhase = GamePhases.Beginning_Upkeep;
+                        break;
+                    case GamePhases.Beginning_Upkeep:
+                        game.ActivePhase = GamePhases.Beginning_Draw;
+                        break;
+                    case GamePhases.Beginning_Draw:
+                        game.ActivePhase = GamePhases.PreCombat_Main;
+                        break;
+                    case GamePhases.PreCombat_Main:
+                        game.ActivePhase = GamePhases.Combat_Beginning;
+                        break;
+                    case GamePhases.Combat_Beginning:
+                        game.ActivePhase = GamePhases.Combat_DeclareAttackers;
+                        break;
+                    case GamePhases.Combat_DeclareAttackers:
+                        game.ActivePhase = GamePhases.Combat_DeclareDefenders;
+                        break;
+                    case GamePhases.Combat_DeclareDefenders:
+                        game.ActivePhase = GamePhases.Combat_Damage;
+                        break;
+                    case GamePhases.Combat_Damage:
+                        game.ActivePhase = GamePhases.Combat_Ending;
+                        break;
+                    case GamePhases.Combat_Ending:
+                        game.ActivePhase = GamePhases.PostCombat_Main;
+                        break;
+                    case GamePhases.PostCombat_Main:
+                        game.ActivePhase = GamePhases.Ending_End;
+                        break;
+                    case GamePhases.Ending_End:
+                        game.ActivePhase = GamePhases.Ending_Cleanup;
+                        break;
+                    case GamePhases.Ending_Cleanup:
+                        game.ActivePhase = GamePhases.Beginning_Untap;
+                        game.ActivePlayerIndex = GetNextPlayerIndex(game);
+                        break;
+                }
+                if (game.SkipPhases.Contains(game.ActivePhase) || game.Players[game.ActivePlayerIndex].SkipPhases.Contains(game.ActivePhase))
+                    NextPhase(game);
+                game.EmptyManaPools();
+            }
+        }
+        private static int GetNextPlayerIndex(ActiveGame game)
+        {
+            int nextIndex = game.ActivePlayerIndex;
+            if (game.Players[game.ActivePlayerIndex].AdditionalTurnCount > 0)
+            {
+                game.Players[game.ActivePlayerIndex].AdditionalTurnCount--;
+                return game.ActivePlayerIndex;
+            }
+            else
+            {
+                if (game.ActivePlayerIndex == game.Players.Count - 1)
+                    game.ActivePlayerIndex = 0;
+                else
+                    game.ActivePlayerIndex++;
+            }
+            if (!string.IsNullOrEmpty(game.Players[nextIndex].LoseMessage))
+                return GetNextPlayerIndex(game);
+            else
+                return game.ActivePlayerIndex;
         }
     }
 }
