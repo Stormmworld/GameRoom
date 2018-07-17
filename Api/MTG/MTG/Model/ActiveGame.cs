@@ -82,6 +82,8 @@ namespace MTG.Model
                         proceed past it as though it didn’t exist. See rule 614.10.
                 500.11. No game events can occur between turns, phases, or steps.
              */
+            if (ActivePhase == GamePhases.None)//beginning of game scenario
+                ActivePhase = GamePhases.Beginning_Untap;
             switch (ActivePhase)
             {
                 case GamePhases.Beginning_Untap:
@@ -121,7 +123,6 @@ namespace MTG.Model
                     Phases.EndingPhase_CleanupStep(this);
                     break;
             }
-            EmptyManaPools();
         }
         public void SetGameType(GameType gameType)
         {

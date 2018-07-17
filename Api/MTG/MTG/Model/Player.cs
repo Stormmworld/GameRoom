@@ -4,6 +4,8 @@ using System;
 using MTG.Helpers;
 using MTG.Enumerations;
 using System.Collections.Generic;
+using MTGModel.Objects;
+using MTG.Model.Abilities;
 
 namespace MTG.Model
 {
@@ -22,14 +24,15 @@ namespace MTG.Model
                 throw new NotImplementedException();
             }
         }
+        public bool FailedDraw { get; set; }
         public bool ForceLose { get; set; }
         public Graveyard Graveyard { get; set; }
         public Hand Hand { get; set; }
         public Library Library { get; set; }
         public int Life { get; set; }
-        public bool FailedDraw { get; set; }
         public string LoseMessage { get; set; }
         public ManaPool ManaPool { get; set; }
+        public string Name { get; set; }
         public int PoisonCounters { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
         #endregion
@@ -99,6 +102,11 @@ namespace MTG.Model
         {
             ManaPool.EmptyManaPool();
         }
+        public void PhasePermanents()
+        {
+            foreach (Card card in Battlefield.Cards.FindAll(o => o.Abilities.Exists(p => p is Phasing)))
+                card.PhasedOut = !card.PhasedOut;
+        }
         public void ResetPlayer()
         {
             AdditionalTurnCount = 0;
@@ -119,6 +127,17 @@ namespace MTG.Model
         {
             Deck = deck;
             Library.Cards = CardHelper.ShuffleCards(Deck.CloneCards(), 3);
+        }
+        public void UntapPermanents()
+        {
+            foreach (Card card in Battlefield.Cards.FindAll(o => o.Tapped))
+            {
+                if (card.UntapDuringUntapPhase || card.SelectedToUntap)
+                {
+                    card.Tapped = false;
+                    card.SelectedToUntap = false;
+                }
+            }
         }
         #endregion
     }

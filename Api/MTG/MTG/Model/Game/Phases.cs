@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTGModel.Objects;
 using System;
 
 namespace MTG.Model.Game
@@ -20,6 +21,8 @@ namespace MTG.Model.Game
                         until the next time a player would receive priority, which is usually during the upkeep step. 
                         (See rule 503, “Upkeep Step.”)
              */
+            game.Players[game.ActivePlayerIndex].PhasePermanents();
+            game.Players[game.ActivePlayerIndex].UntapPermanents();
         }
         public static void BegginingPhase_UpkeepStep(ActiveGame game)
         {
