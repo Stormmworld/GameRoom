@@ -28,6 +28,7 @@ namespace MTG.Model
         public bool ForceLose { get; set; }
         public Graveyard Graveyard { get; set; }
         public Hand Hand { get; set; }
+        public string Id { get; set; }
         public Library Library { get; set; }
         public int Life { get; set; }
         public string LoseMessage { get; set; }
@@ -35,6 +36,8 @@ namespace MTG.Model
         public string Name { get; set; }
         public int PoisonCounters { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
+        public int TeamId { get; set;
+        }
         #endregion
 
         #region Constructors
@@ -126,6 +129,8 @@ namespace MTG.Model
         public void SelectDeck(Deck deck)
         {
             Deck = deck;
+            foreach (Card card in Deck.Cards)
+                card.OwnerId = this.Id;
             Library.Cards = CardHelper.ShuffleCards(Deck.CloneCards(), 3);
         }
         public void UntapPermanents()

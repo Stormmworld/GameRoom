@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Model.Objects;
 using MTGModel.Objects;
 using System;
 
@@ -36,7 +37,101 @@ namespace MTG.Model.Game
                 503.2. If a spell states that it may be cast only “after [a player’s] upkeep step,” and the turn 
                         has multiple upkeep steps, that spell may be cast any time after the first upkeep step ends.
              */
-            throw new NotImplementedException();
+            foreach (Player player in game.Players)
+            {
+                foreach (Card card in player.Battlefield.Cards)
+                {
+                    if (card.UpkeepRequirement != null)
+                    {
+                        UpkeepRequirement requirement = card.UpkeepRequirement.Clone();
+                        switch (card.UpkeepTrigger)
+                        {
+                            case UpkeepTriggers.Owner:
+                                if (player.Id == game.Players[game.ActivePlayerIndex].Id)
+                                    ProcessUpkeepRequirement(requirement, game);
+                                break;
+                            case UpkeepTriggers.All:
+                                ProcessUpkeepRequirement(requirement, game);
+                                break;
+                            case UpkeepTriggers.Team:
+                                if (player.TeamId == game.Players[game.ActivePlayerIndex].TeamId)//team mate
+                                    ProcessUpkeepRequirement(requirement, game);
+                                break;
+                            case UpkeepTriggers.Opponnent:
+                                if (player.TeamId != game.Players[game.ActivePlayerIndex].TeamId)//team mate
+                                    ProcessUpkeepRequirement(requirement, game);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        public static void BegginingPhase_UpkeepStep_End(ActiveGame game)
+        {
+            /*
+             * https://mtg.gamepedia.com/Beginning_phase#Upkeep_step
+                503.1. The upkeep step has no turn-based actions. Once it begins, the active player gets priority. 
+                        (See rule 116, “Timing and Priority.”)
+                503.1a Any abilities that triggered during the untap step and any abilities that triggered at the 
+                        beginning of the upkeep are put onto the stack before the active player gets priority; the 
+                        order in which they triggered doesn’t matter. (See rule 603, “Handling Triggered Abilities.”)
+                503.2. If a spell states that it may be cast only “after [a player’s] upkeep step,” and the turn 
+                        has multiple upkeep steps, that spell may be cast any time after the first upkeep step ends.
+             */
+            while (game.UpkeepRequirements.Count > 0)
+            {
+                if (game.UpkeepRequirements[0].Target != TargetType.None)
+                {
+                    switch (game.UpkeepRequirements[0].Target)
+                    {
+                        case TargetType.Artifact:
+                            throw new NotImplementedException();
+                            break;
+                        case TargetType.Creature:
+                            throw new NotImplementedException();
+                            break;
+                        case TargetType.Land:
+                            throw new NotImplementedException();
+                            break;
+                        case TargetType.Permanent:
+                            throw new NotImplementedException();
+                            break;
+                        case TargetType.Player:
+                            throw new NotImplementedException();
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+                else
+                {
+                    switch (game.UpkeepRequirements[0].FailedRequirementResult)
+                    {
+                        case UpkeepFailedRequirementResults.Damage:
+                            switch (game.UpkeepRequirements[0].FailedTarget)
+                            {
+                                case TargetType.Artifact:
+                                case TargetType.Creature:
+                                case TargetType.Land:
+                                case TargetType.Permanent:
+                                    throw new NotImplementedException();
+                                    break;
+                                case TargetType.Player:
+                                    throw new NotImplementedException();
+                                    break;
+                                default:
+                                    throw new NotImplementedException();
+                            }
+                            break;
+                        case UpkeepFailedRequirementResults.Sacrifice_Creature:
+                            throw new NotImplementedException();
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+                game.UpkeepRequirements.RemoveAt(0);
+            }
         }
         public static void BegginingPhase_DrawStep(ActiveGame game)
         {
@@ -459,6 +554,26 @@ namespace MTG.Model.Game
                 return GetNextPlayerIndex(game);
             else
                 return game.ActivePlayerIndex;
+        }
+        private static void ProcessUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
+        {
+            if (requirement.RequiresSelection)
+                game.UpkeepRequirements.Add(requirement);
+            else
+            {
+                switch (requirement.RequirementType)
+                {
+                    case UpkeepRequirementTypes.Damage:
+                        break;
+                    case UpkeepRequirementTypes.Discard:
+                        break;
+                    case UpkeepRequirementTypes.Discard_Random:
+                        break;
+                    case UpkeepRequirementTypes.Sacrifice_Creature:
+                        break;
+                }
+            }
+            throw new NotImplementedException();
         }
     }
 }

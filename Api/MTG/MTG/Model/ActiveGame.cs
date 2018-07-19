@@ -1,5 +1,6 @@
 ﻿using MTG.Enumerations;
 using MTG.Model.Game;
+using MTG.Model.Objects;
 using MTG.Model.Zones;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace MTG.Model
         public List<Player> Players { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
         public Stack Stack { get; set; }
+        public List<UpkeepRequirement> UpkeepRequirements { get; set; }
         #endregion
 
         #region Constructors
@@ -40,6 +42,10 @@ namespace MTG.Model
         #endregion
 
         #region Methods
+        public void AddToStack(StackEntry stackEntry)
+        {
+            throw new NotImplementedException();
+        }
         public void EmptyManaPools()
         {
             foreach (Player player in Players)
@@ -93,6 +99,7 @@ namespace MTG.Model
                     Phases.BegginingPhase_UpkeepStep(this);
                     break;
                 case GamePhases.Beginning_Draw:
+                    Phases.BegginingPhase_UpkeepStep_End(this);
                     Phases.BegginingPhase_DrawStep(this);
                     break;
                 case GamePhases.PreCombat_Main:

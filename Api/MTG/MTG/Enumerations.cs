@@ -162,6 +162,19 @@ namespace MTG.Enumerations
         Red,
         White
     }
+    public enum EffectTypes
+    {
+        None,
+        Destroy,
+        Damage,
+        DrawCard,
+        DiscardCard,
+        PlaceCardInLibrary_Top,
+        PlaceCardInLibrary_Bottom,
+        ShuffleLibrary,
+        CombineGraveyardToLibrary,
+        CombineHandToLibrary,
+    }
     public enum GamePhases
     {
         None = 0,
@@ -193,11 +206,32 @@ namespace MTG.Enumerations
     public enum TargetType
     {
         None,
-        AllPlayers,
         Artifact,
         Creature,
         Land,
         Permanent,
         Player,
+    }
+    public enum UpkeepRequirementTypes
+    {
+        None,
+        Sacrifice_Creature,
+        Damage,
+        Discard,
+        Discard_Random
+    }
+    public enum UpkeepFailedRequirementResults
+    {
+        None,
+        Sacrifice_Creature,
+        Damage,
+    }
+    public enum UpkeepTriggers
+    {
+        None,
+        All,
+        Owner,
+        Opponnent,
+        Team
     }
 }

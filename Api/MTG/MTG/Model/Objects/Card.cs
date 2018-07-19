@@ -1,6 +1,7 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.Enumerations;
 using MTG.Interfaces;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 
@@ -19,6 +20,7 @@ namespace MTGModel.Objects
         #region Properties
         public List<IAbility> Abilities { get; set; } 
         public List<CardType> CardTypes { get; set; }
+        public string OwnerId { get; set; }
         public bool PhasedOut
         {
             get { return _PhasedOut; }
@@ -45,6 +47,8 @@ namespace MTGModel.Objects
             }
         }
         public bool UntapDuringUntapPhase { get; set; }
+        public UpkeepTriggers UpkeepTrigger { get; set; }
+        public UpkeepRequirement UpkeepRequirement { get; set; }
         #endregion
 
         #region Constructors
