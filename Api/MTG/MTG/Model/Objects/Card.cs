@@ -12,7 +12,7 @@ namespace MTGModel.Objects
     public class Card
     {
         #region Events
-        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped;
+        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped, CardDestroyed;
         #endregion
 
         #region Variables
@@ -43,6 +43,7 @@ namespace MTGModel.Objects
                     CardPhasedIn?.Invoke(null, new CardEventArgs() { Card = this });
             }
         }
+        public int Power { get; set; }
         public bool SelectedToUntap { get; set; }
         public List<SubType> SubTypes { get; set; }
         public List<SuperType> SuperTypes { get; set; }
@@ -58,6 +59,7 @@ namespace MTGModel.Objects
                     CardUntapped?.Invoke(null, new CardEventArgs() { Card = this });
             }
         }
+        public int Toughness { get; set; }
         public bool UntapDuringUntapPhase { get; set; }
         public UpkeepTriggers UpkeepTrigger { get; set; }
         public UpkeepRequirement UpkeepRequirement { get; set; }
@@ -91,10 +93,6 @@ namespace MTGModel.Objects
         {
             throw new NotImplementedException("Card.AddCounter");
         }
-        public void RemoveCounter(Counter counter)
-        {
-            throw new NotImplementedException("Card.RemoveCounter");
-        }
         public void AddDamage(int damage, List<Colors> colors, List<CardType> cardTypes, List<SubType> subTypes)
         {
             foreach (IAbility ability in Abilities.FindAll(o=>o is Protection))
@@ -108,20 +106,34 @@ namespace MTGModel.Objects
             }
             DamageTaken = DamageTaken + damage;
         }
-        public Card getFacedownCardDetails()
+        public void Destroy()
+        {
+            if (Abilities.FirstOrDefault(o => o is Indestructible) == null)
+                CardDestroyed?.Invoke(this, new CardEventArgs() { Card = this });
+        }
+        public void FlipCard()
+        {
+            FaceUpSide = (FaceUpSide == 1) ? 2 : 1;
+        }
+        public Card GetFacedownCardDetails()
         {
             Morph morphAbility = (Morph)Abilities.First(o=>o is Morph);
             Card faceDownCard = morphAbility.FaceDownCard();
             faceDownCard.Id = this.Id;
             return faceDownCard;
         }
-        public void FlipCard()
-        {
-            FaceUpSide = (FaceUpSide == 1) ? 2 : 1;
-        }
         public void Morph()
         {
             IsFaceDown = false;
+        }
+        public void ProcessDamage()
+        {
+            if (DamageTaken >= Toughness)
+                Destroy();
+        }
+        public void RemoveCounter(Counter counter)
+        {
+            throw new NotImplementedException("Card.RemoveCounter");
         }
         #endregion
     }

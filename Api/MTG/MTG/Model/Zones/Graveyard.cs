@@ -1,5 +1,6 @@
 ﻿using MTG.Interfaces;
 using MTGModel.Objects;
+using System;
 using System.Collections.Generic;
 
 namespace MTG.Model.Zones
@@ -25,6 +26,18 @@ namespace MTG.Model.Zones
         public Graveyard()
         {
             Cards = new List<Card>();
+        }
+        #endregion
+
+        #region Methods
+        public void AddCard(Card card)
+        {
+            Cards.Add(card);
+            ProcessGraveyard();
+        }
+        public void ProcessGraveyard()
+        {
+            throw new NotImplementedException("Graveyard.ProcessGraveyard");
         }
         #endregion
     }

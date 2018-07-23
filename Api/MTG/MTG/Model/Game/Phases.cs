@@ -3,6 +3,7 @@ using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using MTGModel.Objects;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MTG.Model.Game
@@ -356,7 +357,9 @@ namespace MTG.Model.Game
              */
             foreach (AttackingCreature attacker in game.Attackers)
             {
-                foreach(Card blocker in attacker.Blockers)
+                int damagetoPlayer = 0;
+                Player defendingPlayer = game.Players.First(o => o.Id == attacker.DefendingPlayerId);
+                foreach (Card blocker in attacker.Blockers)
                 {
                     if (blocker.Abilities.FirstOrDefault(o => o is First_Strike) != null || blocker.Abilities.FirstOrDefault(o => o is Double_Strike) != null)
                     {
@@ -364,18 +367,25 @@ namespace MTG.Model.Game
                             continue;//process first strike damage only when the flag is true
                         else//combat damage
                         {
+                            //Banding?
+                            //Multiple Blockers?
+                            //Trample?
                         }
                     }
 
                 }
-                int damagetoPlayer = 0;
                 if (firstStrike && !(attacker.Card.Abilities.FirstOrDefault(o => o is First_Strike) != null || attacker.Card.Abilities.FirstOrDefault(o => o is Double_Strike) != null))
                     continue;//process first strike damage only when the flag is true
-                else //combat damage
+                else if(attacker.Blockers.Count == 0) //unblocked combat damage
                 {
-                }
+                    List<Card> bodyguards = defendingPlayer.Battlefield.Cards.FindAll(o => o.Abilities.FirstOrDefault(m => m is Bodyguard) != null);
+                    if (bodyguards.Count > 0)
+                    {//add pending damage resolution for which bodyguard gets damaged
 
+                    }
+                }
                 //resolve damage and process cards to graveyard
+
             }
             throw new NotImplementedException();
         }

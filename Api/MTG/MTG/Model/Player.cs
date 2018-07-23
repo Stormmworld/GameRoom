@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using MTGModel.Objects;
 using MTG.Model.Abilities;
 using System.Linq;
+using MTG.ArgumentDefintions;
 
 namespace MTG.Model
 {
@@ -18,6 +19,7 @@ namespace MTG.Model
         public Command Command { get; set; }
         public bool Conceded { get; set; }
         public List<Counter> Counters { get; private set; }
+        public int DamageTaken { get; set; }
         public Deck Deck { get; private set; }
         public int DrawExtraCards
         {
@@ -49,10 +51,18 @@ namespace MTG.Model
         }
         #endregion
 
+        #region EventHandlers
+        private void Card_OnCardDestroyed(object sender, EventArgs e)
+        {
+            Battlefield.Cards.Remove(((CardEventArgs)e).Card);
+            Graveyard.AddCard(((CardEventArgs)e).Card);
+        }
+        #endregion
+
         #region Methods
         public void AddDamage(int damage)
         {
-            Life = Life - damage;
+            DamageTaken = DamageTaken + damage;
         }
         public bool CheckLoseConditions()
         {
@@ -124,7 +134,7 @@ namespace MTG.Model
         }
         private void Discard(int cardIndex)
         {
-            Graveyard.Cards.Add(Hand.Cards[cardIndex]);
+            Graveyard.AddCard(Hand.Cards[cardIndex]);
             Hand.Cards.RemoveAt(cardIndex);
         }
         public void DrawCards(int drawCount)
@@ -145,6 +155,13 @@ namespace MTG.Model
         {
             foreach (Card card in Battlefield.Cards.FindAll(o => o.Abilities.Exists(p => p is Phasing)))
                 card.PhasedOut = !card.PhasedOut;
+        }
+        public void ProcessDamage()
+        {
+            Life = Life - DamageTaken;
+            DamageTaken = 0;
+            foreach (Card card in Battlefield.Cards)
+                card.ProcessDamage();
         }
         public void ResetPlayer()
         {

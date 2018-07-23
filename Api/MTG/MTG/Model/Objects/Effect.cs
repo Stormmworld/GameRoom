@@ -60,7 +60,7 @@ namespace MTG.Model.Objects
                             int cardIndex = player.Battlefield.Cards.IndexOf(TargetCard);
                             if (cardIndex > -1)
                             {
-                                player.Graveyard.Cards.Add(TargetCard);
+                                player.Graveyard.AddCard(TargetCard);
                                 player.Battlefield.Cards.RemoveAt(cardIndex);
                                 break;
                             }

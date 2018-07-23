@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MTG.Interfaces
 {
-    public interface IPendingActions
+    public interface IPendingAction
     {
         int ActionPlayerId { get; set; }
     }
