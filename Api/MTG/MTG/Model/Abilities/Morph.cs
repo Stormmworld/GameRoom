@@ -1,5 +1,6 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.Interfaces;
+using MTGModel.Objects;
 using System;
 
 namespace MTG.Model.Abilities
@@ -47,6 +48,10 @@ namespace MTG.Model.Abilities
         public void Process(AbilityArgs args)
         {
             throw new NotImplementedException();
+        }
+        public Card FaceDownCard()
+        {
+            throw new NotImplementedException("Morph.FaceDownCard");
         }
     }
 }

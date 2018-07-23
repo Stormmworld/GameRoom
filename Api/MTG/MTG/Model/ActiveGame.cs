@@ -1,9 +1,12 @@
 ﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using MTG.Model.Game;
 using MTG.Model.Objects;
 using MTG.Model.Zones;
+using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model
 {
@@ -13,6 +16,7 @@ namespace MTG.Model
         public int ActivePlayerIndex { get; set; }
         public GamePhases ActivePhase { get; set; }
         public Ante Ante { get; set; }
+        public List<AttackingCreature> Attackers { get; set; }
         public int DrawExtraCards
         {
             get
@@ -23,6 +27,7 @@ namespace MTG.Model
         public Exile Exile { get; set; }
         public GameType GameType { get; private set; }
         public GamePhases OverrideNextPhase { get; set; }
+        public List<IPendingActions> PendingActions{get;set;}
         public List<Player> Players { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
         public Stack Stack { get; set; }
@@ -41,7 +46,26 @@ namespace MTG.Model
         }
         #endregion
 
+        #region Event Handlers
+        public void OnCardDestroyed(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("OnCardDestroyed");
+        }
+        public void OnCardEnteredBattlefield(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("OnCardEnteredBattlefield");
+        }
+        public void OnCardEnteredGraveYard(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("OnCardDestroyed");
+        }
+        #endregion
+
         #region Methods
+        public void AddEffect(Effect effect)
+        {
+            throw new NotImplementedException("ActiveGame.AddEffect");
+        }
         public void AddToStack(StackEntry stackEntry)
         {
             throw new NotImplementedException();
@@ -50,6 +74,31 @@ namespace MTG.Model
         {
             foreach (Player player in Players)
                 player.EmptyManaPool();
+        }
+        public Card FindCard(int cardId)
+        {
+            Card foundCard = Exile.Cards.FirstOrDefault(o => o.Id == cardId);
+            if (foundCard != null)
+                return foundCard;
+            foreach (Player player in Players)
+            {
+                foundCard = player.Hand.Cards.FirstOrDefault(o => o.Id == cardId);
+                if (foundCard != null)
+                    return foundCard;
+                foundCard = player.Library.Cards.FirstOrDefault(o => o.Id == cardId);
+                if (foundCard != null)
+                    return foundCard;
+                foundCard = player.Graveyard.Cards.FirstOrDefault(o => o.Id == cardId);
+                if (foundCard != null)
+                    return foundCard;
+                foundCard = player.Battlefield.Cards.FirstOrDefault(o => o.Id == cardId);
+                if (foundCard != null)
+                    return foundCard;
+                foundCard = player.Command.Cards.FirstOrDefault(o => o.Id == cardId);
+                if (foundCard != null)
+                    return foundCard;
+            }
+            return null;
         }
         public void ProcessPhase()
         {
@@ -114,8 +163,11 @@ namespace MTG.Model
                 case GamePhases.Combat_DeclareDefenders:
                     Phases.CombatPhase_DeclareBlockersStep(this);
                     break;
+                case GamePhases.Combat_Damage_FirstStrike:
+                    Phases.CombatPhase_CombatDamageStep(this,true);
+                    break;
                 case GamePhases.Combat_Damage:
-                    Phases.CombatPhase_CombatDamageStep(this);
+                    Phases.CombatPhase_CombatDamageStep(this, false);
                     break;
                 case GamePhases.Combat_Ending:
                     Phases.CombatPhase_EndStep(this);

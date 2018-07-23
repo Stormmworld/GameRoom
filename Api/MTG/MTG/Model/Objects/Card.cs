@@ -1,9 +1,11 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.Enumerations;
 using MTG.Interfaces;
+using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTGModel.Objects
 {
@@ -15,12 +17,20 @@ namespace MTGModel.Objects
 
         #region Variables
         private bool _PhasedOut, _Tapped;
+        private List<Counter> _Counters;
         #endregion
 
         #region Properties
-        public List<IAbility> Abilities { get; set; } 
-        public List<CardType> CardTypes { get; set; }
-        public string OwnerId { get; set; }
+        public List<IAbility> Abilities { get; set; }
+        public List<CardType> CardTypes { get; private set; }
+        public List<Colors> Colors { get; set; }
+        public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
+        public int DamageTaken { get; set; }
+        public int FaceUpSide { get; set; }
+        public int Id { get; set; }
+        public bool IsFaceDown { get; set; }
+        public bool IsTwoSided { get; set; }
+        public int OwnerId { get; set; }
         public bool PhasedOut
         {
             get { return _PhasedOut; }
@@ -34,6 +44,8 @@ namespace MTGModel.Objects
             }
         }
         public bool SelectedToUntap { get; set; }
+        public List<SubType> SubTypes { get; set; }
+        public List<SuperType> SuperTypes { get; set; }
         public bool Tapped
         {
             get { return _Tapped; }
@@ -75,6 +87,42 @@ namespace MTGModel.Objects
         #endregion
 
         #region Methods
+        public void AddCounter(Counter counter)
+        {
+            throw new NotImplementedException("Card.AddCounter");
+        }
+        public void RemoveCounter(Counter counter)
+        {
+            throw new NotImplementedException("Card.RemoveCounter");
+        }
+        public void AddDamage(int damage, List<Colors> colors, List<CardType> cardTypes, List<SubType> subTypes)
+        {
+            foreach (IAbility ability in Abilities.FindAll(o=>o is Protection))
+            {
+                if (((Protection)ability).Colors.Intersect(colors).Count() > 0)
+                    return;//no damage from a color when we have protection
+                if (((Protection)ability).CardTypes.Intersect(cardTypes).Count() > 0)
+                    return;//no damage from a card sub type when we have protection
+                if (((Protection)ability).SubTypes.Intersect(subTypes).Count() > 0)
+                    return;//no damage from a card type when we have protection
+            }
+            DamageTaken = DamageTaken + damage;
+        }
+        public Card getFacedownCardDetails()
+        {
+            Morph morphAbility = (Morph)Abilities.First(o=>o is Morph);
+            Card faceDownCard = morphAbility.FaceDownCard();
+            faceDownCard.Id = this.Id;
+            return faceDownCard;
+        }
+        public void FlipCard()
+        {
+            FaceUpSide = (FaceUpSide == 1) ? 2 : 1;
+        }
+        public void Morph()
+        {
+            IsFaceDown = false;
+        }
         #endregion
     }
 }

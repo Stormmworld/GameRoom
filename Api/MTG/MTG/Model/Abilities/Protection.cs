@@ -1,6 +1,8 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities
 { 
@@ -52,9 +54,17 @@ namespace MTG.Model.Abilities
                     aren’t put into their owners’ graveyards as a state-based action. If the creature has other instances 
                     of protection from the same quality, those instances affect Auras as normal.
         */
+        #region Properties
+        public List<Colors> Colors { get; set; }
+        public List<SubType> SubTypes { get; set; }
+        public List<CardType> CardTypes { get; set; }
+        #endregion
+
+        #region Methods
         public void Process(AbilityArgs args)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

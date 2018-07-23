@@ -1,7 +1,9 @@
 ﻿using MTG.Enumerations;
+using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using MTGModel.Objects;
 using System;
+using System.Linq;
 
 namespace MTG.Model.Game
 {
@@ -80,56 +82,7 @@ namespace MTG.Model.Game
              */
             while (game.UpkeepRequirements.Count > 0)
             {
-                if (game.UpkeepRequirements[0].Target != TargetType.None)
-                {
-                    switch (game.UpkeepRequirements[0].Target)
-                    {
-                        case TargetType.Artifact:
-                            throw new NotImplementedException();
-                            break;
-                        case TargetType.Creature:
-                            throw new NotImplementedException();
-                            break;
-                        case TargetType.Land:
-                            throw new NotImplementedException();
-                            break;
-                        case TargetType.Permanent:
-                            throw new NotImplementedException();
-                            break;
-                        case TargetType.Player:
-                            throw new NotImplementedException();
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
-                else
-                {
-                    switch (game.UpkeepRequirements[0].FailedRequirementResult)
-                    {
-                        case UpkeepFailedRequirementResults.Damage:
-                            switch (game.UpkeepRequirements[0].FailedTarget)
-                            {
-                                case TargetType.Artifact:
-                                case TargetType.Creature:
-                                case TargetType.Land:
-                                case TargetType.Permanent:
-                                    throw new NotImplementedException();
-                                    break;
-                                case TargetType.Player:
-                                    throw new NotImplementedException();
-                                    break;
-                                default:
-                                    throw new NotImplementedException();
-                            }
-                            break;
-                        case UpkeepFailedRequirementResults.Sacrifice_Creature:
-                            throw new NotImplementedException();
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                }
+                CompleteUpkeepRequirement(game.UpkeepRequirements[0], game);
                 game.UpkeepRequirements.RemoveAt(0);
             }
         }
@@ -156,7 +109,6 @@ namespace MTG.Model.Game
                         action doesn’t use the stack. (See rule 506.2.)
                 507.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
-            throw new NotImplementedException();
         }
         public static void CombatPhase_DeclareAttackersStep(ActiveGame game)
         {
@@ -260,7 +212,6 @@ namespace MTG.Model.Game
                 508.8. If no creatures are declared as attackers or put onto the battlefield attacking, skip the declare blockers and 
                         combat damage steps.
              */
-            throw new NotImplementedException();
         }
         public static void CombatPhase_DeclareBlockersStep(ActiveGame game)
         {
@@ -382,9 +333,8 @@ namespace MTG.Model.Game
                 509.7b A creature that’s put onto the battlefield blocking isn’t affected by requirements or restrictions that apply 
                     to the declaration of blockers.
              */
-            throw new NotImplementedException();
         }
-        public static void CombatPhase_CombatDamageStep(ActiveGame game)
+        public static void CombatPhase_CombatDamageStep(ActiveGame game, bool firstStrike)
         {
             /*
              * https://mtg.gamepedia.com/Combat_damage_step
@@ -404,6 +354,29 @@ namespace MTG.Model.Game
                 510.3a Any abilities that triggered on damage being dealt or while state-based actions are performed afterward are put onto the stack before the active player gets priority; the order in which they triggered doesn’t matter. (See rule 603, “Handling Triggered Abilities.”)
                 510.4. If at least one attacking or blocking creature has first strike (see rule 702.7) or double strike (see rule 702.4) as the combat damage step begins, the only creatures that assign combat damage in that step are those with first strike or double strike. After that step, instead of proceeding to the end of combat step, the phase gets a second combat damage step. The only creatures that assign combat damage in that step are the remaining attackers and blockers that had neither first strike nor double strike as the first combat damage step began, as well as the remaining attackers and blockers that currently have double strike. After that step, the phase proceeds to the end of combat step.
              */
+            foreach (AttackingCreature attacker in game.Attackers)
+            {
+                foreach(Card blocker in attacker.Blockers)
+                {
+                    if (blocker.Abilities.FirstOrDefault(o => o is First_Strike) != null || blocker.Abilities.FirstOrDefault(o => o is Double_Strike) != null)
+                    {
+                        if (firstStrike && !(attacker.Card.Abilities.FirstOrDefault(o => o is First_Strike) != null || attacker.Card.Abilities.FirstOrDefault(o => o is Double_Strike) != null))
+                            continue;//process first strike damage only when the flag is true
+                        else//combat damage
+                        {
+                        }
+                    }
+
+                }
+                int damagetoPlayer = 0;
+                if (firstStrike && !(attacker.Card.Abilities.FirstOrDefault(o => o is First_Strike) != null || attacker.Card.Abilities.FirstOrDefault(o => o is Double_Strike) != null))
+                    continue;//process first strike damage only when the flag is true
+                else //combat damage
+                {
+                }
+
+                //resolve damage and process cards to graveyard
+            }
             throw new NotImplementedException();
         }
         public static void CombatPhase_EndStep(ActiveGame game)
@@ -483,6 +456,8 @@ namespace MTG.Model.Game
         }
         private static void NextPhase(ActiveGame game)
         {
+            if (game.PendingActions.Count > 0)
+                return;
             if (game.OverrideNextPhase != GamePhases.None)
             {
                 game.ActivePhase = game.OverrideNextPhase;
@@ -508,10 +483,16 @@ namespace MTG.Model.Game
                         game.ActivePhase = GamePhases.Combat_DeclareAttackers;
                         break;
                     case GamePhases.Combat_DeclareAttackers:
-                        game.ActivePhase = GamePhases.Combat_DeclareDefenders;
+                        if(game.Attackers.Count > 0)
+                            game.ActivePhase = GamePhases.Combat_DeclareDefenders;
+                        else
+                            game.ActivePhase = GamePhases.Combat_Ending;
                         break;
                     case GamePhases.Combat_DeclareDefenders:
-                        game.ActivePhase = GamePhases.Combat_Damage;
+                        game.ActivePhase = GamePhases.Combat_Damage_FirstStrike;
+                        break;
+                    case GamePhases.Combat_Damage_FirstStrike:
+                        game.ActivePhase = GamePhases.Combat_Ending;
                         break;
                     case GamePhases.Combat_Damage:
                         game.ActivePhase = GamePhases.Combat_Ending;
@@ -561,19 +542,76 @@ namespace MTG.Model.Game
                 game.UpkeepRequirements.Add(requirement);
             else
             {
-                switch (requirement.RequirementType)
+                EffectTypes effectType = Effect.TranslateEffectType(game.UpkeepRequirements[0].RequirementType);
+                switch (requirement.TargetType)
                 {
-                    case UpkeepRequirementTypes.Damage:
+                    case TargetType.Artifact:
+                    case TargetType.Creature:
+                    case TargetType.Land:
+                    case TargetType.Permanent:
+                        game.AddEffect(Effect.CreateEffect(game, effectType, requirement.TargetId, 0, requirement.RequirementValue));
                         break;
-                    case UpkeepRequirementTypes.Discard:
-                        break;
-                    case UpkeepRequirementTypes.Discard_Random:
-                        break;
-                    case UpkeepRequirementTypes.Sacrifice_Creature:
+                    case TargetType.Player:
+                        switch (requirement.TargetScope)
+                        {
+                            case TargetScope.All:
+                                foreach (Player player in game.Players)
+                                    game.AddEffect(Effect.CreateEffect(game, effectType, 0, player.Id,requirement.RequirementValue));
+                                break;
+                            case TargetScope.Single:
+                                game.AddEffect(Effect.CreateEffect(game, effectType, 0, requirement.RequirementPlayerId, requirement.RequirementValue));
+                                break;
+                        }
                         break;
                 }
             }
             throw new NotImplementedException();
+        }
+        private static void CompleteUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
+        {
+            EffectTypes effectType = Effect.TranslateEffectType(game.UpkeepRequirements[0].RequirementType);
+            if (requirement.TargetId == 0)//target not selected process failed
+            {
+                switch (game.UpkeepRequirements[0].FailedRequirementResult)
+                {
+                    case UpkeepRequirementTypes.Damage:
+                        switch (game.UpkeepRequirements[0].FailedTarget)
+                        {
+                            case TargetType.Artifact:
+                            case TargetType.Creature:
+                            case TargetType.Land:
+                            case TargetType.Permanent:
+                                game.AddEffect(Effect.CreateEffect(game, effectType, requirement.FailedTargetId, 0, requirement.RequirementValue));
+                                break;
+                            case TargetType.Player:
+                                game.AddEffect(Effect.CreateEffect(game, effectType, 0, requirement.FailedTargetId, requirement.RequirementValue));
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
+                        break;
+                    case UpkeepRequirementTypes.Sacrifice_Creature:
+                        throw new NotImplementedException();
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            else //Target Selected 
+            {
+                switch (game.UpkeepRequirements[0].TargetType)
+                {
+                    case TargetType.Artifact:
+                    case TargetType.Creature:
+                    case TargetType.Land:
+                    case TargetType.Permanent:
+                        game.AddEffect(Effect.CreateEffect(game, effectType, requirement.TargetId, 0, requirement.RequirementValue));
+                        break;
+                    case TargetType.Player:
+                        game.AddEffect(Effect.CreateEffect(game, effectType, 0, requirement.TargetId, requirement.RequirementValue));
+                        break;
+                }
+            }
         }
     }
 }

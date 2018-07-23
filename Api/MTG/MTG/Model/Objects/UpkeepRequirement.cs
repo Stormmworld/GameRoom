@@ -5,13 +5,16 @@ namespace MTG.Model.Objects
     public class UpkeepRequirement
     {
         #region Properties
-        public string RequirementPlayerId {get;set;}
+        public int RequirementPlayerId {get;set;}
         public TargetType FailedTarget { get; set; }
         public int FailedTargetId { get; set; }
-        public UpkeepFailedRequirementResults FailedRequirementResult { get; set; }
+        public UpkeepRequirementTypes FailedRequirementResult { get; set; }
         public int FailedValue { get; set; }
         public bool Optional { get; set; }
+        public int OwnerId { get; set; }
         public TargetType Target { get; set; }
+        public TargetScope TargetScope { get; set; }
+        public TargetType TargetType { get; set; }
         public int TargetId { get; set; }
         public bool RequiresSelection { get; set; }
         public UpkeepRequirementTypes RequirementType { get; set; }
@@ -39,7 +42,9 @@ namespace MTG.Model.Objects
                 RequirementValue = this.RequirementValue,
                 RequiresSelection = this.RequiresSelection,
                 Target = this.Target,
-                TargetId = this.TargetId
+                TargetId = this.TargetId,
+                TargetType = this.TargetType,
+                TargetScope = this.TargetScope,
             };
         }
         #endregion

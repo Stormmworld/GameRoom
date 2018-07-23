@@ -1,4 +1,5 @@
 ﻿using MTG.Interfaces;
+using MTGModel.Objects;
 using System.Collections.Generic;
 
 namespace MTG.Model.Zones

@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Helpers;
+using MTG.Interfaces;
 using MTGModel.Objects;
 using System.Collections.Generic;
 
@@ -50,6 +51,10 @@ namespace MTG.Model.Zones
                 Cards.RemoveAt(0);
             }
             return drawnCards;
+        }
+        public void Shuffle(int riffleShuffleCount = 3)
+        {
+            Cards = CardHelper.ShuffleCards(Cards, riffleShuffleCount);
         }
         #endregion
     }

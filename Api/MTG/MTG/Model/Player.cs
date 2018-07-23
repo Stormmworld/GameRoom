@@ -6,6 +6,7 @@ using MTG.Enumerations;
 using System.Collections.Generic;
 using MTGModel.Objects;
 using MTG.Model.Abilities;
+using System.Linq;
 
 namespace MTG.Model
 {
@@ -16,6 +17,7 @@ namespace MTG.Model
         public Battlefield Battlefield { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
+        public List<Counter> Counters { get; private set; }
         public Deck Deck { get; private set; }
         public int DrawExtraCards
         {
@@ -28,14 +30,14 @@ namespace MTG.Model
         public bool ForceLose { get; set; }
         public Graveyard Graveyard { get; set; }
         public Hand Hand { get; set; }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public Library Library { get; set; }
         public int Life { get; set; }
         public string LoseMessage { get; set; }
         public ManaPool ManaPool { get; set; }
         public string Name { get; set; }
-        public int PoisonCounters { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
+        public string SocketId { get; set; }
         public int TeamId { get; set;
         }
         #endregion
@@ -48,6 +50,10 @@ namespace MTG.Model
         #endregion
 
         #region Methods
+        public void AddDamage(int damage)
+        {
+            Life = Life - damage;
+        }
         public bool CheckLoseConditions()
         {
             /*
@@ -85,11 +91,41 @@ namespace MTG.Model
                 LoseMessage = @"No life remaining.";
             else if (Library.Cards.Count == 0 && FailedDraw)//104.3c 
                 LoseMessage = @"Not enough cards in current library to complete the required draw.";
-            else if (PoisonCounters >= 10)//104.3d 
-                LoseMessage = @"Poisoned to death (" + PoisonCounters +" counters)";
+            else if (Counters.FindAll(o=>o.CounterType == CounterType.Poison).Count >= 10)//104.3d 
+                LoseMessage = @"Poisoned to death (" + Counters.FindAll(o => o.CounterType == CounterType.Poison).Count + " counters)";
             else if (ForceLose)//104.3e 
                 LoseMessage = @"Lost the game";
             return !string.IsNullOrEmpty(LoseMessage);
+        }
+        public void CombineToLibrary(bool hand, bool graveyard)
+        {
+            if (graveyard)
+            {
+                Library.Cards.AddRange(Graveyard.Cards);
+                Graveyard.Cards.Clear();
+            }
+            if (hand)
+            {
+                Library.Cards.AddRange(Hand.Cards);
+                Hand.Cards.Clear();
+            }
+            Library.Shuffle();
+        }
+        public void Discard(int cardId, int randomCount)
+        {
+            if (cardId > 0)
+                Discard(Hand.Cards.IndexOf(Hand.Cards.First(o => o.Id == cardId)));
+
+            while (randomCount > 0 && Hand.Cards.Count > 0)
+            {
+                Random random = new Random();
+                Discard(random.Next(0, Hand.Cards.Count - 1));
+            }
+        }
+        private void Discard(int cardIndex)
+        {
+            Graveyard.Cards.Add(Hand.Cards[cardIndex]);
+            Hand.Cards.RemoveAt(cardIndex);
         }
         public void DrawCards(int drawCount)
         {
@@ -131,7 +167,8 @@ namespace MTG.Model
             Deck = deck;
             foreach (Card card in Deck.Cards)
                 card.OwnerId = this.Id;
-            Library.Cards = CardHelper.ShuffleCards(Deck.CloneCards(), 3);
+            Library.Cards = Deck.CloneCards();
+            Library.Shuffle();
         }
         public void UntapPermanents()
         {
