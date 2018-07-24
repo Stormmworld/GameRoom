@@ -323,6 +323,17 @@ namespace MTG.Enumerations
         None,
         Melee
     }
+    public enum ManaRestriction
+    {
+        None,
+        Activate_Abilities,
+        Activate_Abilities_CardType,
+        Color,
+        Spell_Type,
+        Cumulative_Upkeep,
+        Flashback_GraveYard,
+
+    }
     public enum SubType
     {
         None

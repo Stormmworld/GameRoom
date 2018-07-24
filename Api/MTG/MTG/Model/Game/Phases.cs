@@ -387,7 +387,7 @@ namespace MTG.Model.Game
                 //resolve damage and process cards to graveyard
 
             }
-            throw new NotImplementedException();
+            throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep");
         }
         public static void CombatPhase_EndStep(ActiveGame game)
         {
@@ -397,7 +397,7 @@ namespace MTG.Model.Game
                 511.2. Abilities that trigger “at end of combat” trigger as the end of combat step begins. Effects that last “until end of combat” expire at the end of the combat phase.
                 511.3. As soon as the end of combat step ends, all creatures and planeswalkers are removed from combat. After the end of combat step ends, the combat phase is over and the postcombat main phase begins (see rule 505).
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("Phases.CombatPhase_EndStep");
         }
         public static void PostCombatMainPhase(ActiveGame game)
         {
@@ -421,7 +421,7 @@ namespace MTG.Model.Game
                         applies only to triggered abilities; it doesn’t apply to continuous effects whose durations 
                         say “until end of turn” or “this turn.” (See rule 514, “Cleanup Step.”)
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("Phases.EndingPhase_EndStep");
         }
         public static void EndingPhase_CleanupStep(ActiveGame game)
         {
@@ -432,7 +432,7 @@ namespace MTG.Model.Game
                 514.3. Normally, no player receives priority during the cleanup step, so no spells can be cast and no abilities can be activated. However, this rule is subject to the following exception:
                 514.3a At this point, the game checks to see if any state-based actions would be performed and/or any triggered abilities are waiting to be put onto the stack (including those that trigger “at the beginning of the next cleanup step”). If so, those state-based actions are performed, then those triggered abilities are put on the stack, then the active player gets priority. Players may cast spells and activate abilities. Once the stack is empty and all players pass in succession, another cleanup step begins.
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("Phases.EndingPhase_CleanupStep");
         }
         private static void MainPhase(bool preCombat, ActiveGame game)
         {
@@ -462,7 +462,7 @@ namespace MTG.Model.Game
                         spell or ability, so it can’t be countered, and players can’t respond to it with instants or activated abilities. 
                         (See rule 305, “Lands.”)
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("Phases.MainPhase");
         }
         private static void NextPhase(ActiveGame game)
         {
@@ -575,7 +575,6 @@ namespace MTG.Model.Game
                         break;
                 }
             }
-            throw new NotImplementedException();
         }
         private static void CompleteUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
         {
@@ -597,14 +596,14 @@ namespace MTG.Model.Game
                                 game.AddEffect(Effect.CreateEffect(game, effectType, 0, requirement.FailedTargetId, requirement.RequirementValue));
                                 break;
                             default:
-                                throw new NotImplementedException();
+                                throw new NotImplementedException("Phases.CompleteUpkeepRequirement.NoFailedTarget");
                         }
                         break;
                     case UpkeepRequirementTypes.Sacrifice_Creature:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException("Phases.CompleteUpkeepRequirement.Sacrifice_Creature");
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new NotImplementedException("Phases.CompleteUpkeepRequirement.NoFailedAction");
                 }
             }
             else //Target Selected 

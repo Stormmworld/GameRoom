@@ -37,7 +37,7 @@ namespace MTG.Model.Game
                 104.6. One card (Karn Liberated) restarts the game. All players still in the game when it restarts 
                         then immediately begin a new game. See rule 718, “Restarting the Game.”
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("EndOfGame.CheckDrawCondition");
         }
         public void CheckEndGameCondition()
         {
@@ -57,7 +57,7 @@ namespace MTG.Model.Game
                 104.2d In an Emperor game, a team wins the game if its emperor wins the game. 
                         (See rule 809.5.)
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("EndOfGame.CheckEndGameCondition");
         }
         public void CheckPlayerLoseCondition()
         {
@@ -67,7 +67,7 @@ namespace MTG.Model.Game
                         that player leaves the game. The multiplayer rules handle what happens when a player leaves 
                         the game; see rule 800.4.
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("EndOfGame.CheckPlayerLoseCondition");
         }
         public void CheckRestartGameCondition()
         {
@@ -76,7 +76,7 @@ namespace MTG.Model.Game
                 104.6. One card (Karn Liberated) restarts the game. All players still in the game when it restarts 
                         then immediately begin a new game. See rule 718, “Restarting the Game.”
              */
-            throw new NotImplementedException();
+            throw new NotImplementedException("EndOfGame.CheckRestartGameCondition");
         }
     }
 }

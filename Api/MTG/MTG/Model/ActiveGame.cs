@@ -21,13 +21,13 @@ namespace MTG.Model
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("ActiveGame.");
             }
         }
         public Exile Exile { get; set; }
         public GameType GameType { get; private set; }
         public GamePhases OverrideNextPhase { get; set; }
-        public List<IPendingActions> PendingActions{get;set;}
+        public List<IPendingAction> PendingActions{get;set;}
         public List<Player> Players { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
         public Stack Stack { get; set; }
@@ -68,7 +68,7 @@ namespace MTG.Model
         }
         public void AddToStack(StackEntry stackEntry)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("ActiveGame.AddToStack");
         }
         public void EmptyManaPools()
         {
@@ -196,7 +196,7 @@ namespace MTG.Model
         public void RestartGame()
         {
             //reset all remaining players to new game
-            throw new NotImplementedException();
+            throw new NotImplementedException("ActiveGame.RestartGame");
         }
         #endregion
     }

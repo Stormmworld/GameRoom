@@ -140,7 +140,7 @@ namespace MTG.Model.Objects
                     }
                     break;
             }
-            throw new NotImplementedException();
+            throw new NotImplementedException("Effect.ProcessEffect");
         }
         public static EffectTypes TranslateEffectType(UpkeepRequirementTypes upkeepRequirement)
         {

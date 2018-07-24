@@ -19,7 +19,7 @@ namespace MTG.Model.Abilities
             702.59b If a spell has multiple instances of ripple, each triggers separately.        */
         public void Process(AbilityArgs args)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Ripple.Process");
         }
     }
 }

@@ -63,7 +63,7 @@ namespace MTG.Model.Abilities
         #region Methods
         public void Process(AbilityArgs args)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Protection.Process");
         }
         #endregion
     }

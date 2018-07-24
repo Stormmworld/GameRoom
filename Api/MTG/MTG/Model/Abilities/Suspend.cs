@@ -28,7 +28,7 @@ namespace MTG.Model.Abilities
         */
         public void Process(AbilityArgs args)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Suspend.Process");
         }
     }
 }

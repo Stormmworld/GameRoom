@@ -25,7 +25,7 @@ namespace MTG.Model
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Player.DrawExtraCards");
             }
         }
         public bool FailedDraw { get; set; }
