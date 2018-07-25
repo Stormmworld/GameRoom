@@ -26,6 +26,7 @@ namespace MTG.Model
         }
         public Exile Exile { get; set; }
         public GameType GameType { get; private set; }
+        public List<GameModifier> Modifiers { get; set; }
         public GamePhases OverrideNextPhase { get; set; }
         public List<IPendingAction> PendingActions{get;set;}
         public List<Player> Players { get; set; }
@@ -43,6 +44,7 @@ namespace MTG.Model
             Players = new List<Player>();
             Stack = new Stack();
             OverrideNextPhase = GamePhases.None;
+            Modifiers = new List<GameModifier>();
         }
         #endregion
 
@@ -164,10 +166,10 @@ namespace MTG.Model
                     Phases.CombatPhase_DeclareBlockersStep(this);
                     break;
                 case GamePhases.Combat_Damage_FirstStrike:
-                    Phases.CombatPhase_CombatDamageStep(this,true);
+                    Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage(this);
                     break;
                 case GamePhases.Combat_Damage:
-                    Phases.CombatPhase_CombatDamageStep(this, false);
+                    Phases.CombatPhase_CombatDamageStep_NormalDamage(this);
                     break;
                 case GamePhases.Combat_Ending:
                     Phases.CombatPhase_EndStep(this);

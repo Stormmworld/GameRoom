@@ -135,6 +135,12 @@ namespace MTG.Enumerations
         Ascend,
         Assist,
     }
+    public enum AttackableType
+    {
+        None,
+        Planeswalker,
+        Player,
+    }
     public enum CardType
     {
         None,
@@ -296,10 +302,25 @@ namespace MTG.Enumerations
         CombineGraveyardToLibrary,
         CombineHandToLibrary,
         CombineHandAndGraveyardToLibrary,
+        PendingCombatDamage,
         TopCardOfLibraryFaceUp,
         RemoveFromGame,
         Exile,
         Sacrifice,
+    }
+    public enum EffectTrigger
+    {
+        None,
+        DamageToPlayer,
+        DamageToCreature,
+        EntersBattleField,
+        EntersGraveyard,
+        XDeepInGraveyard,
+    }
+    public enum GameModifier {
+        None,
+        CreaturesTakeNoDamage,
+        CombatDamagePrevented,
     }
     public enum GamePhases
     {

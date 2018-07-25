@@ -8,6 +8,8 @@ using MTGModel.Objects;
 using MTG.Model.Abilities;
 using System.Linq;
 using MTG.ArgumentDefintions;
+using MTG.Interfaces;
+using MTG.Model.Pending_Actions;
 
 namespace MTG.Model
 {
@@ -16,6 +18,7 @@ namespace MTG.Model
         #region Properties
         public int AdditionalTurnCount { get; set; }
         public Battlefield Battlefield { get; set; }
+        public int CombatDamage { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
         public List<Counter> Counters { get; private set; }
@@ -60,9 +63,29 @@ namespace MTG.Model
         #endregion
 
         #region Methods
-        public void AddDamage(int damage)
+        public List<IPendingDamageResolution> AddDamage(ActiveGame game, int damage, Card originCard)
         {
-            DamageTaken = DamageTaken + damage;
+            List<IPendingDamageResolution> retVal = new List<IPendingDamageResolution>();
+            List<Card> bodyguards = Battlefield.Cards.FindAll(o => o.Abilities.FirstOrDefault(m => m is Bodyguard) != null);
+            List<Card> cardsThatAffectDamage = GetCardsThatAffectDamage();
+            if (cardsThatAffectDamage.Count > 0)
+            {
+                throw new NotImplementedException("Player.AddDamage-cardsThatAffectDamage");
+            }
+            else if (bodyguards.Count > 1)
+            {
+                retVal.Add(new BodyGuardPendingDamageResolution()
+                {
+                    ActionPlayerId = Id,
+                    BodyGuards = bodyguards,
+                    Damage = damage,
+                });
+            }
+            else if (bodyguards.Count == 1)
+                bodyguards[0].AddDamage(game, damage, originCard);
+            else
+                DamageTaken = DamageTaken + damage;
+            return retVal;
         }
         public bool CheckLoseConditions()
         {
@@ -150,6 +173,10 @@ namespace MTG.Model
         public void EmptyManaPool()
         {
             ManaPool.EmptyManaPool();
+        }
+        public List<Card> GetCardsThatAffectDamage()
+        {
+            throw new NotImplementedException("Player.GetCardsThatAffectDamage");//COP
         }
         public void PhasePermanents()
         {

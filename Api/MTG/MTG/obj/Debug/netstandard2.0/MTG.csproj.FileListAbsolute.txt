@@ -2,3 +2,7 @@ C:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.csprojResolveAssembl
 C:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.csproj.CoreCompileInputs.cache
 C:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.AssemblyInfoInputs.cache
 C:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.AssemblyInfo.cs
+F:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.csprojResolveAssemblyReference.cache
+F:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.csproj.CoreCompileInputs.cache
+F:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.AssemblyInfoInputs.cache
+F:\gitsrc\GameRoom\Api\MTG\MTG\obj\Debug\netstandard2.0\MTG.AssemblyInfo.cs

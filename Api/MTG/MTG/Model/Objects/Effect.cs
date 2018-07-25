@@ -48,7 +48,7 @@ namespace MTG.Model.Objects
                     break;
                 case EffectTypes.Damage:
                     if (TargetPlayer != null)
-                        TargetPlayer.AddDamage(Value);
+                        TargetPlayer.AddDamage(game, Value, OriginCard);
                     else if (TargetCard != null)
                         TargetCard.AddDamage(Value, OriginCard.);
                     break;
