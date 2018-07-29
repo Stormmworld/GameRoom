@@ -292,25 +292,46 @@ namespace MTG.Enumerations
     public enum EffectTypes
     {
         None,
-        Destroy,
-        Damage,
-        DrawCard,
-        DiscardCard,
-        PlaceCardInLibrary_Top,
-        PlaceCardInLibrary_Bottom,
-        ShuffleLibrary,
         CombineGraveyardToLibrary,
         CombineHandToLibrary,
         CombineHandAndGraveyardToLibrary,
-        PendingCombatDamage,
-        TopCardOfLibraryFaceUp,
-        RemoveFromGame,
+        CounterSpell_TargetSpell,
+        CounterSpell_TargetSpell_Exile,
+        CounterSpell_TargetSpell_ExileCopiesNotInBattlefield,
+        CounterSpell_TargetSpell_CardType,
+        CounterSpell_TargetSpell_CardType_UnlessPaidX,
+        CounterSpell_TargetSpell_CardType_Exile,
+        CounterSpell_TargetSpell_Color,
+        CounterSpell_TargetSpell_CostGreaterThanX,
+        CounterSpell_TargetSpell_CostLessThanX,
+        CounterSpell_TargetSpell_NotOwned,
+        CounterSpell_TargetSpell_SuspendX,
+        CounterSpell_TargetSpell_TargetsOwnerPoisoned,
+        CounterSpell_TargetSpell_TargetingCardType,
+        CounterSpell_TargetSpell_TargetingOwnedPermanents,
+        CounterSpell_TargetSpell_UnlessPaidX,
+        CounterSpell_TargetAbility,
+        CounterSpell_TargetAbility_UnlessPaidX,
+        Destroy,
+        Damage,
+        DrawPhaseExtraCards,        
+        DiscardCard,
         Exile,
+        OpponentDrawsYouDrawX,
+        PlaceCardInLibrary_Top,
+        PlaceCardInLibrary_Bottom,
+        PendingCombatDamage,
+        RemoveFromGame,
         Sacrifice,
+        ShuffleLibrary,
+        SkipDrawCard,
+        TopCardOfLibraryFaceUp,
+        CannotCounter,
     }
     public enum EffectTrigger
     {
         None,
+        Cast,
         DamageToPlayer,
         DamageToCreature,
         EntersBattleField,
@@ -354,6 +375,12 @@ namespace MTG.Enumerations
         Cumulative_Upkeep,
         Flashback_GraveYard,
 
+    }
+    public enum StackEntryType
+    {
+        None,
+        Spell,
+        Effect,
     }
     public enum SubType
     {

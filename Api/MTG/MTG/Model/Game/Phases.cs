@@ -95,7 +95,10 @@ namespace MTG.Model.Game
                 504.1. First, the active player draws a card. This turn-based action doesn’t use the stack.
                 504.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
-            game.Players[game.ActivePlayerIndex].DrawCards(1 + game.DrawExtraCards);
+            int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.EffectType == EffectTypes.SkipDrawCard) != null ? 0 : 1);
+            foreach (Effect drawEffect in game.ActiveEffects.FindAll(o=>o.EffectType == EffectTypes.DrawPhaseExtraCards))
+                cardDrawCount += drawEffect.Value;
+            game.Players[game.ActivePlayerIndex].DrawCards(cardDrawCount);
         }
         public static void PreCombatMainPhase(ActiveGame game)
         {
@@ -381,14 +384,20 @@ namespace MTG.Model.Game
                             if (blocker.HasFirstStrike())
                             {
                                 if (!attackerIsBandingWithOthers)
+                                {
                                     attacker.AddDamage(game, blocker.Power, blocker);
+                                    blocker.DealtDamage(game);
+                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
                             }
                             if (attacker.HasFirstStrike())
                             {
                                 if (!blockerIsBandingWithOthers)
+                                {
                                     blocker.AddDamage(game, attacker.Power, attacker);
+                                    attacker.DealtDamage(game);
+                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
                             }
@@ -401,14 +410,20 @@ namespace MTG.Model.Game
                                 if (blocker.HasFirstStrike())
                                 {
                                     if (!attackerIsBandingWithOthers)
+                                    { 
                                         attacker.AddDamage(game, blocker.Power, blocker);
+                                        blocker.DealtDamage(game);
+                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
                                 }
                                 if(attacker.HasFirstStrike())
                                 {
                                     if (!blockerIsBandingWithOthers)
+                                    {
                                         blocker.AddDamage(game, attacker.Power, attacker);
+                                        attacker.DealtDamage(game);
+                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
                                 }
@@ -464,14 +479,20 @@ namespace MTG.Model.Game
                             if (blocker.HasNormalStrike())
                             {
                                 if (!attackerIsBandingWithOthers)
+                                {
                                     attacker.AddDamage(game, blocker.Power, blocker);
+                                    blocker.DealtDamage(game);
+                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
                             }
                             if (attacker.HasNormalStrike())
                             {
                                 if (!blockerIsBandingWithOthers)
+                                {
                                     blocker.AddDamage(game, attacker.Power, attacker);
+                                    attacker.DealtDamage(game);
+                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
                             }
@@ -484,14 +505,20 @@ namespace MTG.Model.Game
                                 if (blocker.HasNormalStrike())
                                 {
                                     if (!attackerIsBandingWithOthers)
+                                    {
                                         attacker.AddDamage(game, blocker.Power, blocker);
+                                        blocker.DealtDamage(game);
+                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
                                 }
                                 if (attacker.HasNormalStrike())
                                 {
                                     if (!blockerIsBandingWithOthers)
+                                    {
                                         blocker.AddDamage(game, attacker.Power, attacker);
+                                        attacker.DealtDamage(game);
+                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
                                 }
@@ -510,7 +537,9 @@ namespace MTG.Model.Game
                 511.3. As soon as the end of combat step ends, all creatures and planeswalkers are removed from combat. After the end of combat step ends, the combat phase is over and the postcombat main phase begins (see rule 505).
              */
             //resolve damage and process cards to graveyard
-            throw new NotImplementedException("Phases.CombatPhase_EndStep");
+            game.ProcessDamage();
+            //remove effects that end with combat phase
+            game.RemoveEffects(GamePhases.Combat_Ending);
         }
         public static void PostCombatMainPhase(ActiveGame game)
         {
@@ -534,6 +563,7 @@ namespace MTG.Model.Game
                         applies only to triggered abilities; it doesn’t apply to continuous effects whose durations 
                         say “until end of turn” or “this turn.” (See rule 514, “Cleanup Step.”)
              */
+            game.RemoveEffects(GamePhases.Combat_Ending);
             throw new NotImplementedException("Phases.EndingPhase_EndStep");
         }
         public static void EndingPhase_CleanupStep(ActiveGame game)
@@ -547,6 +577,8 @@ namespace MTG.Model.Game
              */
             game.Modifiers.RemoveAll(o=>o==GameModifier.CombatDamagePrevented);
             game.Modifiers.RemoveAll(o => o == GameModifier.CreaturesTakeNoDamage);
+            game.RemoveEffects(GamePhases.Ending_Cleanup);
+            game.TurnSpellCount = 0;
             throw new NotImplementedException("Phases.EndingPhase_CleanupStep");
         }
         private static void MainPhase(bool preCombat, ActiveGame game)

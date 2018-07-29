@@ -13,17 +13,11 @@ namespace MTG.Model
     public class ActiveGame
     {
         #region Properties
+        public List<Effect> ActiveEffects { get; set; }
         public int ActivePlayerIndex { get; set; }
         public GamePhases ActivePhase { get; set; }
         public Ante Ante { get; set; }
         public List<AttackingCreature> Attackers { get; set; }
-        public int DrawExtraCards
-        {
-            get
-            {
-                throw new NotImplementedException("ActiveGame.");
-            }
-        }
         public Exile Exile { get; set; }
         public GameType GameType { get; private set; }
         public List<GameModifier> Modifiers { get; set; }
@@ -31,6 +25,7 @@ namespace MTG.Model
         public List<IPendingAction> PendingActions{get;set;}
         public List<Player> Players { get; set; }
         public List<GamePhases> SkipPhases { get; set; }
+        public int TurnSpellCount { get; set; }
         public Stack Stack { get; set; }
         public List<UpkeepRequirement> UpkeepRequirements { get; set; }
         #endregion
@@ -45,6 +40,7 @@ namespace MTG.Model
             Stack = new Stack();
             OverrideNextPhase = GamePhases.None;
             Modifiers = new List<GameModifier>();
+            ActiveEffects = new List<Effect>();
         }
         #endregion
 
@@ -66,9 +62,14 @@ namespace MTG.Model
         #region Methods
         public void AddEffect(Effect effect)
         {
-            throw new NotImplementedException("ActiveGame.AddEffect");
+            ActiveEffects.Add(effect);
         }
-        public void AddToStack(StackEntry stackEntry)
+        public void AddToStack(Card card)
+        {
+
+            throw new NotImplementedException("ActiveGame.AddToStack");
+        }
+        public void AddToStack(Effect effect)
         {
             throw new NotImplementedException("ActiveGame.AddToStack");
         }
@@ -101,6 +102,11 @@ namespace MTG.Model
                     return foundCard;
             }
             return null;
+        }
+        public void ProcessDamage()
+        {
+            foreach (Player player in Players)
+                player.ProcessDamage();
         }
         public void ProcessPhase()
         {
@@ -185,6 +191,15 @@ namespace MTG.Model
                     break;
             }
         }
+        public void RemoveEffects(GamePhases processPhase)
+        {
+            ActiveEffects.RemoveAll(o => o.EndingPhase == processPhase);
+        }
+        public void RestartGame()
+        {
+            //reset all remaining players to new game
+            throw new NotImplementedException("ActiveGame.RestartGame");
+        }
         public void SetGameType(GameType gameType)
         {
             //Apply any game type specific settings
@@ -194,11 +209,6 @@ namespace MTG.Model
                 case GameType.Melee:
                     break;
             }
-        }
-        public void RestartGame()
-        {
-            //reset all remaining players to new game
-            throw new NotImplementedException("ActiveGame.RestartGame");
         }
         #endregion
     }

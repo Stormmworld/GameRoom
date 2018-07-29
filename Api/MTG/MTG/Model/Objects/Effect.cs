@@ -8,12 +8,14 @@ namespace MTG.Model.Objects
     public class Effect
     {
         #region Properties
+        public bool Boolean { get; set; }
         public EffectTypes EffectType { get; set; }
+        public GamePhases EndingPhase { get; set; }
         public Player TargetPlayer { get; set; }
         public Card OriginCard { get; set; }
+        public int SecondaryValue { get; set; }//Y
         public Card TargetCard { get; set; }
-        public int Value { get; set; }
-        public bool Boolean { get; set; }
+        public int Value { get; set; }//X
         #endregion
 
         #region Methods

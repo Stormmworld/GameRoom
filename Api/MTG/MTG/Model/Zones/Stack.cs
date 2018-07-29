@@ -1,5 +1,10 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces;
+using MTG.Model.Objects;
+using MTGModel.Objects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Zones
 {
@@ -47,13 +52,60 @@ namespace MTG.Model.Zones
     public class Stack: IZone
     {
         #region Properties
-        public List<Card> Cards { get; set; }
+        public List<StackEntry> Entries { get; set; }
+        public List<Card> Cards
+        {
+            get
+            {
+                List<Card> retVal = new List<Card>();
+                foreach (StackEntry entry in Entries.FindAll(o => o.EntryType == StackEntryType.Spell))
+                    retVal.Add(entry.Card);
+                return retVal;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
         #endregion
 
         #region Constructors
         public Stack()
         {
-            Cards = new List<Card>();
+            Entries = new List<StackEntry>();
+        }
+        #endregion
+
+        #region Methods
+        public void Add(ActiveGame game, Card card)
+        {
+            Entries.Add(new StackEntry(Entries.Count + 1, card));
+        }
+        public void Add(ActiveGame game, Effect effect, Card originCard)
+        {
+            Entries.Add(new StackEntry(Entries.Count + 1, effect, originCard.ImageUrl));
+        }
+        public void CounterSpell(ActiveGame game, Card targetSpell, Card counteringSpell)
+        {
+            if (targetSpell.TriggeredEffects.FirstOrDefault(o => o.Trigger == EffectTrigger.Cast && o.EffectType == EffectTypes.CannotCounter) != null)
+                return;
+            throw new NotImplementedException("Stack.CounterSpell");
+        }
+        public static void Process(ActiveGame game)
+        {
+            while (game.Stack.Entries.Count > 0)
+            {
+                StackEntry entry = game.Stack.Entries[game.Stack.Entries.Count-1];
+                switch (entry.EntryType)
+                {
+                    case StackEntryType.Effect:
+                        break;
+                    case StackEntryType.Spell:
+                        break;
+                }
+                game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
+            }
+            throw new NotImplementedException("Stack.Process");
         }
         #endregion
     }

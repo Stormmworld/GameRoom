@@ -13,7 +13,7 @@ namespace MTGModel.Objects
     public class Card
     {
         #region Events
-        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped, CardDestroyed;
+        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped, CardDestroyed, PendingActionTriggered;
         #endregion
 
         #region Variables
@@ -30,6 +30,7 @@ namespace MTGModel.Objects
         public int DamageTaken { get; set; }
         public int FaceUpSide { get; set; }
         public int Id { get; set; }
+        public string ImageUrl { get; set; }
         public bool IsFaceDown { get; set; }
         public bool IsTwoSided { get; set; }
         public int OwnerId { get; set; }
@@ -131,6 +132,12 @@ namespace MTGModel.Objects
             bool hasVigilance = Abilities.FirstOrDefault(p => p is Vigilance) != null;
             return Tapped || hasVigilance;
         }
+        public void DealtDamage(ActiveGame game, TargetType damagedEntity)
+        {
+            //Lifelink
+            //triggered effects get pending actions
+            throw new NotImplementedException("Card.DealtDamage");
+        }
         public void Destroy()
         {
             if (Abilities.FirstOrDefault(o => o is Indestructible) == null)
@@ -178,6 +185,7 @@ namespace MTGModel.Objects
             }
             else if (SufferingFromDeathtouchEffect ||DamageTaken >= Toughness)
                 Destroy();
+            DamageTaken = 0;
         }
         public void ProcessPhasing()
         {

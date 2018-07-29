@@ -15,7 +15,12 @@ namespace MTG.Model
 {
     public class Player
     {
+        #region Events
+        public event EventHandler AddPendingAction;
+        #endregion
+
         #region Properties
+        public List<Effect> ActiveEffects { get; set; }
         public int AdditionalTurnCount { get; set; }
         public Battlefield Battlefield { get; set; }
         public int CombatDamage { get; set; }
@@ -24,13 +29,6 @@ namespace MTG.Model
         public List<Counter> Counters { get; private set; }
         public int DamageTaken { get; set; }
         public Deck Deck { get; private set; }
-        public int DrawExtraCards
-        {
-            get
-            {
-                throw new NotImplementedException("Player.DrawExtraCards");
-            }
-        }
         public bool FailedDraw { get; set; }
         public bool ForceLose { get; set; }
         public Graveyard Graveyard { get; set; }
@@ -162,13 +160,17 @@ namespace MTG.Model
         }
         public void DrawCards(int drawCount)
         {
-            if ((drawCount + DrawExtraCards) > Library.Cards.Count)
+            int cardDrawCount = drawCount;
+            foreach (Effect drawEffect in ActiveEffects.FindAll(o => o.EffectType == EffectTypes.DrawPhaseExtraCards))
+                cardDrawCount += drawEffect.Value;
+
+            if (cardDrawCount > Library.Cards.Count)
             {
                 FailedDraw = true;
                 Hand.Cards.AddRange(Library.Draw(Library.Cards.Count));
             }
             else
-                Hand.Cards.AddRange(Library.Draw(drawCount + DrawExtraCards));
+                Hand.Cards.AddRange(Library.Draw(cardDrawCount));
         }
         public void EmptyManaPool()
         {
