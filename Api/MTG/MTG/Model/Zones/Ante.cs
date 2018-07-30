@@ -53,6 +53,18 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Ante.Add");
         }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Ante.Add");
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            throw new NotImplementedException("Ante.CardsWithAbility");
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            throw new NotImplementedException("Ante.FilteredCards");
+        }
         public void Remove(Card card, TargetZone targetZone)
         {
             throw new NotImplementedException("Ante.Remove");

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MTG.Model.Objects;
 
 namespace MTGModel.Objects
 {

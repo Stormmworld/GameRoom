@@ -303,6 +303,26 @@ namespace MTG.Model
                     break;
             }
         }
+        public void SetNextPlayer()
+        {
+            if (ActivePlayer.AdditionalTurnCount > 0)
+                ActivePlayer.AdditionalTurnCount--;
+            else 
+            {
+                int nextIndex = 0;
+                if (ActivePlayerIndex != Players.Count - 1)
+                    nextIndex = ActivePlayerIndex + 1;
+                while (_Players[nextIndex].LoseMessage != null)
+                {
+
+                    if (nextIndex != Players.Count - 1)
+                        nextIndex = 0;
+                    else
+                        nextIndex++;
+                }
+                ActivePlayerIndex = nextIndex;
+            }
+        }
         #endregion
     }
 }

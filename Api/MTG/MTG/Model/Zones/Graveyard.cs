@@ -48,6 +48,18 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Graveyard.Add");
         }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Graveyard.Add");
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            throw new NotImplementedException("Graveyard.CardsWithAbility");
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            throw new NotImplementedException("Graveyard.FilteredCards");
+        }
         public void Remove(TargetZone targetZone)
         {//send all cards to targetZone
             throw new NotImplementedException("Graveyard.Remove");
@@ -56,6 +68,7 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Graveyard.Remove");
         }
+
         #endregion
     }
 }

@@ -44,7 +44,19 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            throw new NotImplementedException("Ante.Add");
+            throw new NotImplementedException("Command.Add");
+        }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Command.Add");
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            throw new NotImplementedException("Command.CardsWithAbility");
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            throw new NotImplementedException("Command.FilteredCards");
         }
         public void Remove(Card card, TargetZone targetZone)
         {

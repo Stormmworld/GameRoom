@@ -65,6 +65,10 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Library.Add");
         }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            throw new NotImplementedException("Library.CardsWithAbility");
+        }
         public List<Card> Draw(int drawCount)
         {
             List<Card> drawnCards = new List<Card>();
@@ -74,6 +78,10 @@ namespace MTG.Model.Zones
                 _Cards.RemoveAt(0);
             }
             return drawnCards;
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            throw new NotImplementedException("Library.FilteredCards");
         }
         public void Insert(Card card, InsertLocation insertLocation)
         {

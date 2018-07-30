@@ -663,33 +663,13 @@ namespace MTG.Model.Game
                         break;
                     case GamePhases.Ending_Cleanup:
                         game.ActivePhase = GamePhases.Beginning_Untap;
-                        game.ActivePlayerIndex = GetNextPlayerIndex(game);
+                        game.SetNextPlayer();
                         break;
                 }
                 if (game.SkipPhases.Contains(game.ActivePhase) || game.ActivePlayer.SkipPhases.Contains(game.ActivePhase))
                     NextPhase(game);
                 game.EmptyManaPools();
             }
-        }
-        private static int GetNextPlayerIndex(ActiveGame game)
-        {
-            int nextIndex = game.ActivePlayerIndex;
-            if (game.ActivePlayer.AdditionalTurnCount > 0)
-            {
-                game.ActivePlayer.AdditionalTurnCount--;
-                return game.ActivePlayerIndex;
-            }
-            else
-            {
-                if (game.ActivePlayerIndex == game.Players.Count - 1)
-                    game.ActivePlayerIndex = 0;
-                else
-                    game.ActivePlayerIndex++;
-            }
-            if (!string.IsNullOrEmpty(game.Players[nextIndex].LoseMessage))
-                return GetNextPlayerIndex(game);
-            else
-                return game.ActivePlayerIndex;
         }
         private static void ProcessUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
         {
@@ -746,7 +726,6 @@ namespace MTG.Model.Game
                         break;
                     case UpkeepRequirementTypes.Sacrifice_Creature:
                         throw new NotImplementedException("Phases.CompleteUpkeepRequirement.Sacrifice_Creature");
-                        break;
                     default:
                         throw new NotImplementedException("Phases.CompleteUpkeepRequirement.NoFailedAction");
                 }

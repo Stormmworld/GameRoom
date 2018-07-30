@@ -98,6 +98,7 @@ namespace MTGModel.Objects
             TriggeredEffects = new List<TriggeredEffect>();
             SubTypes = new List<SubType>();
             Colors = new List<Colors>();
+            _Counters = new List<Counter>();
          _PhasedOut = false;
             SelectedToUntap = false;
             _Tapped = false;

@@ -77,15 +77,27 @@ namespace MTG.Model.Zones
         {
             Entries.Add(new StackEntry(Entries.Count + 1, card));
         }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Stack.Add");
+        }
         public void Add(Effect effect, Card originCard)
         {
             Entries.Add(new StackEntry(Entries.Count + 1, effect, originCard.ImageUrl));
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            throw new NotImplementedException("Stack.CardsWithAbility");
         }
         public void CounterSpell(Card targetSpell, Card counteringSpell)
         {
             if (targetSpell.TriggeredEffects.FirstOrDefault(o => o.Trigger == EffectTrigger.Cast && o.EffectType == EffectTypes.CannotCounter) != null)
                 return;
             throw new NotImplementedException("Stack.CounterSpell");
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            throw new NotImplementedException("Stack.FilteredCards");
         }
         public static void Process(ActiveGame game)
         {
