@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
@@ -18,26 +19,42 @@ namespace MTG.Model.Zones
      */
     public class Graveyard: IZone
     {
+        #region Events
+        #endregion
+
+        #region Variables
+        private List<Card> _Cards;
+        #endregion
+
         #region Properties
-        public List<Card> Cards { get; set; }
+        public IReadOnlyCollection<Card> Cards
+        {
+            get
+            {
+                return _Cards.AsReadOnly();
+            }
+        }
         #endregion
 
         #region Constructors
         public Graveyard()
         {
-            Cards = new List<Card>();
+            _Cards = new List<Card>();
         }
         #endregion
 
         #region Methods
-        public void AddCard(Card card)
+        public void Add(Card card)
         {
-            Cards.Add(card);
-            ProcessGraveyard();
+            throw new NotImplementedException("Graveyard.Add");
         }
-        public void ProcessGraveyard()
+        public void Remove(TargetZone targetZone)
+        {//send all cards to targetZone
+            throw new NotImplementedException("Graveyard.Remove");
+        }
+        public void Remove(Card card, TargetZone targetZone)
         {
-            throw new NotImplementedException("Graveyard.ProcessGraveyard");
+            throw new NotImplementedException("Graveyard.Remove");
         }
         #endregion
     }

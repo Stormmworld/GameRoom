@@ -1,6 +1,8 @@
-﻿using MTG.Helpers;
+﻿using MTG.Enumerations;
+using MTG.Helpers;
 using MTG.Interfaces;
 using MTGModel.Objects;
+using System;
 using System.Collections.Generic;
 
 namespace MTG.Model.Zones
@@ -28,33 +30,70 @@ namespace MTG.Model.Zones
      */
     public class Library: IZone
     {
+        #region Events
+        #endregion
+
+        #region Variables
+        private List<Card> _Cards;
+        #endregion
+
         #region Properties
-        public List<Card> Cards { get; set; }
+        public IReadOnlyCollection<Card> Cards
+        {
+            get
+            {
+                return _Cards.AsReadOnly();
+            }
+        }
         public bool ShowTopCard { get; set; }
         #endregion
 
         #region Constructors
         public Library()
         {
-            Cards = new List<Card>();
+            _Cards = new List<Card>();
             ShowTopCard = false;
         }
         #endregion
 
         #region Methods
+        public void Add(Card card)
+        {
+            throw new NotImplementedException("Library.Add");
+        }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Library.Add");
+        }
         public List<Card> Draw(int drawCount)
         {
             List<Card> drawnCards = new List<Card>();
             for (int i = 0; i < drawCount; i++)
             {
-                drawnCards.Add(Cards[0]);
-                Cards.RemoveAt(0);
+                drawnCards.Add(_Cards[0]);
+                _Cards.RemoveAt(0);
             }
             return drawnCards;
         }
+        public void Insert(Card card, InsertLocation insertLocation)
+        {
+            switch (insertLocation)
+            {
+                case InsertLocation.Bottom:
+                    _Cards.Add(card);
+                    break;
+                case InsertLocation.Top:
+                    _Cards.Insert(0, card);
+                    break;
+            }
+        }
+        public void Remove(Card card, TargetZone targetZone)
+        {
+            throw new NotImplementedException("Library.Remove");
+        }
         public void Shuffle(int riffleShuffleCount = 3)
         {
-            Cards = CardHelper.ShuffleCards(Cards, riffleShuffleCount);
+            _Cards = CardHelper.ShuffleCards(_Cards, riffleShuffleCount);
         }
         #endregion
     }

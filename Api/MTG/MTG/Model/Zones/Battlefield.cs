@@ -1,6 +1,9 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using MTGModel.Objects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Zones
 {
@@ -19,14 +22,50 @@ namespace MTG.Model.Zones
                 text have received errata in the Oracle card reference.     */
     public class Battlefield: IZone
     {
+        #region Events
+        #endregion
+
+        #region Variables
+        private List<Card> _Cards;
+        #endregion
+
         #region Properties
-        public List<Card> Cards { get; set; }
+        public IReadOnlyCollection<Card> Cards
+        {
+            get
+            {
+                return _Cards.AsReadOnly();
+            }
+        }
         #endregion
 
         #region Constructors
         public Battlefield()
         {
-            Cards = new List<Card>();
+            _Cards = new List<Card>();
+        }
+        #endregion
+
+        #region Methods
+        public void Add(Card card)
+        {
+            throw new NotImplementedException("BattleField.Add");
+        }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("BattleField.Add");
+        }
+        public List<Card> CardsWithAbility(Type type)
+        {
+            return _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.GetType() == type) != null);
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            return _Cards.FindAll(predicate);
+        }
+        public void Remove(Card card,TargetZone targetZone)
+        {
+            throw new NotImplementedException("BattleField.Remove");
         }
         #endregion
     }

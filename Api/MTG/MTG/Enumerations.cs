@@ -314,6 +314,7 @@ namespace MTG.Enumerations
         CounterSpell_TargetAbility_UnlessPaidX,
         Destroy,
         Damage,
+        DrawCard,
         DrawPhaseExtraCards,        
         DiscardCard,
         Exile,
@@ -364,6 +365,12 @@ namespace MTG.Enumerations
     {
         None,
         Melee
+    }
+    public enum InsertLocation
+    {
+        None,
+        Bottom,
+        Top,
     }
     public enum ManaRestriction
     {
@@ -724,6 +731,19 @@ namespace MTG.Enumerations
         Land,
         Permanent,
         Player,
+        Planeswalker,
+    }
+    public enum TargetZone
+    {
+        None,
+        Ante,
+        Battlefield,
+        Command,
+        Exile,
+        Graveyard,
+        Hand,
+        Library,
+        Stack,
     }
     public enum UpkeepRequirementTypes
     {

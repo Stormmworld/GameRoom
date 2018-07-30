@@ -53,18 +53,14 @@ namespace MTG.Model.Zones
     {
         #region Properties
         public List<StackEntry> Entries { get; set; }
-        public List<Card> Cards
+        public IReadOnlyCollection<Card> Cards
         {
             get
             {
                 List<Card> retVal = new List<Card>();
                 foreach (StackEntry entry in Entries.FindAll(o => o.EntryType == StackEntryType.Spell))
                     retVal.Add(entry.Card);
-                return retVal;
-            }
-            set
-            {
-                throw new NotImplementedException();
+                return retVal.AsReadOnly();
             }
         }
         #endregion
@@ -77,15 +73,15 @@ namespace MTG.Model.Zones
         #endregion
 
         #region Methods
-        public void Add(ActiveGame game, Card card)
+        public void Add(Card card)
         {
             Entries.Add(new StackEntry(Entries.Count + 1, card));
         }
-        public void Add(ActiveGame game, Effect effect, Card originCard)
+        public void Add(Effect effect, Card originCard)
         {
             Entries.Add(new StackEntry(Entries.Count + 1, effect, originCard.ImageUrl));
         }
-        public void CounterSpell(ActiveGame game, Card targetSpell, Card counteringSpell)
+        public void CounterSpell(Card targetSpell, Card counteringSpell)
         {
             if (targetSpell.TriggeredEffects.FirstOrDefault(o => o.Trigger == EffectTrigger.Cast && o.EffectType == EffectTypes.CannotCounter) != null)
                 return;
@@ -96,16 +92,26 @@ namespace MTG.Model.Zones
             while (game.Stack.Entries.Count > 0)
             {
                 StackEntry entry = game.Stack.Entries[game.Stack.Entries.Count-1];
+                Player controllerPlayer = game.Players.First(o=>o.Id == entry.Card.ControllerId);
                 switch (entry.EntryType)
                 {
                     case StackEntryType.Effect:
                         break;
                     case StackEntryType.Spell:
+                        if (entry.Card.IsPermanant)
+                        {
+                            controllerPlayer.Battlefield.Add(entry.Card);
+
+                        }
                         break;
                 }
                 game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
             }
             throw new NotImplementedException("Stack.Process");
+        }
+        public void Remove(Card card, TargetZone targetZone)
+        {
+            throw new NotImplementedException("Stack.Remove");
         }
         #endregion
     }

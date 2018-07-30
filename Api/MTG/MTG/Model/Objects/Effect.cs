@@ -29,7 +29,7 @@ namespace MTG.Model.Objects
                 EffectType = effectType,
                 TargetCard = card,
                 TargetPlayer = player,
-                Value = game.UpkeepRequirements[0].FailedValue,
+                Value = value,
             };
         }
         public void ProcessEffect(ActiveGame game)
@@ -52,26 +52,18 @@ namespace MTG.Model.Objects
                     if (TargetPlayer != null)
                         TargetPlayer.AddDamage(game, Value, OriginCard);
                     else if (TargetCard != null)
-                        TargetCard.AddDamage(Value, OriginCard.);
+                        TargetCard.AddDamage(game, Value, OriginCard);
                     break;
                 case EffectTypes.Destroy:
                     if (TargetCard != null)
                     {
-                        foreach (Player player in game.Players)
-                        {
-                            int cardIndex = player.Battlefield.Cards.IndexOf(TargetCard);
-                            if (cardIndex > -1)
-                            {
-                                player.Graveyard.AddCard(TargetCard);
-                                player.Battlefield.Cards.RemoveAt(cardIndex);
-                                break;
-                            }
-                        }
+                        Player player = game.Players.First(o => o.Id == TargetCard.ControllerId);
+                        player.Battlefield.Remove(TargetCard, TargetZone.Graveyard);
                     }
                     break;
                 case EffectTypes.DiscardCard:
                     if (TargetPlayer != null && TargetCard != null)
-                        TargetPlayer.Hand.Cards.Remove(TargetCard);
+                        TargetPlayer.Hand.Remove(TargetCard, TargetZone.Graveyard);
                     break;
                 case EffectTypes.DrawCard:
                     if (TargetPlayer != null)
@@ -79,11 +71,11 @@ namespace MTG.Model.Objects
                     break;
                 case EffectTypes.PlaceCardInLibrary_Bottom:
                     if (TargetPlayer != null && TargetCard != null)
-                        TargetPlayer.Library.Cards.Add(TargetCard);
+                        TargetPlayer.Library.Insert(TargetCard, InsertLocation.Bottom);
                     break;
                 case EffectTypes.PlaceCardInLibrary_Top:
                     if (TargetPlayer != null && TargetCard != null)
-                        TargetPlayer.Library.Cards.Insert(0,TargetCard);
+                        TargetPlayer.Library.Insert(TargetCard, InsertLocation.Top);
                     break;
                 case EffectTypes.ShuffleLibrary:
                     if (TargetPlayer != null)
@@ -94,51 +86,21 @@ namespace MTG.Model.Objects
                         TargetPlayer.Library.ShowTopCard = Boolean;
                     break;
                 case EffectTypes.RemoveFromGame:
+
                     if (TargetCard != null)
                     {
-                        foreach (Player player in game.Players)
-                        {
-                            int cardIndex = player.Battlefield.Cards.IndexOf(TargetCard);
-                            if (cardIndex > -1)
-                            {
-                                player.Battlefield.Cards.RemoveAt(cardIndex);
-                                break;
-                            }
-                            else
-                            {
-                                cardIndex = player.Graveyard.Cards.IndexOf(TargetCard);
-                                if (cardIndex > -1)
-                                {
-                                    player.Graveyard.Cards.RemoveAt(cardIndex);
-                                    break;
-                                }
-                            }
-                        }
+                        Player player = game.Players.First(o => o.Id == TargetCard.ControllerId);
+                        player.Battlefield.Remove(TargetCard, TargetZone.None);
+                        player.Graveyard.Remove(TargetCard, TargetZone.None);
+                        player.Hand.Remove(TargetCard, TargetZone.None);
                     }
                     break;
                 case EffectTypes.Exile:
                     if (TargetCard != null)
                     {
-                        foreach (Player player in game.Players)
-                        {
-                            int cardIndex = player.Battlefield.Cards.IndexOf(TargetCard);
-                            if (cardIndex > -1)
-                            {
-                                game.Exile.Cards.Add(TargetCard);
-                                player.Battlefield.Cards.RemoveAt(cardIndex);
-                                break;
-                            }
-                            else
-                            {
-                                cardIndex = player.Graveyard.Cards.IndexOf(TargetCard);
-                                if (cardIndex > -1)
-                                {
-                                    game.Exile.Cards.Add(TargetCard);
-                                    player.Graveyard.Cards.RemoveAt(cardIndex);
-                                    break;
-                                }
-                            }
-                        }
+                        Player player = game.Players.First(o => o.Id == TargetCard.ControllerId);
+                        player.Battlefield.Remove(TargetCard, TargetZone.None);
+                        game.Stack.Remove(TargetCard, TargetZone.None);
                     }
                     break;
             }

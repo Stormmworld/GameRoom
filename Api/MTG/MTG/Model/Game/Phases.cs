@@ -26,8 +26,8 @@ namespace MTG.Model.Game
                         until the next time a player would receive priority, which is usually during the upkeep step. 
                         (See rule 503, “Upkeep Step.”)
              */
-            game.Players[game.ActivePlayerIndex].PhasePermanents();
-            game.Players[game.ActivePlayerIndex].UntapPermanents();
+            game.ActivePlayer.PhasePermanents();
+            game.ActivePlayer.UntapPermanents();
         }
         public static void BegginingPhase_UpkeepStep(ActiveGame game)
         {
@@ -51,18 +51,18 @@ namespace MTG.Model.Game
                         switch (card.UpkeepTrigger)
                         {
                             case UpkeepTriggers.Owner:
-                                if (player.Id == game.Players[game.ActivePlayerIndex].Id)
+                                if (player.Id == game.ActivePlayer.Id)
                                     ProcessUpkeepRequirement(requirement, game);
                                 break;
                             case UpkeepTriggers.All:
                                 ProcessUpkeepRequirement(requirement, game);
                                 break;
                             case UpkeepTriggers.Team:
-                                if (player.TeamId == game.Players[game.ActivePlayerIndex].TeamId)//team mate
+                                if (player.TeamId == game.ActivePlayer.TeamId)//team mate
                                     ProcessUpkeepRequirement(requirement, game);
                                 break;
                             case UpkeepTriggers.Opponnent:
-                                if (player.TeamId != game.Players[game.ActivePlayerIndex].TeamId)//team mate
+                                if (player.TeamId != game.ActivePlayer.TeamId)//team mate
                                     ProcessUpkeepRequirement(requirement, game);
                                 break;
                         }
@@ -83,10 +83,7 @@ namespace MTG.Model.Game
                         has multiple upkeep steps, that spell may be cast any time after the first upkeep step ends.
              */
             while (game.UpkeepRequirements.Count > 0)
-            {
-                CompleteUpkeepRequirement(game.UpkeepRequirements[0], game);
-                game.UpkeepRequirements.RemoveAt(0);
-            }
+                CompleteUpkeepRequirement(game.NextUpkeepRequirement(), game);
         }
         public static void BegginingPhase_DrawStep(ActiveGame game)
         {
@@ -96,9 +93,9 @@ namespace MTG.Model.Game
                 504.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
             int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.EffectType == EffectTypes.SkipDrawCard) != null ? 0 : 1);
-            foreach (Effect drawEffect in game.ActiveEffects.FindAll(o=>o.EffectType == EffectTypes.DrawPhaseExtraCards))
+            foreach (Effect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
                 cardDrawCount += drawEffect.Value;
-            game.Players[game.ActivePlayerIndex].DrawCards(cardDrawCount);
+            game.ActivePlayer.DrawCards(cardDrawCount);
         }
         public static void PreCombatMainPhase(ActiveGame game)
         {
@@ -386,7 +383,7 @@ namespace MTG.Model.Game
                                 if (!attackerIsBandingWithOthers)
                                 {
                                     attacker.AddDamage(game, blocker.Power, blocker);
-                                    blocker.DealtDamage(game);
+                                    blocker.DealtDamage(game, TargetType.Creature);
                                 }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
@@ -396,7 +393,7 @@ namespace MTG.Model.Game
                                 if (!blockerIsBandingWithOthers)
                                 {
                                     blocker.AddDamage(game, attacker.Power, attacker);
-                                    attacker.DealtDamage(game);
+                                    attacker.DealtDamage(game, TargetType.Creature);
                                 }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
@@ -412,7 +409,7 @@ namespace MTG.Model.Game
                                     if (!attackerIsBandingWithOthers)
                                     { 
                                         attacker.AddDamage(game, blocker.Power, blocker);
-                                        blocker.DealtDamage(game);
+                                        blocker.DealtDamage(game, TargetType.Creature);
                                     }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
@@ -422,7 +419,7 @@ namespace MTG.Model.Game
                                     if (!blockerIsBandingWithOthers)
                                     {
                                         blocker.AddDamage(game, attacker.Power, attacker);
-                                        attacker.DealtDamage(game);
+                                        attacker.DealtDamage(game, TargetType.Creature);
                                     }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
@@ -481,7 +478,7 @@ namespace MTG.Model.Game
                                 if (!attackerIsBandingWithOthers)
                                 {
                                     attacker.AddDamage(game, blocker.Power, blocker);
-                                    blocker.DealtDamage(game);
+                                    blocker.DealtDamage(game, TargetType.Creature);
                                 }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
@@ -491,7 +488,7 @@ namespace MTG.Model.Game
                                 if (!blockerIsBandingWithOthers)
                                 {
                                     blocker.AddDamage(game, attacker.Power, attacker);
-                                    attacker.DealtDamage(game);
+                                    attacker.DealtDamage(game, TargetType.Creature);
                                 }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
@@ -507,7 +504,7 @@ namespace MTG.Model.Game
                                     if (!attackerIsBandingWithOthers)
                                     {
                                         attacker.AddDamage(game, blocker.Power, blocker);
-                                        blocker.DealtDamage(game);
+                                        blocker.DealtDamage(game, TargetType.Creature);
                                     }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
@@ -517,7 +514,7 @@ namespace MTG.Model.Game
                                     if (!blockerIsBandingWithOthers)
                                     {
                                         blocker.AddDamage(game, attacker.Power, attacker);
-                                        attacker.DealtDamage(game);
+                                        attacker.DealtDamage(game, TargetType.Creature);
                                     }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
@@ -575,8 +572,9 @@ namespace MTG.Model.Game
                 514.3. Normally, no player receives priority during the cleanup step, so no spells can be cast and no abilities can be activated. However, this rule is subject to the following exception:
                 514.3a At this point, the game checks to see if any state-based actions would be performed and/or any triggered abilities are waiting to be put onto the stack (including those that trigger “at the beginning of the next cleanup step”). If so, those state-based actions are performed, then those triggered abilities are put on the stack, then the active player gets priority. Players may cast spells and activate abilities. Once the stack is empty and all players pass in succession, another cleanup step begins.
              */
-            game.Modifiers.RemoveAll(o=>o==GameModifier.CombatDamagePrevented);
-            game.Modifiers.RemoveAll(o => o == GameModifier.CreaturesTakeNoDamage);
+            game.RemoveModifiers(GameModifier.CombatDamagePrevented);
+            game.RemoveModifiers(GameModifier.CreaturesTakeNoDamage);
+
             game.RemoveEffects(GamePhases.Ending_Cleanup);
             game.TurnSpellCount = 0;
             throw new NotImplementedException("Phases.EndingPhase_CleanupStep");
@@ -668,7 +666,7 @@ namespace MTG.Model.Game
                         game.ActivePlayerIndex = GetNextPlayerIndex(game);
                         break;
                 }
-                if (game.SkipPhases.Contains(game.ActivePhase) || game.Players[game.ActivePlayerIndex].SkipPhases.Contains(game.ActivePhase))
+                if (game.SkipPhases.Contains(game.ActivePhase) || game.ActivePlayer.SkipPhases.Contains(game.ActivePhase))
                     NextPhase(game);
                 game.EmptyManaPools();
             }
@@ -676,9 +674,9 @@ namespace MTG.Model.Game
         private static int GetNextPlayerIndex(ActiveGame game)
         {
             int nextIndex = game.ActivePlayerIndex;
-            if (game.Players[game.ActivePlayerIndex].AdditionalTurnCount > 0)
+            if (game.ActivePlayer.AdditionalTurnCount > 0)
             {
-                game.Players[game.ActivePlayerIndex].AdditionalTurnCount--;
+                game.ActivePlayer.AdditionalTurnCount--;
                 return game.ActivePlayerIndex;
             }
             else
@@ -696,10 +694,10 @@ namespace MTG.Model.Game
         private static void ProcessUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
         {
             if (requirement.RequiresSelection)
-                game.UpkeepRequirements.Add(requirement);
+                game.AddUpkeepRequirement(requirement);
             else
             {
-                EffectTypes effectType = Effect.TranslateEffectType(game.UpkeepRequirements[0].RequirementType);
+                EffectTypes effectType = Effect.TranslateEffectType(requirement.RequirementType);
                 switch (requirement.TargetType)
                 {
                     case TargetType.Artifact:
@@ -725,13 +723,13 @@ namespace MTG.Model.Game
         }
         private static void CompleteUpkeepRequirement(UpkeepRequirement requirement, ActiveGame game)
         {
-            EffectTypes effectType = Effect.TranslateEffectType(game.UpkeepRequirements[0].RequirementType);
+            EffectTypes effectType = Effect.TranslateEffectType(requirement.RequirementType);
             if (requirement.TargetId == 0)//target not selected process failed
             {
-                switch (game.UpkeepRequirements[0].FailedRequirementResult)
+                switch (requirement.FailedRequirementResult)
                 {
                     case UpkeepRequirementTypes.Damage:
-                        switch (game.UpkeepRequirements[0].FailedTarget)
+                        switch (requirement.FailedTarget)
                         {
                             case TargetType.Artifact:
                             case TargetType.Creature:
@@ -755,7 +753,7 @@ namespace MTG.Model.Game
             }
             else //Target Selected 
             {
-                switch (game.UpkeepRequirements[0].TargetType)
+                switch (requirement.TargetType)
                 {
                     case TargetType.Artifact:
                     case TargetType.Creature:

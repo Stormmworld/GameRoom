@@ -1,5 +1,7 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using MTGModel.Objects;
+using System;
 using System.Collections.Generic;
 
 namespace MTG.Model.Zones
@@ -41,14 +43,38 @@ namespace MTG.Model.Zones
      */
     public class Exile: IZone
     {
+        #region Events
+        #endregion
+
+        #region Variables
+        private List<Card> _Cards;
+        #endregion
+
         #region Properties
-        public List<Card> Cards { get; set; }
+        public IReadOnlyCollection<Card> Cards
+        {
+            get
+            {
+                return _Cards.AsReadOnly();
+            }
+        }
         #endregion
 
         #region Constructors
         public Exile()
         {
-            Cards = new List<Card>();
+            _Cards = new List<Card>();
+        }
+        #endregion
+
+        #region Methods
+        public void Add(Card card)
+        {
+            throw new NotImplementedException("Ante.Add");
+        }
+        public void Remove(Card card, TargetZone targetZone)
+        {
+            throw new NotImplementedException("Ante.Remove");
         }
         #endregion
     }

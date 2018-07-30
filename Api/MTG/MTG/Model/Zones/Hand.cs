@@ -3,6 +3,7 @@ using MTG.Interfaces;
 using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Zones
 {
@@ -20,28 +21,86 @@ namespace MTG.Model.Zones
      */
     public class Hand: IZone
     {
+        #region Events
+        #endregion
+
+        #region Variables
+        private List<Card> _Cards;
+        #endregion
+
         #region Properties
-        public int MaximumSize { get; set; }
-        public List<Card> Cards { get; set; }
+        public IReadOnlyCollection<Card> Cards
+        {
+            get
+            {
+                return _Cards.AsReadOnly();
+            }
+        }
         public bool HandRevealed { get; set; }
+        public int MaximumSize { get; set; }
         #endregion
 
         #region Constructors
         public Hand()
         {
-            Cards = new List<Card>();
-            MaximumSize = 7;
+            _Cards = new List<Card>();
         }
         #endregion
 
         #region Methods
+        public void Add(Card card)
+        {
+            throw new NotImplementedException("Hand.Add");
+        }
+        public void Add(List<Card> cards)
+        {
+            throw new NotImplementedException("Library.Add");
+        }
+        public List<Card> CardsWithAbility(Type type)
+        {
+            return _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.GetType() == type) != null);
+        }
+        public void Discard(bool random, int cardIndex)
+        {
+            if (random)
+            {
+                Random rng = new Random();
+                Discard(rng.Next(0, _Cards.Count - 1));
+            }
+            else
+            {
+
+            }
+
+            throw new NotImplementedException("Hand.Discard");
+        }
+        public void Discard(Card card)
+        {
+            throw new NotImplementedException("Hand.Discard");
+        }
+        public void Discard(int cardId)
+        {
+            throw new NotImplementedException("Hand.Discard");
+        }
+        public List<Card> FilteredCards(Predicate<Card> predicate)
+        {
+            return _Cards.FindAll(predicate);
+        }
         public bool LandMulligan()
         {
-            var landInHand = Cards.FindAll(o=>o.CardTypes.Contains(CardType.Land));
+            var landInHand = _Cards.FindAll(o=>o.CardTypes.Contains(CardType.Land));
             if (landInHand.Count < 2)
                 return true;
             else
                 return landInHand.Count == MaximumSize;
+        }
+        public void Remove(TargetZone targetZone)
+        {//send all cards to targetZone
+            throw new NotImplementedException("Graveyard.Remove");
+        }
+        public void Remove(Card card, TargetZone targetZone)
+        {
+            throw new NotImplementedException("Hand.Remove");
         }
         #endregion
     }

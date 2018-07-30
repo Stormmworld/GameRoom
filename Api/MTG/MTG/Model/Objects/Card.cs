@@ -26,6 +26,7 @@ namespace MTGModel.Objects
         public List<int> BandedWithCardIds { get; set; }
         public List<CardType> CardTypes { get; private set; }
         public List<Colors> Colors { get; set; }
+        public int ControllerId { get; set; }
         public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
         public int DamageTaken { get; set; }
         public int FaceUpSide { get; set; }
@@ -68,6 +69,25 @@ namespace MTGModel.Objects
         public bool UntapDuringUntapPhase { get; set; }
         public UpkeepTriggers UpkeepTrigger { get; set; }
         public UpkeepRequirement UpkeepRequirement { get; set; }
+        public bool IsPermanant
+        {
+            get
+            {
+                foreach (CardType type in CardTypes)
+                {
+                    switch (type)
+                    {
+                        case CardType.Artifact:
+                        case CardType.Creature:
+                        case CardType.Enchantment:
+                        case CardType.Land:
+                        case CardType.Planeswalker:
+                            return true;
+                    }
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Constructors

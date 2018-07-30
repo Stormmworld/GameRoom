@@ -24,9 +24,15 @@ namespace MTG.Model.Objects
             Player defendingPlayer = game.Players.First(o => o.Id == Defender.PlayerId);
             Card planeswalker = defendingPlayer.Battlefield.Cards.FirstOrDefault(o => o.Id == Defender.PlaneswalkerId);
             if (Defender.AttackableType == AttackableType.Planeswalker && planeswalker != null)// card not destroyed 
-                    planeswalker.AddDamage(game,damageDealt, Card);
+            {
+                planeswalker.AddDamage(game, damageDealt, Card);
+                Card.DealtDamage(game, TargetType.Planeswalker);
+            }
             else if (Defender.AttackableType == AttackableType.Player)
+            {
                 defendingPlayer.AddDamage(game, damageDealt, Card);
+                Card.DealtDamage(game, TargetType.Player);
+            }
         }
         #endregion
     }

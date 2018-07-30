@@ -1,4 +1,5 @@
 ﻿
+using MTG.Enumerations;
 using MTGModel.Objects;
 using System;
 using System.Collections.Generic;
@@ -77,6 +78,12 @@ namespace MTG.Interfaces
      */
     public interface IZone
     {
-        List<Card> Cards { get; set; }
+        IReadOnlyCollection<Card> Cards { get; }
+
+        void Add(Card card);
+        void Add(List<Card> cards);
+        List<Card> CardsWithAbility(Type abilityType);
+        List<Card> FilteredCards(Predicate<Card> predicate);
+        void Remove(Card card, TargetZone targetZone);
     }
 }

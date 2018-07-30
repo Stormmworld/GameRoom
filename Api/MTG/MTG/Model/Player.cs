@@ -16,7 +16,7 @@ namespace MTG.Model
     public class Player
     {
         #region Events
-        public event EventHandler AddPendingAction;
+        public event EventHandler AddPendingAction, AddCardToZone;
         #endregion
 
         #region Properties
@@ -50,13 +50,16 @@ namespace MTG.Model
         {
             ResetPlayer();
         }
+        public Player(string name):this()
+        {
+            Name = name;
+        }
         #endregion
 
         #region EventHandlers
         private void Card_OnCardDestroyed(object sender, EventArgs e)
         {
-            Battlefield.Cards.Remove(((CardEventArgs)e).Card);
-            Graveyard.AddCard(((CardEventArgs)e).Card);
+            Battlefield.Remove(((CardEventArgs)e).Card, TargetZone.Graveyard);
         }
         #endregion
 
@@ -64,7 +67,7 @@ namespace MTG.Model
         public List<IPendingDamageResolution> AddDamage(ActiveGame game, int damage, Card originCard)
         {
             List<IPendingDamageResolution> retVal = new List<IPendingDamageResolution>();
-            List<Card> bodyguards = Battlefield.Cards.FindAll(o => o.Abilities.FirstOrDefault(m => m is Bodyguard) != null);
+            List<Card> bodyguards = Battlefield.CardsWithAbility(typeof(Bodyguard));
             List<Card> cardsThatAffectDamage = GetCardsThatAffectDamage();
             if (cardsThatAffectDamage.Count > 0)
             {
@@ -131,32 +134,23 @@ namespace MTG.Model
         public void CombineToLibrary(bool hand, bool graveyard)
         {
             if (graveyard)
-            {
-                Library.Cards.AddRange(Graveyard.Cards);
-                Graveyard.Cards.Clear();
-            }
+                Graveyard.Remove(TargetZone.Library);
             if (hand)
             {
-                Library.Cards.AddRange(Hand.Cards);
-                Hand.Cards.Clear();
+                Hand.Remove(TargetZone.Library);
             }
             Library.Shuffle();
         }
         public void Discard(int cardId, int randomCount)
         {
             if (cardId > 0)
-                Discard(Hand.Cards.IndexOf(Hand.Cards.First(o => o.Id == cardId)));
-
-            while (randomCount > 0 && Hand.Cards.Count > 0)
-            {
-                Random random = new Random();
-                Discard(random.Next(0, Hand.Cards.Count - 1));
-            }
+                Hand.Discard(Hand.Cards.First(o => o.Id == cardId));
+            for (int i = 0; i < randomCount; i++)
+                Hand.Discard(true, 0);
         }
-        private void Discard(int cardIndex)
+        private void Discard(Card card)
         {
-            Graveyard.AddCard(Hand.Cards[cardIndex]);
-            Hand.Cards.RemoveAt(cardIndex);
+            Hand.Remove(card, TargetZone.Graveyard);
         }
         public void DrawCards(int drawCount)
         {
@@ -167,10 +161,10 @@ namespace MTG.Model
             if (cardDrawCount > Library.Cards.Count)
             {
                 FailedDraw = true;
-                Hand.Cards.AddRange(Library.Draw(Library.Cards.Count));
+                Hand.Add(Library.Draw(Library.Cards.Count));
             }
             else
-                Hand.Cards.AddRange(Library.Draw(cardDrawCount));
+                Hand.Add(Library.Draw(cardDrawCount));
         }
         public void EmptyManaPool()
         {
@@ -182,7 +176,7 @@ namespace MTG.Model
         }
         public void PhasePermanents()
         {
-            foreach (Card card in Battlefield.Cards.FindAll(o => o.Abilities.Exists(p => p is Phasing)))
+            foreach (Card card in Battlefield.CardsWithAbility(typeof(Phasing)))
                 card.PhasedOut = !card.PhasedOut;
         }
         public void ProcessDamage()
@@ -213,12 +207,12 @@ namespace MTG.Model
             Deck = deck;
             foreach (Card card in Deck.Cards)
                 card.OwnerId = this.Id;
-            Library.Cards = Deck.CloneCards();
+            Library.Add(Deck.CloneCards());
             Library.Shuffle();
         }
         public void UntapPermanents()
         {
-            foreach (Card card in Battlefield.Cards.FindAll(o => o.Tapped))
+            foreach (Card card in Battlefield.FilteredCards(o=>o.Tapped))
             {
                 if (card.UntapDuringUntapPhase || card.SelectedToUntap)
                 {
