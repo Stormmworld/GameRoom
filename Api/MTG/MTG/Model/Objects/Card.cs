@@ -13,7 +13,7 @@ namespace MTGModel.Objects
     public class Card
     {
         #region Events
-        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped, CardDestroyed, PendingActionTriggered;
+        public event EventHandler CardPhasedIn, CardPhasedOut, CardTapped, CardUntapped, CardDestroyed, PendingActionTriggered, EffectTriggered;
         #endregion
 
         #region Variables
@@ -152,6 +152,12 @@ namespace MTGModel.Objects
         {
             bool hasVigilance = Abilities.FirstOrDefault(p => p is Vigilance) != null;
             return Tapped || hasVigilance;
+        }
+        public void CheckTriggeredAbilities(EffectTrigger trigger)
+        {
+            if (trigger == EffectTrigger.None)
+                return;
+            throw new NotImplementedException("Card.CheckTriggeredAbilities");
         }
         public void DealtDamage(ActiveGame game, TargetType damagedEntity)
         {

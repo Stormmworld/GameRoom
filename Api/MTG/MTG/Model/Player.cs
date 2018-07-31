@@ -57,9 +57,33 @@ namespace MTG.Model
         #endregion
 
         #region EventHandlers
-        private void Card_OnCardDestroyed(object sender, EventArgs e)
+        private void Card_CardDestroyed(object sender, EventArgs e)
         {
             Battlefield.Remove(((CardEventArgs)e).Card, TargetZone.Graveyard);
+        }
+        private void Card_EffectTriggered(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Card_EffectTriggered");
+        }
+        private void Card_PendingActionTriggered(object sender, EventArgs e)
+        {
+            AddPendingAction?.Invoke(sender, e);
+        }
+        private void Card_CardPhasedIn(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Card_CardPhasedIn");
+        }
+        private void Card_CardPhasedOut(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Card_CardPhasedOut");
+        }
+        private void Card_CardTapped(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Card_CardTapped");
+        }
+        private void Card_CardUntapped(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Card_CardUntapped");
         }
         #endregion
 
@@ -152,19 +176,35 @@ namespace MTG.Model
         {
             Hand.Remove(card, TargetZone.Graveyard);
         }
-        public void DrawCards(int drawCount)
+        public void DrawCards(int drawCount, GamePhases currentPhase)
         {
             int cardDrawCount = drawCount;
-            foreach (Effect drawEffect in ActiveEffects.FindAll(o => o.EffectType == EffectTypes.DrawPhaseExtraCards))
-                cardDrawCount += drawEffect.Value;
 
+            if (currentPhase == GamePhases.Beginning_Draw)
+                foreach (Effect drawEffect in ActiveEffects.FindAll(o => o.EffectType == EffectTypes.DrawPhaseExtraCards))
+                    cardDrawCount += drawEffect.Value;
+
+            List<Card> cardsDrawn = new List<Card>();
             if (cardDrawCount > Library.Cards.Count)
             {
                 FailedDraw = true;
-                Hand.Add(Library.Draw(Library.Cards.Count));
+                cardsDrawn.AddRange(Library.Draw(Library.Cards.Count));
             }
             else
-                Hand.Add(Library.Draw(cardDrawCount));
+                cardsDrawn.AddRange(Library.Draw(cardDrawCount));
+
+            foreach (Card card in cardsDrawn)
+            {
+                card.EffectTriggered += Card_EffectTriggered;
+                card.CardPhasedIn += Card_CardPhasedIn; ;
+                card.CardPhasedOut += Card_CardPhasedOut;
+                card.CardTapped += Card_CardTapped;
+                card.CardUntapped += Card_CardUntapped;
+                card.CardDestroyed += Card_CardDestroyed;
+                card.PendingActionTriggered += Card_PendingActionTriggered;
+            }
+
+            Hand.Add(cardsDrawn);
         }
         public void EmptyManaPool()
         {

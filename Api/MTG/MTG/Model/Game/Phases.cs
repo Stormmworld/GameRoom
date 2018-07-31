@@ -95,7 +95,7 @@ namespace MTG.Model.Game
             int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.EffectType == EffectTypes.SkipDrawCard) != null ? 0 : 1);
             foreach (Effect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
                 cardDrawCount += drawEffect.Value;
-            game.ActivePlayer.DrawCards(cardDrawCount);
+            game.ActivePlayer.DrawCards(cardDrawCount, GamePhases.Beginning_Draw);
         }
         public static void PreCombatMainPhase(ActiveGame game)
         {
