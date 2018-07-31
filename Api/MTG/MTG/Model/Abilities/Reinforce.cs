@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -16,9 +17,17 @@ namespace MTG.Model.Abilities
                     other zones. Therefore objects with reinforce will be affected by effects that 
                     depend on objects having one or more activated abilities.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public bool IsActivated { get { return true; } }
+        public bool IsStatic { get { return false; } }
+        public EffectTrigger Trigger { get { return EffectTrigger.CardInHand; } }        
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Reinforce.Process");
         }
+        #endregion
     }
 }

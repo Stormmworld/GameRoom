@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -16,9 +17,15 @@ namespace MTG.Model.Abilities
                     to exist while the object is on the battlefield and in all other zones. Therefore objects with transmute 
                     will be affected by effects that depend on objects having one or more activated abilities.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Transmute.Process");
         }
+        #endregion
     }
 }

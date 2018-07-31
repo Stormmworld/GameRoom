@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -13,9 +14,15 @@ namespace MTG.Model.Abilities
                     power. (See rule 509, “Declare Blockers Step.”)
             702.117c Multiple instances of skulk on the same creature are redundant.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.DeclareBlockersPhase; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Skulk.Process");
         }
+        #endregion
     }
 }

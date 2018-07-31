@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -26,9 +27,15 @@ namespace MTG.Model.Abilities
                     it or the creature it’s paired with; it or the creature it’s paired with stops being a creature; or 
                     it or the creature it’s paired with leaves the battlefield.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.EntersBattleField; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
-            throw new NotImplementedException("Soulbond.Process");
+            throw new NotImplementedException("Soulshift.Process");
         }
+        #endregion
     }
 }

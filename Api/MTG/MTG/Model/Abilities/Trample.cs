@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -34,9 +35,15 @@ namespace MTG.Model.Abilities
                     creature could assign is greater than the planeswalker’s loyalty.
             702.19e Multiple instances of trample on the same creature are redundant.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Trample.Process");
         }
+        #endregion
     }
 }

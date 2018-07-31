@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -15,9 +16,15 @@ namespace MTG.Model.Abilities
                     is true if the opponent chosen as a result of the tribute ability didn’t have the creature enter the 
                     battlefield with +1/+1 counters as specified by the creature’s tribute ability.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Tribute.Process");
         }
+        #endregion
     }
 }

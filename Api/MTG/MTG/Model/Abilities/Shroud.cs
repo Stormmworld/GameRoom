@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -12,9 +13,15 @@ namespace MTG.Model.Abilities
                     be the target of spells or abilities.”
             702.18b Multiple instances of shroud on the same permanent or player are redundant.   
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.EntersBattleField; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Shroud.Process");
         }
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -21,9 +22,15 @@ namespace MTG.Model.Abilities
                     triggers based on the payments made for it, not any other instance of 
                     replicate.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
-            throw new NotImplementedException("Replicate.Process");
+            throw new NotImplementedException("Scavenge.Process");
         }
+        #endregion
     }
 }

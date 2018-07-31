@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -16,9 +17,15 @@ namespace MTG.Model.Abilities
                     on the stack.
             702.60c Multiple instances of split second on the same spell are redundant.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Split_Second.Process");
         }
+        #endregion
     }
 }

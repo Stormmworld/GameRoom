@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -13,9 +14,15 @@ namespace MTG.Model.Abilities
                     your graveyard to your hand.”
             702.45b If a permanent has multiple instances of soulshift, each triggers separately.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.EntersGraveyard; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Soulshift.Process");
         }
+        #endregion
     }
 }

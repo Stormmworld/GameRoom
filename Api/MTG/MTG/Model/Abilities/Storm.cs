@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -13,9 +14,15 @@ namespace MTG.Model.Abilities
                     you may choose new targets for any of the copies.”
             702.39b If a spell has multiple instances of storm, each triggers separately.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Storm.Process");
         }
+        #endregion
     }
 }

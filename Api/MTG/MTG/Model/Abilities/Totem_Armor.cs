@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -12,9 +13,15 @@ namespace MTG.Model.Abilities
                     means “If enchanted permanent would be destroyed, instead remove all damage 
                     marked on it and destroy this Aura.”
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Totem_Armor.Process");
         }
+        #endregion
     }
 }

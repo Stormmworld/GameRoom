@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -17,9 +18,15 @@ namespace MTG.Model.Abilities
                     counter is removed from this permanent, sacrifice it.”
             702.62c If a permanent has multiple instances of vanishing, each works separately. 
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Vanishing.Process");
         }
+        #endregion
     }
 }

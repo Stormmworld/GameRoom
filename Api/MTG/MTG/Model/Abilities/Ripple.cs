@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -17,9 +18,15 @@ namespace MTG.Model.Abilities
                     then put all revealed cards not cast this way on the bottom of your 
                     library in any order.”
             702.59b If a spell has multiple instances of ripple, each triggers separately.        */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Ripple.Process");
         }
+        #endregion
     }
 }

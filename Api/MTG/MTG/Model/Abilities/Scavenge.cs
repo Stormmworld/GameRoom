@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -13,9 +14,15 @@ namespace MTG.Model.Abilities
                     graveyard: Put a number of +1/+1 counters equal to the power of the card you exiled 
                     on target creature. Activate this ability only any time you could cast a sorcery.”
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.IsInGraveyard; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Scavenge.Process");
         }
+        #endregion
     }
 }

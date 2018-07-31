@@ -1,12 +1,14 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.Enumerations;
+using System.Collections.Generic;
 
 namespace MTG.Interfaces
 {
     public interface IAbility
     {
-        EffectTrigger trigger { get; set; } 
+        IReadOnlyCollection<AbilityType> Types { get; }
+        EffectTrigger Trigger { get;  }
 
-        void Process(AbilityArgs args);
+        AbilityProcessedEventArgs Process(AbilityArgs args);
     }
 }

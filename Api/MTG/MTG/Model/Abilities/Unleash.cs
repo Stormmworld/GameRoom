@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -12,9 +13,15 @@ namespace MTG.Model.Abilities
                     have this permanent enter the battlefield with an additional +1/+1 counter on it” and 
                     “This permanent can’t block as long as it has a +1/+1 counter on it.”
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Unleash.Process");
         }
+        #endregion
     }
 }

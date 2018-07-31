@@ -122,6 +122,17 @@ namespace MTGModel.Objects
         }
         #endregion
 
+        #region Operators
+        public static bool operator ==(Card x, Card y)
+        {
+            return x.Equals(y);
+        }
+        public static bool operator !=(Card x, Card y)
+        {
+            return !(x == y);
+        }
+        #endregion
+
         #region Methods
         public void AddCounter(Counter counter)
         {
@@ -169,6 +180,11 @@ namespace MTGModel.Objects
         {
             if (Abilities.FirstOrDefault(o => o is Indestructible) == null)
                 CardDestroyed?.Invoke(this, new CardEventArgs() { Card = this });
+        }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Card)) return false;  
+            return Id == ((Card)obj).Id;
         }
         public void FlipCard()
         {

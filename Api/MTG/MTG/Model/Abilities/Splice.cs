@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -30,9 +31,15 @@ namespace MTG.Model.Abilities
                     targets won’t resolve if all of its targets are illegal on resolution.
             702.46e The spell loses any splice changes once it leaves the stack for any reason.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Splice.Process");
         }
+        #endregion
     }
 }

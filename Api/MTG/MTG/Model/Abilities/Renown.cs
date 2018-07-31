@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -18,9 +19,21 @@ namespace MTG.Model.Abilities
                     such ability to resolve will cause the creature to become renowned, and subsequent 
                     abilities will have no effect. (See rule 603.4) 
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.DamageToPlayer; } }
+        private bool IsRenowned { get; set; }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
+            if (!IsRenowned)
+            {
+                //add +1/+1 effect to card
+                IsRenowned = true;
+            }
             throw new NotImplementedException("Renown.Process");
         }
+        #endregion
     }
 }

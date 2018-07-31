@@ -1,6 +1,8 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities
 { 
@@ -13,9 +15,28 @@ namespace MTG.Model.Abilities
                     graveyard from the battlefield, you may pay [cost]. If you do, return this card 
                     from your graveyard to your hand. Otherwise, exile this card.”
         */
-        public void Process(AbilityArgs args)
+        #region Variables
+        public List<AbilityType> _Types;
+        #endregion
+
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.EntersGraveyard; } }
+        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        #endregion
+
+        #region Constructor
+        public Recover()
+        {
+            _Types = new List<AbilityType>();
+            _Types.Add(AbilityType.Triggered);
+        }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Recover.Process");
         }
+        #endregion
     }
 }

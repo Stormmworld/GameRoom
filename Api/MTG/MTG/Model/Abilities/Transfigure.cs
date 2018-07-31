@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -13,9 +14,15 @@ namespace MTG.Model.Abilities
                     put it onto the battlefield. Then shuffle your library. Activate this ability only any time you 
                     could cast a sorcery.”
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Transfigure.Process");
         }
+        #endregion
     }
 }

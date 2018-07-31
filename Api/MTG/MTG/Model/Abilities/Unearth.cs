@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -14,9 +15,15 @@ namespace MTG.Model.Abilities
                     exile it instead of putting it anywhere else. Activate this ability only any time you could 
                     cast a sorcery.”
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Unearth.Process");
         }
+        #endregion
     }
 }

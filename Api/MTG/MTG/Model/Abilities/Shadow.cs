@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -14,9 +15,15 @@ namespace MTG.Model.Abilities
                     rule 509, “Declare Blockers Step.”)
             702.27c Multiple instances of shadow on the same creature are redundant.
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.DeclareBlockersPhase; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Shadow.Process");
         }
+        #endregion
     }
 }

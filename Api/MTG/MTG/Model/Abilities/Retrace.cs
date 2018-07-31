@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using System;
 
@@ -15,9 +16,15 @@ namespace MTG.Model.Abilities
                     spell using its retrace ability follows the rules for paying additional 
                     costs in rules 601.2b and 601.2f–h. 
         */
-        public void Process(AbilityArgs args)
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.IsInGraveyard; } }
+        #endregion
+
+        #region Methods
+        public AbilityProcessedEventArgs Process(AbilityArgs args)
         {
             throw new NotImplementedException("Retrace.Process");
         }
+        #endregion
     }
 }
