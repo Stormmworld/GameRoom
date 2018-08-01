@@ -113,13 +113,16 @@ namespace MTG.Model.Zones
                         if (entry.Card.IsPermanant)
                         {
                             controllerPlayer.Battlefield.Add(entry.Card);
-
                         }
                         break;
                 }
                 game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
             }
             throw new NotImplementedException("Stack.Process");
+        }
+        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        {
+            throw new NotImplementedException("Stack.ProcessTriggeredAbilities");
         }
         public void Remove(Card card, TargetZone targetZone)
         {

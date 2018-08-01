@@ -1,10 +1,12 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.Interfaces;
-using MTGModel.Objects;
+﻿using MTG.Interfaces;
+using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using System;
+using System.Collections.Generic;
+using MTGModel.Objects;
 
 namespace MTG.Model.Abilities
-{ 
+{
     public class Morph : IAbility
     {
         /*
@@ -45,13 +47,54 @@ namespace MTG.Model.Abilities
             702.36g See rule 707, “Face-Down Spells and Permanents,” for more information about how to cast 
                     cards with a morph ability.  
         */
+        #region Events
+        public event EventHandler PendingActionTriggered, EffectTriggered;
+        #endregion
+
+        #region Variables
+        private List<AbilityType> _Types;
+        #endregion
+
+        #region Properties
+        public Card FaceUpCard { get; set; }
+        public Card FaceDownCard
+        {
+            get
+            {
+                Card retVal = new Card()
+                {
+                    Power = 2,
+                    Toughness = 2,
+                    Name = "Morphed Card",
+                    Abilities = new List<IAbility>()
+                };
+                // need an ability to flip this card back over
+                //retVal.AddAbility();
+                throw new NotImplementedException("Morph.FaceDownCard");
+                return retVal;
+            }
+        }
+        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
+        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        #endregion
+
+        #region Constructors
+        public Morph()
+        {
+            _Types = new List<AbilityType>();
+            _Types.Add(AbilityType.Static);
+        }
+        public Morph(Card card) : this()
+        {
+            FaceUpCard = card;
+        }
+        #endregion
+
+        #region Methods
         public void Process(AbilityArgs args)
         {
             throw new NotImplementedException("Morph.Process");
         }
-        public Card FaceDownCard()
-        {
-            throw new NotImplementedException("Morph.FaceDownCard");
-        }
+        #endregion
     }
 }

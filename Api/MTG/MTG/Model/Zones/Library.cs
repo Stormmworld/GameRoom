@@ -95,6 +95,10 @@ namespace MTG.Model.Zones
                     break;
             }
         }
+        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        {
+            throw new NotImplementedException("Library.ProcessTriggeredAbilities");
+        }
         public void Remove(Card card, TargetZone targetZone)
         {
             throw new NotImplementedException("Library.Remove");

@@ -26,12 +26,10 @@ namespace MTG.Model.Objects
             if (Defender.AttackableType == AttackableType.Planeswalker && planeswalker != null)// card not destroyed 
             {
                 planeswalker.AddDamage(game, damageDealt, Card);
-                Card.DealtDamage(game, TargetType.Planeswalker);
             }
             else if (Defender.AttackableType == AttackableType.Player)
             {
                 defendingPlayer.AddDamage(game, damageDealt, Card);
-                Card.DealtDamage(game, TargetType.Player);
             }
         }
         #endregion

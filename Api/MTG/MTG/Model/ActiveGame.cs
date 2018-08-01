@@ -117,6 +117,12 @@ namespace MTG.Model
         {
             throw new NotImplementedException("OnCardDestroyed");
         }
+        private void OnEffectTrigger(object sender, EventArgs e)
+        {
+            EffectTriggerEventArgs args = (EffectTriggerEventArgs)e;
+
+            throw new NotImplementedException("ActiveGame.OnEffectTrigger");
+        }
         #endregion
 
         #region Methods
@@ -136,8 +142,9 @@ namespace MTG.Model
             //create player
             Player player = new Player(name);
             //add event handlers
-            player.AddCardToZone += OnAddCardToZone;
-            player.AddPendingAction += OnAddPendingAction;
+            player.OnAddCardToZone += OnAddCardToZone;
+            player.OnAddPendingAction += OnAddPendingAction;
+            player.OnEffectTrigger += OnEffectTrigger;
             //add deck
             player.SelectDeck(deck);
 

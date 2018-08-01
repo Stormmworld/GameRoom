@@ -26,7 +26,7 @@ namespace MTG.Model.Game
                         until the next time a player would receive priority, which is usually during the upkeep step. 
                         (See rule 503, “Upkeep Step.”)
              */
-            game.ActivePlayer.PhasePermanents();
+            game.ActivePlayer.Battlefield.ProcessTriggeredAbilities(EffectTrigger.UntapStep);
             game.ActivePlayer.UntapPermanents();
         }
         public static void BegginingPhase_UpkeepStep(ActiveGame game)
@@ -362,8 +362,8 @@ namespace MTG.Model.Game
             foreach (AttackingCreature attackingCreature in game.Attackers)
             {
                 bool attackerIsBandingWithOthers = attackingCreature.Card.BandedWithCardIds.Count > 0;
-                bool attackerHasFirstStrike = attackingCreature.Card.HasFirstStrike() || attackingCreature.Card.HasDoubleStrike();
-                bool defendersHaveFirstStrike = attackingCreature.Blockers.FirstOrDefault(o => o.HasDoubleStrike() || o.HasFirstStrike()) != null;
+                bool attackerHasFirstStrike = attackingCreature.Card.HasFirstStrike || attackingCreature.Card.HasDoubleStrike;
+                bool defendersHaveFirstStrike = attackingCreature.Blockers.FirstOrDefault(o => o.HasDoubleStrike || o.HasFirstStrike) != null;
                 if (attackerHasFirstStrike || defendersHaveFirstStrike)
                 {
                     Card attacker = game.FindCard(attackingCreature.Card.Id);
@@ -371,30 +371,24 @@ namespace MTG.Model.Game
                     {
                         if (attackingCreature.Blockers.Count == 0)
                         {// Not Blocked
-                            if (attacker.HasFirstStrike())
+                            if (attacker.HasFirstStrike)
                                 attackingCreature.processDamageToDefender(game, attacker.Power);
                         }
                         else if (attackingCreature.Blockers.Count == 1)
                         {//single blocker
                             Card blocker = game.FindCard(attackingCreature.Blockers[0].Id);
                             bool blockerIsBandingWithOthers = blocker.BandedWithCardIds.Count > 0;
-                            if (blocker.HasFirstStrike())
+                            if (blocker.HasFirstStrike)
                             {
                                 if (!attackerIsBandingWithOthers)
-                                {
                                     attacker.AddDamage(game, blocker.Power, blocker);
-                                    blocker.DealtDamage(game, TargetType.Creature);
-                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
                             }
-                            if (attacker.HasFirstStrike())
+                            if (attacker.HasFirstStrike)
                             {
                                 if (!blockerIsBandingWithOthers)
-                                {
                                     blocker.AddDamage(game, attacker.Power, attacker);
-                                    attacker.DealtDamage(game, TargetType.Creature);
-                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
                             }
@@ -404,23 +398,17 @@ namespace MTG.Model.Game
                             foreach (Card blocker in attackingCreature.Blockers)
                             {
                                 bool blockerIsBandingWithOthers = blocker.BandedWithCardIds.Count > 0;
-                                if (blocker.HasFirstStrike())
+                                if (blocker.HasFirstStrike)
                                 {
                                     if (!attackerIsBandingWithOthers)
-                                    { 
                                         attacker.AddDamage(game, blocker.Power, blocker);
-                                        blocker.DealtDamage(game, TargetType.Creature);
-                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Attackers");
                                 }
-                                if(attacker.HasFirstStrike())
+                                if(attacker.HasFirstStrike)
                                 {
                                     if (!blockerIsBandingWithOthers)
-                                    {
                                         blocker.AddDamage(game, attacker.Power, attacker);
-                                        attacker.DealtDamage(game, TargetType.Creature);
-                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage-Banded Defenders");
                                 }
@@ -457,8 +445,8 @@ namespace MTG.Model.Game
             foreach (AttackingCreature attackingCreature in game.Attackers)
             {
                 bool attackerIsBandingWithOthers = attackingCreature.Card.BandedWithCardIds.Count > 0;
-                bool attackerHasNormalStrike = attackingCreature.Card.HasFirstStrike();
-                bool defendersHaveNormalStrike = attackingCreature.Blockers.FirstOrDefault(o => o.HasNormalStrike()) != null;
+                bool attackerHasNormalStrike = attackingCreature.Card.HasFirstStrike;
+                bool defendersHaveNormalStrike = attackingCreature.Blockers.FirstOrDefault(o => o.HasNormalStrike) != null;
                 if (attackerHasNormalStrike || defendersHaveNormalStrike)
                 {
                     Card attacker = game.FindCard(attackingCreature.Card.Id);
@@ -466,30 +454,24 @@ namespace MTG.Model.Game
                     {
                         if (attackingCreature.Blockers.Count == 0)
                         {// Not Blocked
-                            if (attacker.HasNormalStrike())
+                            if (attacker.HasNormalStrike)
                                 attackingCreature.processDamageToDefender(game, attacker.Power);
                         }
                         else if (attackingCreature.Blockers.Count == 1)
                         {//single blocker
                             Card blocker = game.FindCard(attackingCreature.Blockers[0].Id);
                             bool blockerIsBandingWithOthers = blocker.BandedWithCardIds.Count > 0;
-                            if (blocker.HasNormalStrike())
+                            if (blocker.HasNormalStrike)
                             {
                                 if (!attackerIsBandingWithOthers)
-                                {
                                     attacker.AddDamage(game, blocker.Power, blocker);
-                                    blocker.DealtDamage(game, TargetType.Creature);
-                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
                             }
-                            if (attacker.HasNormalStrike())
+                            if (attacker.HasNormalStrike)
                             {
                                 if (!blockerIsBandingWithOthers)
-                                {
                                     blocker.AddDamage(game, attacker.Power, attacker);
-                                    attacker.DealtDamage(game, TargetType.Creature);
-                                }
                                 else
                                     throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
                             }
@@ -499,23 +481,17 @@ namespace MTG.Model.Game
                             foreach (Card blocker in attackingCreature.Blockers)
                             {
                                 bool blockerIsBandingWithOthers = blocker.BandedWithCardIds.Count > 0;
-                                if (blocker.HasNormalStrike())
+                                if (blocker.HasNormalStrike)
                                 {
                                     if (!attackerIsBandingWithOthers)
-                                    {
                                         attacker.AddDamage(game, blocker.Power, blocker);
-                                        blocker.DealtDamage(game, TargetType.Creature);
-                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Attackers");
                                 }
-                                if (attacker.HasNormalStrike())
+                                if (attacker.HasNormalStrike)
                                 {
                                     if (!blockerIsBandingWithOthers)
-                                    {
                                         blocker.AddDamage(game, attacker.Power, attacker);
-                                        attacker.DealtDamage(game, TargetType.Creature);
-                                    }
                                     else
                                         throw new NotImplementedException("Phases.CombatPhase_CombatDamageStep_NormalDamage-Banded Defenders");
                                 }

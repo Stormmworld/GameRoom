@@ -205,7 +205,7 @@ namespace MTG.Enumerations
     public enum EffectTrigger
     {
         None,
-        CardInHand
+        CardInHand,
         Cast,
         DamageToPlayer,
         DamageToCreature,
@@ -214,6 +214,16 @@ namespace MTG.Enumerations
         EntersGraveyard,
         IsInGraveyard,
         XDeepInGraveyard,
+        RecievesDamage,
+        IsBlocked,
+        DelcaredAsAttacker,
+        SelectedToCast,
+        IsInBattlefield,
+        CardDestroyed,
+        CombatProcessDamage_FirstStrike,
+        UntapStep,
+        CardDealtDamage,
+        LifeGained,
     }
     public enum GameModifier {
         None,

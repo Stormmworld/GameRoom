@@ -84,6 +84,7 @@ namespace MTG.Interfaces
         void Add(List<Card> cards);
         List<Card> CardsWithAbility(Type abilityType);
         List<Card> FilteredCards(Predicate<Card> predicate);
+        void ProcessTriggeredAbilities(EffectTrigger trigger);
         void Remove(Card card, TargetZone targetZone);
     }
 }

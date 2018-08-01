@@ -16,7 +16,7 @@ namespace MTG.Model
     public class Player
     {
         #region Events
-        public event EventHandler AddPendingAction, AddCardToZone;
+        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTrigger;
         #endregion
 
         #region Properties
@@ -35,7 +35,7 @@ namespace MTG.Model
         public Hand Hand { get; set; }
         public int Id { get; set; }
         public Library Library { get; set; }
-        public int Life { get; set; }
+        public int Life { get; private set; }
         public string LoseMessage { get; set; }
         public ManaPool ManaPool { get; set; }
         public string Name { get; set; }
@@ -65,9 +65,13 @@ namespace MTG.Model
         {
             throw new NotImplementedException("Player.Card_EffectTriggered");
         }
+        private void Card_EffectTrigger(object sender, EventArgs e)
+        {
+            OnEffectTrigger?.Invoke(sender, e);
+        }
         private void Card_PendingActionTriggered(object sender, EventArgs e)
         {
-            AddPendingAction?.Invoke(sender, e);
+            OnAddPendingAction?.Invoke(sender, e);
         }
         private void Card_CardPhasedIn(object sender, EventArgs e)
         {
@@ -109,8 +113,23 @@ namespace MTG.Model
             else if (bodyguards.Count == 1)
                 bodyguards[0].AddDamage(game, damage, originCard);
             else
+            {
                 DamageTaken = DamageTaken + damage;
+                foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.DamageToPlayer))
+                {
+                    Player originPlayer = game.Players.First(o=>o.Id == originCard.OwnerId);
+                    ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });
+                }
+            }
             return retVal;
+        }
+        public void AddLife(int amount)
+        {
+            Life += amount;
+            Battlefield.ProcessTriggeredAbilities(EffectTrigger.LifeGained);
+            foreach (Card card in Battlefield.Cards)
+                foreach (IAbility ability in card.Abilities.FindAll(o => o.Trigger == EffectTrigger.LifeGained))
+                    ability.Process(new AbilityArgs() { Life=amount, OriginPlayer = this});
         }
         public bool CheckLoseConditions()
         {
@@ -195,13 +214,14 @@ namespace MTG.Model
 
             foreach (Card card in cardsDrawn)
             {
-                card.EffectTriggered += Card_EffectTriggered;
-                card.CardPhasedIn += Card_CardPhasedIn; ;
-                card.CardPhasedOut += Card_CardPhasedOut;
-                card.CardTapped += Card_CardTapped;
-                card.CardUntapped += Card_CardUntapped;
-                card.CardDestroyed += Card_CardDestroyed;
-                card.PendingActionTriggered += Card_PendingActionTriggered;
+                card.OnEffectTriggered += Card_EffectTriggered;
+                card.OnCardPhasedIn += Card_CardPhasedIn; ;
+                card.OnCardPhasedOut += Card_CardPhasedOut;
+                card.OnCardTapped += Card_CardTapped;
+                card.OnCardUntapped += Card_CardUntapped;
+                card.OnCardDestroyed += Card_CardDestroyed;
+                card.OnPendingActionTriggered += Card_PendingActionTriggered;
+                card.OnEffectTrigger += Card_EffectTrigger;
             }
 
             Hand.Add(cardsDrawn);
@@ -213,11 +233,6 @@ namespace MTG.Model
         public List<Card> GetCardsThatAffectDamage()
         {
             throw new NotImplementedException("Player.GetCardsThatAffectDamage");//COP
-        }
-        public void PhasePermanents()
-        {
-            foreach (Card card in Battlefield.CardsWithAbility(typeof(Phasing)))
-                card.PhasedOut = !card.PhasedOut;
         }
         public void ProcessDamage()
         {

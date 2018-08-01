@@ -1,6 +1,8 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.Interfaces;
+﻿using MTG.Interfaces;
+using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities
 { 
@@ -54,9 +56,33 @@ namespace MTG.Model.Abilities
                     the next untap step after that player’s next turn would have begun.
             702.25n Multiple instances of phasing on the same permanent are redundant.
         */
+        #region Events
+        public event EventHandler PendingActionTriggered, EffectTriggered;
+        #endregion
+
+        #region Variables
+        private List<AbilityType> _Types;
+        #endregion
+
+        #region Properties
+        public EffectTrigger Trigger { get { return EffectTrigger.UntapStep; } }
+        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        #endregion
+
+        #region Constructors
+        public Phasing()
+        {
+            _Types = new List<AbilityType>();
+            _Types.Add(AbilityType.Triggered);
+                    throw new NotImplementedException("Phasing.Constructor");
+        }
+        #endregion
+
+        #region Methods
         public void Process(AbilityArgs args)
         {
-            throw new NotImplementedException("Phasing.Process");
+            args.OriginCard.PhasedOut = !args.OriginCard.PhasedOut;
         }
+        #endregion
     }
 }

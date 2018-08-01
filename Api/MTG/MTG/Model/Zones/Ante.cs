@@ -1,8 +1,10 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
 using MTGModel.Objects;
+using MTG.ArgumentDefintions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Zones
 {
@@ -64,6 +66,14 @@ namespace MTG.Model.Zones
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
             throw new NotImplementedException("Ante.FilteredCards");
+        }
+        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        {
+            foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
+            {
+                foreach (IAbility ability in card.Abilities.FindAll(o => o.Trigger == trigger))
+                    ability.Process(new AbilityArgs() { OriginCard = card });
+            }
         }
         public void Remove(Card card, TargetZone targetZone)
         {

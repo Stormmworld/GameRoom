@@ -1,4 +1,5 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Interfaces;
 using MTGModel.Objects;
 using System;
@@ -93,6 +94,14 @@ namespace MTG.Model.Zones
                 return true;
             else
                 return landInHand.Count == MaximumSize;
+        }
+        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        {
+            foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
+            {
+                foreach (IAbility ability in card.Abilities.FindAll(o => o.Trigger == trigger))
+                    ability.Process(new AbilityArgs() { OriginCard = card });
+            }
         }
         public void Remove(TargetZone targetZone)
         {//send all cards to targetZone
