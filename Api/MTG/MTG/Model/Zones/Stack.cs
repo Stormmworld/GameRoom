@@ -51,6 +51,10 @@ namespace MTG.Model.Zones
      */
     public class Stack: IZone
     {
+        #region Events
+        public event EventHandler OnEffectTrigger;
+        #endregion
+
         #region Properties
         public List<StackEntry> Entries { get; set; }
         public IReadOnlyCollection<Card> Cards
@@ -120,7 +124,7 @@ namespace MTG.Model.Zones
             }
             throw new NotImplementedException("Stack.Process");
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             throw new NotImplementedException("Stack.ProcessTriggeredAbilities");
         }

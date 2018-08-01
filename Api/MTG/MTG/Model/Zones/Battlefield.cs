@@ -24,6 +24,7 @@ namespace MTG.Model.Zones
     public class Battlefield: IZone
     {
         #region Events
+        public event EventHandler OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -65,7 +66,7 @@ namespace MTG.Model.Zones
         {
             return _Cards.FindAll(predicate);
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
             {

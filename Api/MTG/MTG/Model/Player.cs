@@ -1,7 +1,6 @@
 ﻿using MTG.Model.Zones;
 using MTG.Model.Objects;
 using System;
-using MTG.Helpers;
 using MTG.Enumerations;
 using System.Collections.Generic;
 using MTGModel.Objects;
@@ -10,6 +9,7 @@ using System.Linq;
 using MTG.ArgumentDefintions;
 using MTG.Interfaces;
 using MTG.Model.Pending_Actions;
+using MTG.ArgumentDefintions.Trigger_Arguments;
 
 namespace MTG.Model
 {
@@ -92,7 +92,7 @@ namespace MTG.Model
         #endregion
 
         #region Methods
-        public List<IPendingDamageResolution> AddDamage(ActiveGame game, int damage, Card originCard)
+        public List<IPendingDamageResolution> AddDamage(ActiveGame game, int damage, Card originCard, bool BlockedDamage = false)
         {
             List<IPendingDamageResolution> retVal = new List<IPendingDamageResolution>();
             List<Card> bodyguards = Battlefield.CardsWithAbility(typeof(Bodyguard));
@@ -101,7 +101,7 @@ namespace MTG.Model
             {
                 throw new NotImplementedException("Player.AddDamage-cardsThatAffectDamage");
             }
-            else if (bodyguards.Count > 1)
+            else if (!BlockedDamage && bodyguards.Count > 1)
             {
                 retVal.Add(new BodyGuardPendingDamageResolution()
                 {
@@ -109,27 +109,49 @@ namespace MTG.Model
                     BodyGuards = bodyguards,
                     Damage = damage,
                 });
+                damage = 0;
             }
-            else if (bodyguards.Count == 1)
+            else if (!BlockedDamage && bodyguards.Count == 1)
+            {
                 bodyguards[0].AddDamage(game, damage, originCard);
-            else
+                damage = 0;
+            }
+            if(damage > 0)
             {
                 DamageTaken = DamageTaken + damage;
                 foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.DamageToPlayer))
                 {
-                    Player originPlayer = game.Players.First(o=>o.Id == originCard.OwnerId);
+                    Player originPlayer = game.Players.First(o => o.Id == originCard.OwnerId);
                     ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });
                 }
+
+                EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+                {
+                    Args = new DamageTakenTriggerArgs()
+                    {
+                        ActivePlayer = this,
+                        Damage = damage,
+                    },
+                    Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
+                };
+                OnEffectTrigger?.Invoke(null, args);
             }
             return retVal;
         }
         public void AddLife(int amount)
         {
             Life += amount;
-            Battlefield.ProcessTriggeredAbilities(EffectTrigger.LifeGained);
-            foreach (Card card in Battlefield.Cards)
-                foreach (IAbility ability in card.Abilities.FindAll(o => o.Trigger == EffectTrigger.LifeGained))
-                    ability.Process(new AbilityArgs() { Life=amount, OriginPlayer = this});
+
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new LifeGainedTriggerArgs()
+                {
+                    ActivePlayer = this,
+                    LifeGained = amount,
+                },
+                Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
+            };
+            OnEffectTrigger?.Invoke(null, args);
         }
         public bool CheckLoseConditions()
         {

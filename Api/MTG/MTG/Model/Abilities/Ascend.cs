@@ -23,7 +23,7 @@ namespace MTG.Model.Abilities
                         matched any trigger conditions.
              */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

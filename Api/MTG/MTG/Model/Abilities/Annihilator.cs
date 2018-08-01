@@ -15,7 +15,7 @@ namespace MTG.Model.Abilities
             702.85b If a creature has multiple instances of annihilator, each triggers separately.
          */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -23,7 +23,7 @@ namespace MTG.Model.Abilities
         #endregion
 
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.DelcaredAsAttacker; } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Phases_CombatPhase_BeginningStep; } }
         public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
         #endregion
 

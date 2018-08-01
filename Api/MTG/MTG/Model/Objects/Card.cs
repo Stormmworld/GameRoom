@@ -160,8 +160,8 @@ namespace MTGModel.Objects
         #region Methods
         public void Add(IAbility ability)
         {
-            ability.EffectTriggered += Ability_EffectTriggered;
-            ability.PendingActionTriggered += Ability_PendingActionTriggered;
+            ability.OnEffectTriggered += Ability_EffectTriggered;
+            ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
             Abilities.Add(ability);
         }
         public void Add(Counter counter)

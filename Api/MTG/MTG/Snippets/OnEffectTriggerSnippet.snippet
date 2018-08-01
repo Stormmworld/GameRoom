@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>OnEffectTrigger</Title>
+      <Author>Stormm</Author>
+      <Description>Inserts the event firing of OnEffectTrigger</Description>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new ITriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.,
+            };
+            OnEffectTrigger?.Invoke(null, args);]]>
+      </Code>
+      <Imports>
+        <Import>
+          <Namespace>MTG.Enumerations</Namespace>
+        </Import>
+        <Import>
+          <Namespace>MTG.ArgumentDefintions.Trigger_Arguments</Namespace>
+        </Import>
+      </Imports>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

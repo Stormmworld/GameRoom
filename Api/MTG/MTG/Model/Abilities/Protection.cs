@@ -57,7 +57,7 @@ namespace MTG.Model.Abilities
                             of protection from the same quality, those instances affect Auras as normal.
                 */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

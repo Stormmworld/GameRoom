@@ -16,7 +16,7 @@ namespace MTG.Model.Abilities
                     damage each time damage would be dealt to you.
         */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

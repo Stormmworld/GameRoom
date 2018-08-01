@@ -57,7 +57,7 @@ namespace MTG.Model.Abilities
             702.25n Multiple instances of phasing on the same permanent are redundant.
         */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -65,7 +65,7 @@ namespace MTG.Model.Abilities
         #endregion
 
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.UntapStep; } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Phases_BegginingPhase_UntapStep; } }
         public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
         #endregion
 

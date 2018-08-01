@@ -1,4 +1,6 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions;
+using MTG.ArgumentDefintions.Trigger_Arguments;
+using MTG.Enumerations;
 using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using MTG.Model.Pending_Actions;
@@ -11,7 +13,7 @@ namespace MTG.Model.Game
 {
     public static class Phases
     {
-        public static void BegginingPhase_UntapStep(ActiveGame game)
+        public static void BegginingPhase_UntapStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Untap_step
@@ -26,10 +28,18 @@ namespace MTG.Model.Game
                         until the next time a player would receive priority, which is usually during the upkeep step. 
                         (See rule 503, “Upkeep Step.”)
              */
-            game.ActivePlayer.Battlefield.ProcessTriggeredAbilities(EffectTrigger.UntapStep);
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_BegginingPhase_UntapStep,
+            };
+            OnEffectTrigger?.Invoke(null, args);
             game.ActivePlayer.UntapPermanents();
         }
-        public static void BegginingPhase_UpkeepStep(ActiveGame game)
+        public static void BegginingPhase_UpkeepStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Upkeep_step
@@ -41,6 +51,12 @@ namespace MTG.Model.Game
                 503.2. If a spell states that it may be cast only “after [a player’s] upkeep step,” and the turn 
                         has multiple upkeep steps, that spell may be cast any time after the first upkeep step ends.
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs() { ActivePlayer = game.ActivePlayer, },
+                Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
+            };
+            OnEffectTrigger?.Invoke(null, args);
             foreach (Player player in game.Players)
             {
                 foreach (Card card in player.Battlefield.Cards)
@@ -70,7 +86,7 @@ namespace MTG.Model.Game
                 }
             }
         }
-        public static void BegginingPhase_UpkeepStep_End(ActiveGame game)
+        public static void BegginingPhase_UpkeepStep_End(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Upkeep_step
@@ -85,23 +101,40 @@ namespace MTG.Model.Game
             while (game.UpkeepRequirements.Count > 0)
                 CompleteUpkeepRequirement(game.NextUpkeepRequirement(), game);
         }
-        public static void BegginingPhase_DrawStep(ActiveGame game)
+        public static void BegginingPhase_DrawStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_phase#Draw_step
                 504.1. First, the active player draws a card. This turn-based action doesn’t use the stack.
                 504.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_BegginingPhase_DrawStep,
+            };
             int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.EffectType == EffectTypes.SkipDrawCard) != null ? 0 : 1);
             foreach (Effect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
                 cardDrawCount += drawEffect.Value;
             game.ActivePlayer.DrawCards(cardDrawCount, GamePhases.Beginning_Draw);
         }
-        public static void PreCombatMainPhase(ActiveGame game)
+        public static void PreCombatMainPhase(ActiveGame game, EventHandler OnEffectTrigger)
         {
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_PreCombatMainPhase,
+            };
+            OnEffectTrigger?.Invoke(null, args);
             MainPhase(true, game);
         }
-        public static void CombatPhase_BeginningStep(ActiveGame game)
+        public static void CombatPhase_BeginningStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Beginning_of_combat_step
@@ -111,8 +144,16 @@ namespace MTG.Model.Game
                         action doesn’t use the stack. (See rule 506.2.)
                 507.2. Second, the active player gets priority. (See rule 116, “Timing and Priority.”)
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_BeginningStep,
+            };
         }
-        public static void CombatPhase_DeclareAttackersStep(ActiveGame game)
+        public static void CombatPhase_DeclareAttackersStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Declare_attackers_step
@@ -214,8 +255,16 @@ namespace MTG.Model.Game
                 508.8. If no creatures are declared as attackers or put onto the battlefield attacking, skip the declare blockers and 
                         combat damage steps.
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_DeclareAttackersStep,
+            };
         }
-        public static void CombatPhase_DeclareBlockersStep(ActiveGame game)
+        public static void CombatPhase_DeclareBlockersStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Declare_blockers_step
@@ -335,8 +384,16 @@ namespace MTG.Model.Game
                 509.7b A creature that’s put onto the battlefield blocking isn’t affected by requirements or restrictions that apply 
                     to the declaration of blockers.
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_DeclareBlockersStep,
+            };
         }
-        public static void CombatPhase_CombatDamageStep_FirstStrikeDamage(ActiveGame game)
+        public static void CombatPhase_CombatDamageStep_FirstStrikeDamage(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Combat_damage_step
@@ -357,6 +414,14 @@ namespace MTG.Model.Game
                 510.4. If at least one attacking or blocking creature has first strike (see rule 702.7) or double strike (see rule 702.4) as the combat damage step begins, the only creatures that assign combat damage in that step are those with first strike or double strike. After that step, instead of proceeding to the end of combat step, the phase gets a second combat damage step. The only creatures that assign combat damage in that step are the remaining attackers and blockers that had neither first strike nor double strike as the first combat damage step began, as well as the remaining attackers and blockers that currently have double strike. After that step, the phase proceeds to the end of combat step.
              */
             //only process first strike damage
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_CombatDamageStep_FirstStrikeDamage,
+            };
             if (game.Modifiers.Contains(GameModifier.CombatDamagePrevented))
                 return;
             foreach (AttackingCreature attackingCreature in game.Attackers)
@@ -418,7 +483,7 @@ namespace MTG.Model.Game
                 }
             }
         }
-        public static void CombatPhase_CombatDamageStep_NormalDamage(ActiveGame game)
+        public static void CombatPhase_CombatDamageStep_NormalDamage(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Combat_damage_step
@@ -501,7 +566,7 @@ namespace MTG.Model.Game
                 }
             }
         }
-        public static void CombatPhase_EndStep(ActiveGame game)
+        public static void CombatPhase_EndStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/End_of_combat_step
@@ -509,16 +574,33 @@ namespace MTG.Model.Game
                 511.2. Abilities that trigger “at end of combat” trigger as the end of combat step begins. Effects that last “until end of combat” expire at the end of the combat phase.
                 511.3. As soon as the end of combat step ends, all creatures and planeswalkers are removed from combat. After the end of combat step ends, the combat phase is over and the postcombat main phase begins (see rule 505).
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_EndStep,
+            };
             //resolve damage and process cards to graveyard
             game.ProcessDamage();
             //remove effects that end with combat phase
             game.RemoveEffects(GamePhases.Combat_Ending);
         }
-        public static void PostCombatMainPhase(ActiveGame game)
+        public static void PostCombatMainPhase(ActiveGame game, EventHandler OnEffectTrigger)
         {
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_PostCombatMainPhase,
+            };
+            OnEffectTrigger?.Invoke(null, args);
             MainPhase(false, game);
         }
-        public static void EndingPhase_EndStep(ActiveGame game)
+        public static void EndingPhase_EndStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Ending_phase#End_step
@@ -536,10 +618,18 @@ namespace MTG.Model.Game
                         applies only to triggered abilities; it doesn’t apply to continuous effects whose durations 
                         say “until end of turn” or “this turn.” (See rule 514, “Cleanup Step.”)
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_CombatPhase_EndStep,
+            };
             game.RemoveEffects(GamePhases.Combat_Ending);
             throw new NotImplementedException("Phases.EndingPhase_EndStep");
         }
-        public static void EndingPhase_CleanupStep(ActiveGame game)
+        public static void EndingPhase_CleanupStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
              * https://mtg.gamepedia.com/Ending_phase#Cleanup_step
@@ -548,6 +638,14 @@ namespace MTG.Model.Game
                 514.3. Normally, no player receives priority during the cleanup step, so no spells can be cast and no abilities can be activated. However, this rule is subject to the following exception:
                 514.3a At this point, the game checks to see if any state-based actions would be performed and/or any triggered abilities are waiting to be put onto the stack (including those that trigger “at the beginning of the next cleanup step”). If so, those state-based actions are performed, then those triggered abilities are put on the stack, then the active player gets priority. Players may cast spells and activate abilities. Once the stack is empty and all players pass in succession, another cleanup step begins.
              */
+            EffectTriggerEventArgs args = new EffectTriggerEventArgs()
+            {
+                Args = new PhaseTriggerArgs()
+                {
+                    ActivePlayer = game.ActivePlayer,
+                },
+                Trigger = EffectTrigger.Phases_EndingPhase_CleanupStep,
+            };
             game.RemoveModifiers(GameModifier.CombatDamagePrevented);
             game.RemoveModifiers(GameModifier.CreaturesTakeNoDamage);
 

@@ -18,7 +18,7 @@ namespace MTG.Model.Abilities
                         generic mana in the spell’s total cost.
              */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

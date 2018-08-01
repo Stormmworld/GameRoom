@@ -246,44 +246,44 @@ namespace MTG.Model
             switch (ActivePhase)
             {
                 case GamePhases.Beginning_Untap:
-                    Phases.BegginingPhase_UntapStep(this);
+                    Phases.BegginingPhase_UntapStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Beginning_Upkeep:
-                    Phases.BegginingPhase_UpkeepStep(this);
+                    Phases.BegginingPhase_UpkeepStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Beginning_Draw:
-                    Phases.BegginingPhase_UpkeepStep_End(this);
-                    Phases.BegginingPhase_DrawStep(this);
+                    Phases.BegginingPhase_UpkeepStep_End(this, OnEffectTrigger);
+                    Phases.BegginingPhase_DrawStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.PreCombat_Main:
-                    Phases.PreCombatMainPhase(this);
+                    Phases.PreCombatMainPhase(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_Beginning:
-                    Phases.CombatPhase_BeginningStep(this);
+                    Phases.CombatPhase_BeginningStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_DeclareAttackers:
-                    Phases.CombatPhase_DeclareAttackersStep(this);
+                    Phases.CombatPhase_DeclareAttackersStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_DeclareDefenders:
-                    Phases.CombatPhase_DeclareBlockersStep(this);
+                    Phases.CombatPhase_DeclareBlockersStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_Damage_FirstStrike:
-                    Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage(this);
+                    Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_Damage:
-                    Phases.CombatPhase_CombatDamageStep_NormalDamage(this);
+                    Phases.CombatPhase_CombatDamageStep_NormalDamage(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_Ending:
-                    Phases.CombatPhase_EndStep(this);
+                    Phases.CombatPhase_EndStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.PostCombat_Main:
-                    Phases.PostCombatMainPhase(this);
+                    Phases.PostCombatMainPhase(this, OnEffectTrigger);
                     break;
                 case GamePhases.Ending_End:
-                    Phases.EndingPhase_EndStep(this);
+                    Phases.EndingPhase_EndStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Ending_Cleanup:
-                    Phases.EndingPhase_CleanupStep(this);
+                    Phases.EndingPhase_CleanupStep(this, OnEffectTrigger);
                     break;
             }
         }

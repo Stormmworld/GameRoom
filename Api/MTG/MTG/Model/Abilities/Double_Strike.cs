@@ -28,7 +28,7 @@ namespace MTG.Model.Abilities
                     702.4e Multiple instances of double strike on the same creature are redundant.
                  */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

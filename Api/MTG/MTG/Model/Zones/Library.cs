@@ -31,6 +31,7 @@ namespace MTG.Model.Zones
     public class Library: IZone
     {
         #region Events
+        public event EventHandler OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -95,7 +96,7 @@ namespace MTG.Model.Zones
                     break;
             }
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             throw new NotImplementedException("Library.ProcessTriggeredAbilities");
         }

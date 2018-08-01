@@ -30,7 +30,7 @@ namespace MTG.Model.Abilities
                         702.7d Multiple instances of first strike on the same creature are redundant.             
                     */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

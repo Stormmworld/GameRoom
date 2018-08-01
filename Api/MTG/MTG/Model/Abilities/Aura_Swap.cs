@@ -20,7 +20,7 @@ namespace MTG.Model.Abilities
                         don’t own. The ability has no effect.
          */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

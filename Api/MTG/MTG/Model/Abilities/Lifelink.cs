@@ -27,7 +27,7 @@ namespace MTG.Model.Abilities
                     702.15f Multiple instances of lifelink on the same object are redundant.  
                 */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

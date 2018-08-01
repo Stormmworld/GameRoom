@@ -17,7 +17,7 @@ namespace MTG.Model.Abilities
             702.12c Multiple instances of indestructible on the same permanent are redundant.
         */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

@@ -16,7 +16,7 @@ namespace MTG.Model.Abilities
         702.40b If a spell has multiple instances of affinity, each of them applies.
         */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables

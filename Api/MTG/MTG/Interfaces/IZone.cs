@@ -78,13 +78,15 @@ namespace MTG.Interfaces
      */
     public interface IZone
     {
+        event EventHandler OnEffectTrigger;
+
         IReadOnlyCollection<Card> Cards { get; }
 
         void Add(Card card);
         void Add(List<Card> cards);
         List<Card> CardsWithAbility(Type abilityType);
         List<Card> FilteredCards(Predicate<Card> predicate);
-        void ProcessTriggeredAbilities(EffectTrigger trigger);
+        void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args);
         void Remove(Card card, TargetZone targetZone);
     }
 }

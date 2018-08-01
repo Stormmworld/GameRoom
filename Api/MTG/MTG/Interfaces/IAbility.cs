@@ -8,7 +8,7 @@ namespace MTG.Interfaces
     public interface IAbility
     {
         #region Events
-        event EventHandler PendingActionTriggered, EffectTriggered;
+        event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Properties

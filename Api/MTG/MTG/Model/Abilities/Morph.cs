@@ -48,7 +48,7 @@ namespace MTG.Model.Abilities
                     cards with a morph ability.  
         */
         #region Events
-        public event EventHandler PendingActionTriggered, EffectTriggered;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables
