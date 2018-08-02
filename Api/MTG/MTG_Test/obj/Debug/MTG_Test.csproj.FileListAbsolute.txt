@@ -1,0 +1,14 @@
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\MTG_Test.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\MTG_Test.pdb
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\obj\Debug\MTG_Test.csprojResolveAssemblyReference.cache
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\obj\Debug\MTG_Test.csproj.CoreCompileInputs.cache
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\obj\Debug\MTG_Test.csproj.CopyComplete
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\obj\Debug\MTG_Test.dll
+F:\gitsrc\GameRoom\Api\MTG\MTG_Test\obj\Debug\MTG_Test.pdb

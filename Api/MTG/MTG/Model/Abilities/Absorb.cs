@@ -21,21 +21,9 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.RecievesDamage; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
-        #endregion
-
-        #region Constructors
-        public Absorb()
-        {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Static);
-        }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_RecievesDamage; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Methods

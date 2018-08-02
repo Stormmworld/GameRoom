@@ -119,7 +119,7 @@ namespace MTG.Model
             if(damage > 0)
             {
                 DamageTaken = DamageTaken + damage;
-                foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.DamageToPlayer))
+                foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.Card_DamagePlayer))
                 {
                     Player originPlayer = game.Players.First(o => o.Id == originCard.OwnerId);
                     ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });

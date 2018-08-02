@@ -23,20 +23,15 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.IsInBattlefield; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_InBattlefield; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
         public Aura_Swap()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Activated);
+
         }
         #endregion
 

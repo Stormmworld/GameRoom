@@ -4,15 +4,31 @@ namespace MTG.Enumerations
     public enum AbilityType
     {
         None,
-        Activated, 
+        Activated,
         Static,
         Triggered
+    }
+    public enum ActionTypes
+    {
+        None,
+        Sacrifice_Creature,
+        Damage,
+        Destroy,
+        Discard,
+        Discard_Random,
+        Remove_From_Game
     }
     public enum AttackableType
     {
         None,
         Planeswalker,
         Player,
+    }
+    public enum BandTypes
+    {
+        None,
+        Attacking,
+        Defending,
     }
     public enum CardType
     {
@@ -162,6 +178,13 @@ namespace MTG.Enumerations
         Wind,
         Wish,
     }
+    public enum DamageTypes
+    {
+        None,
+        Trample,
+        Unblocked,
+        Spell,
+    }
     public enum EffectTypes
     {
         None,
@@ -205,21 +228,22 @@ namespace MTG.Enumerations
     public enum EffectTrigger
     {
         None,
-        CardInHand,
-        Cast,
-        DamageToPlayer,
-        DamageToCreature,
-        EntersBattleField,
-        EntersGraveyard,
-        IsInGraveyard,
-        XDeepInGraveyard,
-        RecievesDamage,
-        IsBlocked,
-        SelectedToCast,
-        IsInBattlefield,
-        CardDestroyed,
-        CombatProcessDamage_FirstStrike,
-        CardDealtDamage,
+        Card_Blocked,
+        Card_Cast,
+        Card_DamageCreature,
+        Card_DamagePlayer,
+        Card_DealtDamage,
+        Card_Destroyed,
+        Card_EntersBattleField,
+        Card_EntersGraveyard,
+        Card_InBattlefield,
+        Card_InHand,
+        Card_InGraveyard,
+        Card_InOpeningHand,
+        Card_RecievesDamage,
+        Card_SelectedToCast,
+        Card_Tapping,
+        Card_XDeepInGraveyard,
         Phases_BegginingPhase_UntapStep,
         Phases_BegginingPhase_UpkeepStep,
         Phases_BegginingPhase_DrawStep,
@@ -249,7 +273,6 @@ namespace MTG.Enumerations
         Combat_Beginning = 5,
         Combat_DeclareAttackers = 6,
         Combat_DeclareDefenders = 7,
-        Combat_Damage_FirstStrike = 8,
         Combat_Damage = 9,
         Combat_Ending = 10,
         PostCombat_Main = 11,
@@ -610,6 +633,12 @@ namespace MTG.Enumerations
         Snow,
         World,
     }
+    public enum TappingTypes
+    {
+        None,
+        Tapped,
+        UnTapped
+    }
     public enum TargetScope
     {
         None,
@@ -639,23 +668,5 @@ namespace MTG.Enumerations
         Hand,
         Library,
         Stack,
-    }
-    public enum UpkeepRequirementTypes
-    {
-        None,
-        Sacrifice_Creature,
-        Damage,
-        Destroy,
-        Discard,
-        Discard_Random,
-        Remove_From_Game
-    }
-    public enum UpkeepTriggers
-    {
-        None,
-        All,
-        Owner,
-        Opponnent,
-        Team
     }
 }

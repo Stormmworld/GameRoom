@@ -51,10 +51,6 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
         public Card FaceUpCard { get; set; }
         public Card FaceDownCard
@@ -65,8 +61,7 @@ namespace MTG.Model.Abilities
                 {
                     Power = 2,
                     Toughness = 2,
-                    Name = "Morphed Card",
-                    Abilities = new List<IAbility>()
+                    Name = "Morphed Card"
                 };
                 // need an ability to flip this card back over
                 //retVal.AddAbility();
@@ -74,15 +69,14 @@ namespace MTG.Model.Abilities
                 return retVal;
             }
         }
-        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_Cast; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
         public Morph()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Static);
+
         }
         public Morph(Card card) : this()
         {

@@ -10,15 +10,34 @@ namespace MTG.Model.Objects
 {
     public class AttackingCreature
     {
+        #region Variables
+        #endregion
+
         #region Properties
         public int AttackingPlayerId { get; set; }
         public List<Card> Blockers { get; set; }
-        public Card Card { get; set; }
+        public List<Band> BlockingBands { get; set; }
+        public Card Card { get; private set; }
         public AttackableTarget Defender { get; set; }
         public int Id { get; set; }
         #endregion
 
+        #region Constructors
+        public AttackingCreature(Card card)
+        {
+            Card = card;
+        }
+        #endregion
+
         #region Methods
+        public void AddBlocker(Card card)
+        {
+            throw new NotImplementedException("AttackingCreature.AddBlocker");
+        }
+        public void AddBlockerToBand(Card card, Guid bandId)
+        {
+            throw new NotImplementedException("AttackingCreature.AddBlockerToBand");
+        }
         public void processDamageToDefender(ActiveGame game, int damageDealt)
         {
             Player defendingPlayer = game.Players.First(o => o.Id == Defender.PlayerId);

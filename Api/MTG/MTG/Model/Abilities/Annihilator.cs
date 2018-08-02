@@ -18,20 +18,15 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
         public EffectTrigger Trigger { get { return EffectTrigger.Phases_CombatPhase_BeginningStep; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
         public Annihilator()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Triggered);
+
         }
         #endregion
 

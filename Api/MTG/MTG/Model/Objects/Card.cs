@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model;
@@ -19,16 +20,25 @@ namespace MTGModel.Objects
         #region Variables
         private bool _PhasedOut, _Tapped;
         private List<Counter> _Counters;
+        private List<IAbility> _Abilities;
+        private List<CardType> _CardTypes;
+        private List<Colors> _Colors;
+        private List<SubType> _SubTypes;
+        private List<SuperType> _SuperTypes;
+        #endregion
+
+        #region Properties - Collections
+        public IReadOnlyList<IAbility> Abilities { get { return _Abilities.AsReadOnly(); } }
+        public IReadOnlyList<CardType> CardTypes { get { return _CardTypes.AsReadOnly(); } }
+        public IReadOnlyList<Colors> Colors { get { return _Colors.AsReadOnly(); } }
+        public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
+        public IReadOnlyList<SubType> SubTypes { get { return _SubTypes.AsReadOnly(); } }
+        public IReadOnlyList<SuperType> SuperTypes { get { return _SuperTypes.AsReadOnly(); } }
         #endregion
 
         #region Properties
-        public List<IAbility> Abilities { get; set; }
-        public List<int> BandedWithCardIds { get; set; }
         public bool CanBeDestroyed { get; set; }
-        public List<CardType> CardTypes { get; private set; }
-        public List<Colors> Colors { get; set; }
         public int ControllerId { get; set; }
-        public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
         public int DamageTaken { get; set; }
         public int FaceUpSide { get; set; }
         public int Id { get; set; }
@@ -61,27 +71,25 @@ namespace MTGModel.Objects
         }
         public int Power { get; set; }
         public int PreventDamage { get; set; }
-        public bool SelectedToUntap { get; set; }
-        public List<SubType> SubTypes { get; set; }
         public bool SufferingFromDeathtouchEffect { get; set; }
-        public List<SuperType> SuperTypes { get; set; }
         public bool Tapped
         {
             get { return _Tapped; }
             set
             {
                 _Tapped = value;
-                if (_Tapped)
-                    OnCardTapped?.Invoke(null, new CardEventArgs() { Card = this });
-                else
-                    OnCardUntapped?.Invoke(null, new CardEventArgs() { Card = this });
+                OnEffectTrigger?.Invoke(null, new EffectTriggerEventArgs()
+                {
+                    Args = new TappingTriggerArgs()
+                    {
+                        ActiveCard = this,
+                        TappingType = value ? TappingTypes.Tapped: TappingTypes.UnTapped,
+                    },
+                    Trigger = EffectTrigger.Card_Tapping,
+                });
             }
         }
         public int Toughness { get; set; }
-        public List<TriggeredEffect> TriggeredEffects { get; set; }
-        public bool UntapDuringUntapPhase { get; set; }
-        public UpkeepTriggers UpkeepTrigger { get; set; }
-        public UpkeepRequirement UpkeepRequirement { get; set; }
         public bool IsPermanant
         {
             get
@@ -106,32 +114,11 @@ namespace MTGModel.Objects
         #region Constructors
         public Card()
         {
-            Abilities = new List<IAbility>();
-            CardTypes = new List<CardType>();
-            TriggeredEffects = new List<TriggeredEffect>();
-            SubTypes = new List<SubType>();
-            Colors = new List<Colors>();
-            _Counters = new List<Counter>();
-         _PhasedOut = false;
-            SelectedToUntap = false;
-            _Tapped = false;
-            UntapDuringUntapPhase = true;
+            throw new NotImplementedException("Card.Constructor");
         }
         public Card(Card card):this()
         {
-            for (int i = 0; i < card.Abilities.Count; i++)
-                Abilities.Add(card.Abilities[i]);
-            for (int i = 0; i < card.CardTypes.Count; i++)
-                CardTypes.Add(card.CardTypes[i]);
-            _PhasedOut = card.PhasedOut;
-            SelectedToUntap = card.SelectedToUntap;
-            _Tapped = card.Tapped;
-            UntapDuringUntapPhase = card.UntapDuringUntapPhase;
-            TriggeredEffects = card.TriggeredEffects;
-            SubTypes = card.SubTypes;
-            Colors = card.Colors;
-            Power = card.Power;
-            Toughness = card.Toughness;
+            throw new NotImplementedException("Card.Constructor");
         }
         #endregion
 
@@ -147,6 +134,10 @@ namespace MTGModel.Objects
         #endregion
 
         #region Event Handlers
+        private void Ability_EffectTrigger(object sender, EventArgs e)
+        {
+            OnEffectTrigger?.Invoke(sender, e);
+        }
         private void Ability_EffectTriggered(object sender, EventArgs e)
         {
             OnEffectTriggered?.Invoke(sender, e);
@@ -160,9 +151,10 @@ namespace MTGModel.Objects
         #region Methods
         public void Add(IAbility ability)
         {
+            ability.OnEffectTrigger += Ability_EffectTrigger;
             ability.OnEffectTriggered += Ability_EffectTriggered;
             ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
-            Abilities.Add(ability);
+            _Abilities.Add(ability);
         }
         public void Add(Counter counter)
         {
@@ -171,24 +163,7 @@ namespace MTGModel.Objects
         public void AddDamage(ActiveGame game, int damage, Card originCard)
         {
             if (game.Modifiers.Contains(GameModifier.CreaturesTakeNoDamage))
-                return;
-
-            foreach (IAbility ability in Abilities.FindAll(o => o.Trigger == EffectTrigger.RecievesDamage))
-            {
-                ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, TargetCard = this });
-                if (PreventDamage >= damage)
-                {
-                    PreventDamage -= damage;
-                    damage = 0;
-                }
-                else
-                {
-                    damage -= PreventDamage;
-                    PreventDamage = 0;
-                }
-            }
-            foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.DamageToCreature))
-                ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, TargetCard = this });
+                return; 
             DamageTaken += damage;
         }
         public void CheckTriggeredAbilities(EffectTrigger trigger)
@@ -198,13 +173,16 @@ namespace MTGModel.Objects
             throw new NotImplementedException("Card.CheckTriggeredAbilities");
         }
         public void Destroy()
-        {
-            CanBeDestroyed = true;
-            foreach (IAbility ability in Abilities.FindAll(o => o.Trigger == EffectTrigger.CardDestroyed))
-                ability.Process(new AbilityArgs() { OriginCard = this });
-
+        {        
             if (CanBeDestroyed)
-                OnCardDestroyed?.Invoke(this, new CardEventArgs() { Card = this });
+                OnEffectTrigger?.Invoke(this, new EffectTriggerEventArgs()
+                {
+                    Args = new DestroyedTriggerArgs()
+                    {
+                        ActiveCard = this,
+                    },
+                    Trigger = EffectTrigger.Card_Destroyed,
+                });
         }
         public override bool Equals(object obj)
         {
@@ -231,14 +209,6 @@ namespace MTGModel.Objects
             else if (SufferingFromDeathtouchEffect ||DamageTaken >= Toughness)
                 Destroy();
             DamageTaken = 0;
-        }
-        public void ProcessPhasing()
-        {
-            PhasedOut = !PhasedOut;
-            if (PhasedOut)
-                OnCardPhasedOut?.Invoke(this, new CardEventArgs() { Card = this });
-            else
-                OnCardPhasedIn?.Invoke(this, new CardEventArgs() { Card = this });
         }
         public void Remove(Counter counter)
         {

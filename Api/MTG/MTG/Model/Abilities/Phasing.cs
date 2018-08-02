@@ -60,21 +60,14 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
         public EffectTrigger Trigger { get { return EffectTrigger.Phases_BegginingPhase_UntapStep; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public AbilityType Type { get { return AbilityType.Triggered; } }
         #endregion
 
         #region Constructors
         public Phasing()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Triggered);
-                    throw new NotImplementedException("Phasing.Constructor");
         }
         #endregion
 

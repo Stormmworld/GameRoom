@@ -33,20 +33,15 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.CombatProcessDamage_FirstStrike; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Phases_CombatPhase_CombatDamageStep_FirstStrikeDamage; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
         public First_Strike()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Static);
+
         }
         #endregion
 

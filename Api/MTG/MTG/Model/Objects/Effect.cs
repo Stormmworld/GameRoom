@@ -106,26 +106,6 @@ namespace MTG.Model.Objects
             }
             throw new NotImplementedException("Effect.ProcessEffect");
         }
-        public static EffectTypes TranslateEffectType(UpkeepRequirementTypes upkeepRequirement)
-        {
-            switch (upkeepRequirement)
-            {
-                case UpkeepRequirementTypes.Damage:
-                    return EffectTypes.Damage;
-                case UpkeepRequirementTypes.Destroy:
-                    return EffectTypes.Destroy;
-                case UpkeepRequirementTypes.Discard:
-                    return EffectTypes.DiscardCard;
-                case UpkeepRequirementTypes.Discard_Random:
-                    return EffectTypes.DiscardCard;
-                case UpkeepRequirementTypes.Remove_From_Game:
-                    return EffectTypes.RemoveFromGame;
-                case UpkeepRequirementTypes.Sacrifice_Creature:
-                    return EffectTypes.Sacrifice;
-                default:
-                    return EffectTypes.None;
-            }
-        }
         #endregion
     }
 }

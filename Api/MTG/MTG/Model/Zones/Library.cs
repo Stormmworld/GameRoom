@@ -96,7 +96,7 @@ namespace MTG.Model.Zones
                     break;
             }
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, TappingTriggerArgs args)
         {
             throw new NotImplementedException("Library.ProcessTriggeredAbilities");
         }

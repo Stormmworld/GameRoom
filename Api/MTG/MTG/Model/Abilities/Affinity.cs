@@ -19,20 +19,15 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_Cast; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
         public Affinity()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Static);
+
         }
         #endregion
 

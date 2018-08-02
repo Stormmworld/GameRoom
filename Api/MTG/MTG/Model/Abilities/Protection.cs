@@ -61,16 +61,15 @@ namespace MTG.Model.Abilities
         #endregion
 
         #region Variables
-        private List<AbilityType> _Types;
         private List<Colors> _Colors;
         private List<SubType> _SubTypes;
         private List<CardType> _CardTypes;
         #endregion
 
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.RecievesDamage; } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_RecievesDamage; } }
         public IReadOnlyCollection<CardType> CardTypes { get { return _CardTypes.AsReadOnly(); } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         public IReadOnlyCollection<Colors> Colors { get { return _Colors.AsReadOnly(); } }
         public IReadOnlyCollection<SubType> SubTypes { get { return _SubTypes.AsReadOnly(); } }
         #endregion
@@ -81,8 +80,6 @@ namespace MTG.Model.Abilities
             _Colors = new List<Colors>();
             _SubTypes = new List<SubType>();
             _CardTypes = new List<CardType>();
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Static);
         }
         #endregion
 

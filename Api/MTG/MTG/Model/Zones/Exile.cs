@@ -87,7 +87,7 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Exile.FilteredCards");
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, TappingTriggerArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
             {

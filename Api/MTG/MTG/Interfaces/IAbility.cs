@@ -12,7 +12,7 @@ namespace MTG.Interfaces
         #endregion
 
         #region Properties
-        IReadOnlyCollection<AbilityType> Types { get; }
+        AbilityType Type { get; }
         EffectTrigger Trigger { get;  }
         #endregion
 

@@ -18,20 +18,15 @@ namespace MTG.Model.Abilities
         public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
-        #region Variables
-        private List<AbilityType> _Types;
-        #endregion
-
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.IsBlocked; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_Blocked; } }
+        public AbilityType Type { get { return AbilityType.Triggered; } }
         #endregion
 
         #region Constructors
         public Afflict()
         {
-            _Types = new List<AbilityType>();
-            _Types.Add(AbilityType.Triggered);
+
         }
         #endregion
 

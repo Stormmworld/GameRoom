@@ -1,4 +1,6 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.DTO.Requests;
+using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model.Game;
@@ -20,7 +22,6 @@ namespace MTG.Model
         private List<GameModifier> _Modifiers;
         private List<Effect> _ActiveEffects;
         private List<AttackingCreature> _Attackers;
-        private List<UpkeepRequirement> _UpkeepRequirements;
         #endregion
 
         #region Properties
@@ -30,8 +31,8 @@ namespace MTG.Model
         public IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
         public IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
         public IReadOnlyCollection<GamePhases> SkipPhases { get { return _SkipPhases.AsReadOnly(); } }
-        public IReadOnlyCollection<UpkeepRequirement> UpkeepRequirements { get { return _UpkeepRequirements.AsReadOnly(); } }
 
+        public Combat ActiveCombat { get; set; }
         public Player ActivePlayer 
         {
             get
@@ -65,7 +66,7 @@ namespace MTG.Model
             _Modifiers = new List<GameModifier>();
             _ActiveEffects = new List<Effect>();
             _Attackers = new List<AttackingCreature>();
-            _UpkeepRequirements = new List<UpkeepRequirement>();
+            ActiveCombat = new Combat();
         }
         #endregion
 
@@ -125,19 +126,30 @@ namespace MTG.Model
         }
         #endregion
 
+        #region Interfacing Methods
+        public CombatResponse DeclareAttacker(DeclareAttackerRequest request)
+        {
+            throw new NotImplementedException("ActiveGame.DeclareAttacker");
+        }
+        public CombatResponse DeclareBlocker(DeclareBlockerRequest request)
+        {
+            throw new NotImplementedException("ActiveGame.DeclareBlocker");
+        }
+        #endregion
+
         #region Methods
-        public List<Effect> ActiveEffectsByType(EffectTypes effectType)
+        internal List<Effect> ActiveEffectsByType(EffectTypes effectType)
         {
             if (effectType == EffectTypes.None)
                 return _ActiveEffects;
             else
                 return _ActiveEffects.FindAll(o=>o.EffectType == effectType);
         }
-        public void AddEffect(Effect effect)
+        internal void AddEffect(Effect effect)
         {
             _ActiveEffects.Add(effect);
         }
-        public void AddPlayer(string name, Deck deck)
+        internal void AddPlayer(string name, Deck deck)
         {
             //create player
             Player player = new Player(name);
@@ -150,25 +162,21 @@ namespace MTG.Model
 
             _Players.Add(player);
         }
-        public void AddToStack(Card card)
+        internal void AddToStack(Card card)
         {
 
             throw new NotImplementedException("ActiveGame.AddToStack");
         }
-        public void AddToStack(Effect effect)
+        internal void AddToStack(Effect effect)
         {
             throw new NotImplementedException("ActiveGame.AddToStack");
         }
-        public void AddUpkeepRequirement(UpkeepRequirement requirement)
-        {
-            _UpkeepRequirements.Add(requirement);
-        }
-        public void EmptyManaPools()
+        internal void EmptyManaPools()
         {
             foreach (Player player in Players)
                 player.EmptyManaPool();
         }
-        public Card FindCard(int cardId)
+        internal Card FindCard(int cardId)
         {
             Card foundCard = Exile.Cards.FirstOrDefault(o => o.Id == cardId);
             if (foundCard != null)
@@ -193,18 +201,12 @@ namespace MTG.Model
             }
             return null;
         }
-        public UpkeepRequirement NextUpkeepRequirement()
-        {
-            UpkeepRequirement retVal = _UpkeepRequirements[0];
-            _UpkeepRequirements.RemoveAt(0);
-            return retVal;
-        }
-        public void ProcessDamage()
+        internal void ProcessDamage()
         {
             foreach (Player player in Players)
                 player.ProcessDamage();
         }
-        public void ProcessPhase()
+        internal void ProcessPhase()
         {
             /*
              * https://mtg.gamepedia.com/Turn_structure
@@ -267,11 +269,8 @@ namespace MTG.Model
                 case GamePhases.Combat_DeclareDefenders:
                     Phases.CombatPhase_DeclareBlockersStep(this, OnEffectTrigger);
                     break;
-                case GamePhases.Combat_Damage_FirstStrike:
-                    Phases.CombatPhase_CombatDamageStep_FirstStrikeDamage(this, OnEffectTrigger);
-                    break;
                 case GamePhases.Combat_Damage:
-                    Phases.CombatPhase_CombatDamageStep_NormalDamage(this, OnEffectTrigger);
+                    Phases.CombatPhase_CombatDamageStep(this, OnEffectTrigger);
                     break;
                 case GamePhases.Combat_Ending:
                     Phases.CombatPhase_EndStep(this, OnEffectTrigger);
@@ -287,20 +286,20 @@ namespace MTG.Model
                     break;
             }
         }
-        public void RemoveEffects(GamePhases processPhase)
+        internal void RemoveEffects(GamePhases processPhase)
         {
             _ActiveEffects.RemoveAll(o => o.EndingPhase == processPhase);
         }
-        public void RemoveModifiers(GameModifier modifier)
+        internal void RemoveModifiers(GameModifier modifier)
         {
             _Modifiers.RemoveAll(o => o == modifier);
         }
-        public void RestartGame()
+        internal void RestartGame()
         {
             //reset all remaining players to new game
             throw new NotImplementedException("ActiveGame.RestartGame");
         }
-        public void SetGameType(GameType gameType)
+        internal void SetGameType(GameType gameType)
         {
             //Apply any game type specific settings
             GameType = gameType;
@@ -310,7 +309,7 @@ namespace MTG.Model
                     break;
             }
         }
-        public void SetNextPlayer()
+        internal void SetNextPlayer()
         {
             if (ActivePlayer.AdditionalTurnCount > 0)
                 ActivePlayer.AdditionalTurnCount--;

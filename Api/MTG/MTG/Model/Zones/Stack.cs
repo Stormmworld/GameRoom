@@ -95,8 +95,6 @@ namespace MTG.Model.Zones
         }
         public void CounterSpell(Card targetSpell, Card counteringSpell)
         {
-            if (targetSpell.TriggeredEffects.FirstOrDefault(o => o.Trigger == EffectTrigger.Cast && o.EffectType == EffectTypes.CannotCounter) != null)
-                return;
             throw new NotImplementedException("Stack.CounterSpell");
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
