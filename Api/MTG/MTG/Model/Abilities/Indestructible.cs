@@ -21,7 +21,7 @@ namespace MTG.Model.Abilities
         #endregion
 
         #region Properties
-        public EffectTrigger Trigger { get { return EffectTrigger.Card_Destroyed; } }
+        public EffectTrigger Trigger { get { return EffectTrigger.Card_EntersBattleField; } }
         public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 

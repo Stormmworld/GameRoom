@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MTGModel.Objects
+namespace MTG.Model.Objects
 {
     public class Card
     {
@@ -38,10 +38,10 @@ namespace MTGModel.Objects
 
         #region Properties
         public bool CanBeDestroyed { get; set; }
-        public int ControllerId { get; set; }
+        public Guid ControllerId { get; set; }
         public int DamageTaken { get; set; }
         public int FaceUpSide { get; set; }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public bool HasFirstStrike
         {
            get { return Abilities.FirstOrDefault(p => p is First_Strike) != null; }
@@ -56,7 +56,7 @@ namespace MTGModel.Objects
         }
         public string ImageUrl { get; set; }
         public string Name { get; set; }
-        public int OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
         public bool PhasedOut
         {
             get { return _PhasedOut; }
@@ -114,6 +114,7 @@ namespace MTGModel.Objects
         #region Constructors
         public Card()
         {
+            Id = Guid.NewGuid();
             throw new NotImplementedException("Card.Constructor");
         }
         public Card(Card card):this()
@@ -166,11 +167,14 @@ namespace MTGModel.Objects
                 return; 
             DamageTaken += damage;
         }
-        public void CheckTriggeredAbilities(EffectTrigger trigger)
+        public void CheckTriggeredAbilities(EffectTrigger trigger, AbilityArgs args = null)
         {
             if (trigger == EffectTrigger.None)
                 return;
-            throw new NotImplementedException("Card.CheckTriggeredAbilities");
+
+            foreach (IAbility ability in _Abilities.FindAll(o => o.Trigger == trigger))
+                ability.Process(new AbilityArgs() { OriginCard = this });
+            throw new NotImplementedException("Card.CheckTriggeredAbilities");// add feed from parameter args
         }
         public void Destroy()
         {        

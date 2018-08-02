@@ -257,6 +257,7 @@ namespace MTG.Enumerations
         Phases_PostCombatMainPhase,
         Phases_EndingPhase_EndStep,
         Phases_EndingPhase_CleanupStep,
+        Player_Damaged,
     }
     public enum GameModifier {
         None,

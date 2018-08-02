@@ -3,7 +3,7 @@ using MTG.Model.Objects;
 using System;
 using MTG.Enumerations;
 using System.Collections.Generic;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using MTG.Model.Abilities;
 using System.Linq;
 using MTG.ArgumentDefintions;
@@ -33,7 +33,7 @@ namespace MTG.Model
         public bool ForceLose { get; set; }
         public Graveyard Graveyard { get; set; }
         public Hand Hand { get; set; }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Library Library { get; set; }
         public int Life { get; private set; }
         public string LoseMessage { get; set; }
@@ -116,14 +116,11 @@ namespace MTG.Model
                 bodyguards[0].AddDamage(game, damage, originCard);
                 damage = 0;
             }
-            if(damage > 0)
+            if (damage > 0)
             {
                 DamageTaken = DamageTaken + damage;
-                foreach (IAbility ability in originCard.Abilities.FindAll(o => o.Trigger == EffectTrigger.Card_DamagePlayer))
-                {
-                    Player originPlayer = game.Players.First(o => o.Id == originCard.OwnerId);
-                    ability.Process(new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });
-                }
+                Player originPlayer = game.Players.First(o => o.Id == originCard.OwnerId);
+                originCard.CheckTriggeredAbilities(EffectTrigger.Card_DamagePlayer, new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });
 
                 EffectTriggerEventArgs args = new EffectTriggerEventArgs()
                 {
@@ -132,7 +129,7 @@ namespace MTG.Model
                         ActivePlayer = this,
                         Damage = damage,
                     },
-                    Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
+                    Trigger = EffectTrigger.Player_Damaged,
                 };
                 OnEffectTrigger?.Invoke(null, args);
             }
@@ -206,9 +203,9 @@ namespace MTG.Model
             }
             Library.Shuffle();
         }
-        public void Discard(int cardId, int randomCount)
+        public void Discard(int randomCount, Guid cardId)
         {
-            if (cardId > 0)
+            if (cardId != null)
                 Hand.Discard(Hand.Cards.First(o => o.Id == cardId));
             for (int i = 0; i < randomCount; i++)
                 Hand.Discard(true, 0);
@@ -289,14 +286,7 @@ namespace MTG.Model
         }
         public void UntapPermanents()
         {
-            foreach (Card card in Battlefield.FilteredCards(o=>o.Tapped))
-            {
-                if (card.UntapDuringUntapPhase || card.SelectedToUntap)
-                {
-                    card.Tapped = false;
-                    card.SelectedToUntap = false;
-                }
-            }
+            throw new NotImplementedException("Player.UntapPermanents");
         }
         #endregion
     }

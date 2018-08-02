@@ -1,6 +1,6 @@
 ﻿using MTG.Enumerations;
 using MTG.Helpers;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 
 namespace MTG.Model.Objects

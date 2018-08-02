@@ -3,7 +3,7 @@ using MTG.ArgumentDefintions;
 using MTG.Enumerations;
 using System;
 using System.Collections.Generic;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 
 namespace MTG.Model.Abilities
 {

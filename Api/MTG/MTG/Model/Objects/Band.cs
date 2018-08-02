@@ -1,5 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System.Collections.Generic;
 
 namespace MTG.Model.Objects

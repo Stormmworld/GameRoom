@@ -1,5 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Linq;
 
@@ -19,7 +19,7 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
-        public static Effect CreateEffect(ActiveGame game, EffectTypes effectType, int cardId = 0, int playerId = 0, int value = 0, bool boolean = false)
+        public static Effect CreateEffect(ActiveGame game, EffectTypes effectType, Guid cardId = new Guid(), Guid playerId = new Guid(), int value = 0, bool boolean = false)
         {
             Player player = game.Players.FirstOrDefault(o => o.Id == playerId);
             Card card = game.FindCard(cardId);

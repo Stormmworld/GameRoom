@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.ArgumentDefintions;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,13 +87,10 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Exile.FilteredCards");
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, TappingTriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
-            {
-                foreach (IAbility ability in card.Abilities.FindAll(o => o.Trigger == trigger))
-                    ability.Process(new AbilityArgs() { OriginCard = card });
-            }
+                card.CheckTriggeredAbilities(trigger);
         }
         public void Remove(Card card, TargetZone targetZone)
         {

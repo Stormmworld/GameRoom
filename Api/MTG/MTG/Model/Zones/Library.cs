@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 
@@ -96,7 +96,7 @@ namespace MTG.Model.Zones
                     break;
             }
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, TappingTriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             throw new NotImplementedException("Library.ProcessTriggeredAbilities");
         }

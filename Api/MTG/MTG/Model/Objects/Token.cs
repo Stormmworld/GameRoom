@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MTGModel.Objects
+namespace MTG.Model.Objects
 {
     public class Token
     {

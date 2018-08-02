@@ -18,7 +18,7 @@ namespace MTG.Model.Pending_Actions
                             to put those cards, then those cards move at the same time.
              */
         #region Properties
-        public int ActionPlayerId { get; set; }
+        public Guid ActionPlayerId { get; set; }
         public int ScryCount { get; set; }
         #endregion
 

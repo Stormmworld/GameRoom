@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Model.Abilities;
 using MTG.Model.Pending_Actions;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

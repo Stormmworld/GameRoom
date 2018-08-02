@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 
 namespace MTG.ArgumentDefintions.Trigger_Arguments
 {

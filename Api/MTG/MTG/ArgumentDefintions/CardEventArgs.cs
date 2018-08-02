@@ -1,4 +1,4 @@
-﻿using MTGModel.Objects;
+﻿using MTG.Model.Objects;
 using System;
 
 namespace MTG.ArgumentDefintions

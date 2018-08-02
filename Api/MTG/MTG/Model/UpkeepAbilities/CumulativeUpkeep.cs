@@ -25,8 +25,7 @@ namespace MTG.Model.UpkeepAbilities
         public bool Success { get; private set; }
         public bool RequiresInteraction { get; private set; }
         public EffectTrigger Trigger { get { return EffectTrigger.Phases_BegginingPhase_UpkeepStep; } }
-        public IReadOnlyCollection<AbilityType> Types { get { return _Types.AsReadOnly(); } }
-
+        public AbilityType Type { get { return AbilityType.Triggered; } }
         #endregion
 
         #region Constructors

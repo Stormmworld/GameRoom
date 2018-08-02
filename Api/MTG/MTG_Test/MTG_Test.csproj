@@ -48,14 +48,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="Ability Tests\Indestructible_Tests.cs" />
+    <Compile Include="Game Tests\Action.cs" />
+    <Compile Include="Game Tests\Player.cs" />
+    <Compile Include="Mockers\Card_Mocker.cs" />
+    <Compile Include="Player Tests\Action.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Ability Tests\" />
+    <ProjectReference Include="..\MTG\MTG.csproj">
+      <Project>{60ac633c-5da3-474e-a4eb-b90f9ded2359}</Project>
+      <Name>MTG</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model.Objects;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

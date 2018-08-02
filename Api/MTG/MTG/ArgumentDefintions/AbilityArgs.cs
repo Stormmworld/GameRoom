@@ -1,5 +1,5 @@
 ﻿using MTG.Model;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 
 namespace MTG.ArgumentDefintions
 {

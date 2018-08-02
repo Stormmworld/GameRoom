@@ -6,7 +6,7 @@ using MTG.Interfaces;
 using MTG.Model.Game;
 using MTG.Model.Objects;
 using MTG.Model.Zones;
-using MTGModel.Objects;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -176,7 +176,7 @@ namespace MTG.Model
             foreach (Player player in Players)
                 player.EmptyManaPool();
         }
-        internal Card FindCard(int cardId)
+        internal Card FindCard(Guid cardId)
         {
             Card foundCard = Exile.Cards.FirstOrDefault(o => o.Id == cardId);
             if (foundCard != null)

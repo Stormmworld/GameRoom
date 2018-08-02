@@ -1,6 +1,6 @@
 ﻿using MTG.Model.Objects;
 
-namespace MTGModel.Objects
+namespace MTG.Model.Objects
 {
     public class ManaCost
     {

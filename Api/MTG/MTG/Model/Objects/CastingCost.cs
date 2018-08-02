@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MTGModel.Objects
+namespace MTG.Model.Objects
 {
     public class CastingCost
     {

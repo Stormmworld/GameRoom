@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using System;
 
 namespace MTG.Model.Objects
 {
@@ -6,8 +7,8 @@ namespace MTG.Model.Objects
     {
         #region Properties
         public AttackableType AttackableType { get; set; }
-        public int PlaneswalkerId { get; set; }
-        public int PlayerId { get; set; }
+        public Guid PlaneswalkerId { get; set; }
+        public Guid PlayerId { get; set; }
         public string Name { get; set; }
         #endregion
     }
