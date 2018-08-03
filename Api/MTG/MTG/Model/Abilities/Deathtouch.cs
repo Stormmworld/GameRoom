@@ -40,6 +40,8 @@ namespace MTG.Model.Abilities
         #region Methods
         public void Process(AbilityArgs args)
         {
+            if (args.TargetCard.HasType(CardType.Planeswalker))
+                return;
             args.TargetCard.SufferingFromDeathtouchEffect = args.TargetCard.SufferingFromDeathtouchEffect || args.Damage > 0;
         }
         #endregion

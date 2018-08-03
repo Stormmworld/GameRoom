@@ -25,6 +25,7 @@ namespace MTG.Model.Objects
         private List<Counter> _Counters;
         private List<SubType> _SubTypes;
         private List<SuperType> _SuperTypes;
+        private int _Power, _Toughness;
         #endregion
 
         #region Properties - Collections
@@ -44,11 +45,7 @@ namespace MTG.Model.Objects
         public Guid Id { get; set; }
         public bool HasFirstStrike
         {
-           get { return Abilities.FirstOrDefault(p => p is First_Strike) != null; }
-        }
-        public bool HasDoubleStrike
-        {
-            get { return Abilities.FirstOrDefault(p => p is Double_Strike) != null;}
+           get { return (Abilities.FirstOrDefault(p => p is First_Strike) != null)||(Abilities.FirstOrDefault(p => p is Double_Strike) != null); }
         }
         public bool HasNormalStrike
         {
@@ -69,7 +66,17 @@ namespace MTG.Model.Objects
                     OnCardPhasedIn?.Invoke(null, new CardEventArgs() { Card = this });
             }
         }
-        public int Power { get; set; }
+        public int Power
+        {
+            get
+            {
+                int retVal = _Power;
+                foreach (Counter counter in _Counters)
+                    if (counter.CounterType == CounterType.PlusXPlusY)
+                        retVal += counter.X;
+                return retVal < 0 ? 0 : retVal;
+            }
+        }
         public int PreventDamage { get; set; }
         public bool SufferingFromDeathtouchEffect { get; set; }
         public bool Tapped
@@ -89,24 +96,15 @@ namespace MTG.Model.Objects
                 });
             }
         }
-        public int Toughness { get; set; }
-        public bool IsPermanant
+        public int Toughness
         {
             get
             {
-                foreach (CardType type in CardTypes)
-                {
-                    switch (type)
-                    {
-                        case CardType.Artifact:
-                        case CardType.Creature:
-                        case CardType.Enchantment:
-                        case CardType.Land:
-                        case CardType.Planeswalker:
-                            return true;
-                    }
-                }
-                return false;
+                int retVal = _Toughness;
+                foreach (Counter counter in _Counters)
+                    if (counter.CounterType == CounterType.PlusXPlusY)
+                        retVal += counter.Y;
+                return retVal < 0 ? 0: retVal;
             }
         }
         #endregion
@@ -122,6 +120,11 @@ namespace MTG.Model.Objects
             _SubTypes = new List<SubType>();
             _SuperTypes = new List<SuperType>();
             CanBeDestroyed = true;
+        }
+        public Card(int power, int toughness):this()
+        {
+            _Power = power;
+            _Toughness = toughness;
         }
         public Card(Card card):this()
         {
@@ -165,7 +168,24 @@ namespace MTG.Model.Objects
         }
         public void Add(Counter counter)
         {
-            throw new NotImplementedException("Card.AddCounter");
+            _Counters.Add(counter);
+            OnEffectTrigger?.Invoke(null, new EffectTriggerEventArgs()
+            {
+                Args = new CounterTriggerArgs()
+                {
+                    ActiveCard = this,
+                    CounterType = counter.CounterType,
+                },
+                Trigger = EffectTrigger.Card_RecievesCounter,
+            });
+        }
+        public void Add(CardType cardType)
+        {
+            _CardTypes.Add(cardType);
+        }
+        public void Add(SubType subType)
+        {
+            _SubTypes.Add(subType);
         }
         public void AddDamage(ActiveGame game, int damage, Card originCard)
         {
@@ -199,9 +219,17 @@ namespace MTG.Model.Objects
             if (!(obj is Card)) return false;  
             return Id == ((Card)obj).Id;
         }
+        public List<Counter> GetCountersByType(CounterType type)
+        {
+            return _Counters.FindAll(o=>o.CounterType == type);
+        }
         public override int GetHashCode()
         {
             return 2108858624 + Id.GetHashCode();
+        }
+        public bool HasType(CardType cardType)
+        {
+            return _CardTypes.Contains(cardType);
         }
         public void ProcessDamage()
         {

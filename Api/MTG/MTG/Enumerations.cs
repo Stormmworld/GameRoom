@@ -258,6 +258,7 @@ namespace MTG.Enumerations
         Phases_EndingPhase_EndStep,
         Phases_EndingPhase_CleanupStep,
         Player_Damaged,
+        Card_RecievesCounter,
     }
     public enum GameModifier {
         None,
@@ -301,6 +302,13 @@ namespace MTG.Enumerations
         Cumulative_Upkeep,
         Flashback_GraveYard,
 
+    }
+    public enum SacrificeType
+    {
+        None,
+        Count,
+        HighestPower,
+        HighestToughness,
     }
     public enum StackEntryType
     {

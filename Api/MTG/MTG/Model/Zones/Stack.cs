@@ -1,6 +1,6 @@
 ﻿using MTG.Enumerations;
+using MTG.Helpers;
 using MTG.Interfaces;
-using MTG.Model.Objects;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
@@ -112,7 +112,7 @@ namespace MTG.Model.Zones
                     case StackEntryType.Effect:
                         break;
                     case StackEntryType.Spell:
-                        if (entry.Card.IsPermanant)
+                        if (CardHelper.IsPermanant(entry.Card))
                         {
                             controllerPlayer.Battlefield.Add(entry.Card);
                         }

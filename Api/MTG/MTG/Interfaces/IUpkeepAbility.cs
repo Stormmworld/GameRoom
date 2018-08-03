@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions;
+using MTG.Model.Objects;
 using System;
 
 namespace MTG.Interfaces
@@ -7,8 +8,7 @@ namespace MTG.Interfaces
     {
         IAbility FailedUpkeep { get; }
         Guid Id { get; }
-        bool Success { get; }
-        bool RequiresInteraction { get; }
+        UpkeepAction Action { get; }
 
         void CheckResolution(AbilityArgs args);
     }

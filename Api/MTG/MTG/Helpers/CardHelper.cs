@@ -1,4 +1,5 @@
-﻿using MTG.Model.Objects;
+﻿using MTG.Enumerations;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 
@@ -38,6 +39,22 @@ namespace MTG.Helpers
             }
 
             return randomCards;
+        }
+        public static bool IsPermanant(Card card)
+        {
+            foreach (CardType type in card.CardTypes)
+            {
+                switch (type)
+                {
+                    case CardType.Artifact:
+                    case CardType.Creature:
+                    case CardType.Enchantment:
+                    case CardType.Land:
+                    case CardType.Planeswalker:
+                        return true;
+                }
+            }
+            return false;
         }
     }
 }

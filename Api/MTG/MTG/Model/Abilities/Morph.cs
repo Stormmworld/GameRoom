@@ -57,10 +57,8 @@ namespace MTG.Model.Abilities
         {
             get
             {
-                Card retVal = new Card()
+                Card retVal = new Card(2,2)
                 {
-                    Power = 2,
-                    Toughness = 2,
                     Name = "Morphed Card"
                 };
                 // need an ability to flip this card back over
