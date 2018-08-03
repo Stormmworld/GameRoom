@@ -60,3 +60,14 @@ typings/
 # webpack
 dist/
 
+# C Sharp build items
+API/MTG/MTG/bin
+API/MTG/MTG/obj
+packages
+*.suo
+/Api/MTG/MTG/obj
+/Api/MTG/MTG/bin
+/Api/MTG/MTG_Test/bin
+/Api/MTG/MTG_Test/obj
+/Api/FiveColorApi/obj
+/Api/FiveColorApi/bin

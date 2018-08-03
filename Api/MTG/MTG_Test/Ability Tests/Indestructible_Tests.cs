@@ -10,14 +10,13 @@ namespace MTG_Test.Ability_Tests
     public class Indestructible_Tests
     {
         [TestMethod]
-        public void AppliesEffect()
+        public void AbilityTests_Indestructible()
         {
             Card indestructibleCard = Mockers.Card_Mocker.MockWithAbility(new Indestructible());
             indestructibleCard.Abilities[0].Process( new AbilityArgs() { OriginCard = indestructibleCard }) ;
-                     
-
-
+            Card destructibleCard = Mockers.Card_Mocker.Mock();
             Assert.IsFalse(indestructibleCard.CanBeDestroyed);
+            Assert.IsTrue(destructibleCard.CanBeDestroyed);
         }
     }
 }
