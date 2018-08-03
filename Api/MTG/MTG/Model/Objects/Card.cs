@@ -19,10 +19,10 @@ namespace MTG.Model.Objects
 
         #region Variables
         private bool _PhasedOut, _Tapped;
-        private List<Counter> _Counters;
         private List<IAbility> _Abilities;
         private List<CardType> _CardTypes;
         private List<Colors> _Colors;
+        private List<Counter> _Counters;
         private List<SubType> _SubTypes;
         private List<SuperType> _SuperTypes;
         #endregion
@@ -115,7 +115,13 @@ namespace MTG.Model.Objects
         public Card()
         {
             Id = Guid.NewGuid();
-            throw new NotImplementedException("Card.Constructor");
+            _Abilities = new List<IAbility>();
+            _CardTypes = new List<CardType>();
+            _Colors = new List<Colors>();
+            _Counters = new List<Counter>();
+            _SubTypes = new List<SubType>();
+            _SuperTypes = new List<SuperType>();
+            CanBeDestroyed = true;
         }
         public Card(Card card):this()
         {
