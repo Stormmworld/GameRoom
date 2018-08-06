@@ -68,6 +68,10 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Ante.FilteredCards");
         }
+        public Card Find(Guid cardId)
+        {
+            return _Cards.FirstOrDefault(o => o.Id == cardId);
+        }
         public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))

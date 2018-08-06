@@ -226,6 +226,7 @@ namespace MTG.Enumerations
         SkipDrawCard,
         TopCardOfLibraryFaceUp,
         CannotCounter,
+        AdditionalTurn,
     }
     public enum EffectTrigger
     {

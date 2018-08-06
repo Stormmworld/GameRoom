@@ -88,6 +88,10 @@ namespace MTG.Model.Zones
         {
             return _Cards.FindAll(predicate);
         }
+        public Card Find(Guid cardId)
+        {
+            return _Cards.FirstOrDefault(o => o.Id == cardId);
+        }
         public bool LandMulligan()
         {
             var landInHand = _Cards.FindAll(o=>o.CardTypes.Contains(CardType.Land));

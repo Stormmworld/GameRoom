@@ -327,9 +327,9 @@ namespace MTG.Model
         }
         internal void SetNextPlayer()
         {
-            if (ActivePlayer.AdditionalTurnCount > 0)
-                ActivePlayer.AdditionalTurnCount--;
-            else 
+            if (ActivePlayer.HasEffectType(EffectTypes.AdditionalTurn))
+                ActivePlayer.Remove(EffectTypes.AdditionalTurn);
+            else
             {
                 int nextIndex = 0;
                 if (ActivePlayerIndex != Players.Count - 1)

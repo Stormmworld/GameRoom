@@ -4,6 +4,7 @@ using MTG.Interfaces;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Zones
 {
@@ -83,6 +84,10 @@ namespace MTG.Model.Zones
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
             throw new NotImplementedException("Library.FilteredCards");
+        }
+        public Card Find(Guid cardId)
+        {
+            return _Cards.FirstOrDefault(o => o.Id == cardId);
         }
         public void Insert(Card card, InsertLocation insertLocation)
         {

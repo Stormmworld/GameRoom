@@ -101,6 +101,10 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Stack.FilteredCards");
         }
+        public Card Find(Guid cardId)
+        {
+            throw new NotImplementedException("Stack.Find - Card: Do not use this method from the stack");
+        }
         public static void Process(ActiveGame game)
         {
             while (game.Stack.Entries.Count > 0)

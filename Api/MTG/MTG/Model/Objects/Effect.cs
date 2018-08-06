@@ -36,6 +36,9 @@ namespace MTG.Model.Objects
         {
             switch (EffectType)
             {
+                case EffectTypes.AdditionalTurn:
+
+                    break;
                 case EffectTypes.CombineHandAndGraveyardToLibrary:
                     //if (TargetPlayer != null)
                     //    TargetPlayer.CombineToLibrary(true, true);

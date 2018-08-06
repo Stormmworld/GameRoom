@@ -21,7 +21,6 @@ namespace MTG.Model
 
         #region Properties
         public List<Effect> ActiveEffects { get; set; }
-        public int AdditionalTurnCount { get; set; }
         public Battlefield Battlefield { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
@@ -32,7 +31,7 @@ namespace MTG.Model
         public Graveyard Graveyard { get; set; }
         public Hand Hand { get; set; }
         public Guid Id { get; set; }
-        public Library Library { get; set; }
+        public Library Library { get; private set; }
         public int Life { get; private set; }
         public string LoseMessage { get; set; }
         public ManaPool ManaPool { get; set; }
@@ -106,12 +105,42 @@ namespace MTG.Model
             };
             OnEffectTrigger?.Invoke(null, args);
         }
+        public void Add(Card card, TargetZone zone)
+        {
+            switch (zone)
+            {
+                case TargetZone.Battlefield:
+                    Battlefield.Add(card);
+                    break;
+                case TargetZone.Command:
+                    Command.Add(card);
+                    break;
+                case TargetZone.Graveyard:
+                    Graveyard.Add(card);
+                    break;
+                case TargetZone.Hand:
+                    Hand.Add(card);
+                    break;
+                case TargetZone.Library:
+                    Library.Add(card);
+                    break;
+                default:
+                    throw new Exception("Player.Add - Card: Invalid Zone for player add card");
+            }
+        }
+        public void Add(Effect effect)
+        {
+            ActiveEffects.Add(effect);
+        }
         public void ApplyDamage(ApplyDamageEventArgs args)
         {
             if (args.Target.Type == TargetType.Player && Id == args.Target.Id)
+            {
                 Life = Life - args.DamageValue;
+
+            }
             else if (args.Target.Type == TargetType.Card || args.Target.Type == TargetType.Planeswalker)
-                FindCard(args.Target.Id)?.ApplyDamage(args);
+                Battlefield.Find(args.Target.Id).ApplyDamage(args);// damage only exists in the battlefield
             else
                 throw new Exception("Player.ApplyDamage - No valid target for damage");
         }
@@ -216,12 +245,30 @@ namespace MTG.Model
         }
         public Card FindCard(Guid cardId)
         {
-
-            throw new NotImplementedException("Player.FindCard");
+            Card retVal = Battlefield.Find(cardId);
+            if(retVal == null)
+                Command.Find(cardId);
+            if (retVal == null)
+                Library.Find(cardId);
+            if (retVal == null)
+                Hand.Find(cardId);
+            if (retVal == null)
+                Graveyard.Find(cardId);
+            return retVal;
+        }
+        public bool HasEffectType(EffectTypes effectType)
+        {
+            return ActiveEffects.FirstOrDefault(o => o.EffectType == effectType) != null;
+        }
+        public void Remove(EffectTypes effectType)
+        {
+            Effect removeEffect = ActiveEffects.FirstOrDefault(o => o.EffectType == effectType);
+            if (removeEffect != null)
+                ActiveEffects.Remove(removeEffect);
         }
         public void ResetPlayer()
         {
-            AdditionalTurnCount = 0;
+            ActiveEffects = new List<Effect>();
             Battlefield = new Battlefield();
             Command = new Command();
             Graveyard = new Graveyard();
