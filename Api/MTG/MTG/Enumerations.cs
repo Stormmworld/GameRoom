@@ -183,7 +183,9 @@ namespace MTG.Enumerations
         None,
         Trample,
         Unblocked,
-        Spell,
+        Deathtouch,
+        Discard1,
+        Discard2,
     }
     public enum EffectTypes
     {
@@ -660,6 +662,7 @@ namespace MTG.Enumerations
     {
         None,
         Artifact,
+        Card,
         Creature,
         Land,
         Permanent,

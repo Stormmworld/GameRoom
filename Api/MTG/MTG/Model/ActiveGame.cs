@@ -24,30 +24,32 @@ namespace MTG.Model
         private List<AttackingCreature> _Attackers;
         #endregion
 
-        #region Properties
-        public IReadOnlyCollection<Effect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
-        public IReadOnlyCollection<AttackingCreature> Attackers { get { return _Attackers.AsReadOnly(); } }
-        public IReadOnlyCollection<GameModifier> Modifiers { get { return _Modifiers.AsReadOnly(); } }
-        public IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
-        public IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
-        public IReadOnlyCollection<GamePhases> SkipPhases { get { return _SkipPhases.AsReadOnly(); } }
+        #region Collection Properties
+        internal IReadOnlyCollection<Effect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
+        internal IReadOnlyCollection<AttackingCreature> Attackers { get { return _Attackers.AsReadOnly(); } }
+        internal IReadOnlyCollection<GameModifier> Modifiers { get { return _Modifiers.AsReadOnly(); } }
+        internal IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
+        internal IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
+        internal IReadOnlyCollection<GamePhases> SkipPhases { get { return _SkipPhases.AsReadOnly(); } }
+        #endregion
 
-        public Combat ActiveCombat { get; set; }
-        public Player ActivePlayer 
+        #region Properties
+        internal Combat ActiveCombat { get; set; }
+        internal Player ActivePlayer 
         {
             get
             {
                 return _Players[ActivePlayerIndex];
             }
         }
-        public int ActivePlayerIndex { get; set; }
-        public GamePhases ActivePhase { get; set; }
-        public Ante Ante { get; set; }
-        public Exile Exile { get; set; }
-        public GameType GameType { get; private set; }
-        public GamePhases OverrideNextPhase { get; set; }
-        public int TurnSpellCount { get; set; }
-        public Stack Stack { get; set; }
+        internal int ActivePlayerIndex { get; set; }
+        internal GamePhases ActivePhase { get; set; }
+        internal Ante Ante { get; set; }
+        internal Exile Exile { get; set; }
+        internal GameType GameType { get; private set; }
+        internal GamePhases OverrideNextPhase { get; set; }
+        internal int TurnSpellCount { get; set; }
+        internal Stack Stack { get; set; }
         #endregion
 
         #region Constructors
@@ -105,6 +107,21 @@ namespace MTG.Model
         private void OnAddPendingAction(object sender, EventArgs e)
         {
             throw new NotImplementedException("ActiveGame.OnAddPendingAction");
+        }
+        private void OnApplyDamage(object sender, EventArgs e)
+        {
+            ApplyDamageEventArgs args = (ApplyDamageEventArgs)e;
+            foreach (Player player in _Players)
+                if (args.Target.Type == TargetType.Player && player.Id == args.Target.Id)
+                {
+                    player.ApplyDamage(args);
+                    return;
+                }
+                else if ((args.Target.Type == TargetType.Card || args.Target.Type == TargetType.Planeswalker) && player.FindCard(args.Target.Id) != null)
+                {
+                    player.ApplyDamage(args);
+                    return;
+                }
         }
         private void OnCardDestroyed(object sender, EventArgs e)
         {
@@ -203,8 +220,7 @@ namespace MTG.Model
         }
         internal void ProcessDamage()
         {
-            foreach (Player player in Players)
-                player.ProcessDamage();
+            throw new NotImplementedException("ActiveGame.ProcessDamage");
         }
         internal void ProcessPhase()
         {

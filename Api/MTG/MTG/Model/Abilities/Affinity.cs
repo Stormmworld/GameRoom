@@ -36,6 +36,10 @@ namespace MTG.Model.Abilities
         {
             throw new NotImplementedException("Affinity.Process");
         }
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
         #endregion
     }
 }

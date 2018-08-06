@@ -1,6 +1,8 @@
-﻿using MTG.Model.Objects;
+﻿using MTG.Helpers;
+using MTG.Model.Abilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Objects
 {
@@ -25,17 +27,48 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
-        public void AddAttacker(Card card)
+        public void AddAttacker(Card card, Guid bandId = new Guid())
         {
-            throw new NotImplementedException("Combat.AddAttacker");
+            if (bandId == new Guid())
+                _Attackers.Add(new AttackingCreature(card));
+            else
+            {
+                Band bandToJoin = _AttackingBands.FirstOrDefault(o=>o.Id == bandId);
+                if (bandToJoin != null)
+                    bandToJoin.AddMember(card);
+                else
+                {
+                    Band newBand = new Band(Enumerations.BandTypes.Attacking);
+                    newBand.AddMember(card);
+                    _AttackingBands.Add(newBand);
+                }
+            }
         }
-        public void AddBlocker(Card card)
+        public void AddBlocker(Card card, Guid attackerId, Guid blockingBandId = new Guid())
         {
-            throw new NotImplementedException("Combat.AddBlocker");
+            AttackingCreature attackerToBlock = _Attackers.FirstOrDefault(o=>o.Id == attackerId);
+            if (attackerToBlock != null)
+                attackerToBlock.AddBlocker(card, blockingBandId);
+            else
+            {
+                Band attackerBandToBlock = _AttackingBands.FirstOrDefault(o => o.Id == attackerId);
+                if (attackerBandToBlock != null)
+                    attackerBandToBlock.AddBlocker(card, blockingBandId);
+            }
         }
-        public void Process()
+        public void AssignDamage(bool isFirstStrike)
         {
-            throw new NotImplementedException("Combat.Process");
+            foreach (AttackingCreature attacker in _Attackers)
+                attacker.AssignDamage(isFirstStrike);
+            foreach (Band band in _AttackingBands)
+                band.AssignDamage(isFirstStrike);
+        }
+        public void CommitDamage()
+        {
+            foreach (AttackingCreature attacker in _Attackers)
+                attacker.CommitDamage();
+            foreach (Band attackerBand in _AttackingBands)
+                attackerBand.CommitDamage();
         }
         #endregion
     }

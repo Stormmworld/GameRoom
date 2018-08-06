@@ -1,5 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTG.Model.Objects;
+using System;
 
 namespace MTG.Model.Objects
 {
@@ -7,8 +7,7 @@ namespace MTG.Model.Objects
     {
         #region Properties
         public TargetType Type { get; set; }
-        public Card Card { get; set; }
-        public Player Player { get; set; }
+        public Guid Id { get; set; }
         #endregion
     }
 }

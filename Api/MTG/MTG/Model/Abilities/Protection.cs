@@ -100,20 +100,18 @@ namespace MTG.Model.Abilities
         {
             //no damage from a color when we have protection
             if (Colors.Intersect(args.OriginCard.Colors).Count() > 0)
-                PreventDamage(args.TargetCard, args.OriginCard, args.Damage);    
+                PreventDamage(args.TargetCard,  args.Damage);    
             //no damage from a card sub type when we have protection
             if (CardTypes.Intersect(args.OriginCard.CardTypes).Count() > 0)
-                PreventDamage(args.TargetCard, args.OriginCard, args.Damage);
+                PreventDamage(args.TargetCard, args.Damage);
             //no damage from a card type when we have protection
             if (SubTypes.Intersect(args.OriginCard.SubTypes).Count() > 0)
-                PreventDamage(args.TargetCard, args.OriginCard, args.Damage);
+                PreventDamage(args.TargetCard, args.Damage);
         }
-        private void PreventDamage(Card recievingCard, Card dealingCard, int damage = 0)
+        private void PreventDamage(Card recievingCard, Damage damage)
         {
-            if (dealingCard.CardTypes.Contains(CardType.Creature) && damage < 1)
-                recievingCard.PreventDamage += dealingCard.Power;
-            else
-                recievingCard.PreventDamage += damage;
+            if (damage.OriginCard.HasType(CardType.Creature))
+                damage.AddPrevention(damage.BaseValue);
         }
         public void Remove(Colors color)
         {
@@ -126,6 +124,10 @@ namespace MTG.Model.Abilities
         public void Remove(CardType cardType)
         {
             _CardTypes.Remove(cardType);
+        }
+        public override string ToString()
+        {
+            return this.GetType().Name;
         }
         #endregion
     }

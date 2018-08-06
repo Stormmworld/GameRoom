@@ -1,7 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Model.Abilities;
 using MTG.Model.Objects;
+using MTG_Test.Mockers;
+using System;
+using System.Collections.Generic;
 
 namespace MTG_Test.Ability_Tests
 {
@@ -9,64 +13,24 @@ namespace MTG_Test.Ability_Tests
     public class Deathtouch_Tests
     {
         [TestMethod]
-        public void Ability_Deathtouch_Creature_NoDamage()
+        public void Ability_Deathtouch_GeneratesDeathTouchDamage()
         {
-            Card deathtouchCard = Mockers.Card_Mocker.MockCreature();
+            List<string> applyDamageTypes = new List<string>();
+            Card deathtouchCard = Card_Mocker.MockCreature(1,1);
             deathtouchCard.Add(new Deathtouch());
-            Card targetCard = Mockers.Card_Mocker.MockCreature();
-            AbilityArgs args = new AbilityArgs()
+            Damage damage = new Damage()
             {
-                OriginCard = deathtouchCard,
-                TargetCard = targetCard,
-                Damage = 0,
+                BaseValue = deathtouchCard.Power,
+                OriginCard = deathtouchCard,          
+                Target = Target_Mocker.Mock(Card_Mocker.MockCreature()),
             };
-            deathtouchCard.Abilities[0].Process(args);
-            Assert.IsFalse(targetCard.SufferingFromDeathtouchEffect);
-        }
-        [TestMethod]
-        public void Ability_Deathtouch_Creature_Damage()
-        {
-            Card deathtouchCard = Mockers.Card_Mocker.MockCreature();
-            deathtouchCard.Add(new Deathtouch());
-            Card targetCard = Mockers.Card_Mocker.MockCreature();
-            AbilityArgs args = new AbilityArgs()
-            {
-                OriginCard = deathtouchCard,
-                TargetCard = targetCard,
-                Damage = 1,
-            };
-            deathtouchCard.Abilities[0].Process(args);
-            Assert.IsTrue(targetCard.SufferingFromDeathtouchEffect);
-        }
-        [TestMethod]
-        public void Ability_Deathtouch_Planeswalker_NoDamage()
-        {
-            Card deathtouchCard = Mockers.Card_Mocker.MockCreature();
-            deathtouchCard.Add(new Deathtouch());
-            Card targetCard = Mockers.Card_Mocker.MockPlaneswalker(5);
-            AbilityArgs args = new AbilityArgs()
-            {
-                OriginCard = deathtouchCard,
-                TargetCard = targetCard,                
-                Damage = 0,
-            };
-            deathtouchCard.Abilities[0].Process(args);
-            Assert.IsFalse(targetCard.SufferingFromDeathtouchEffect);
-        }
-        [TestMethod]
-        public void Ability_Deathtouch_Planeswalker_Damage()
-        {
-            Card deathtouchCard = Mockers.Card_Mocker.MockCreature();
-            deathtouchCard.Add(new Deathtouch());
-            Card targetCard = Mockers.Card_Mocker.MockPlaneswalker(5);
-            AbilityArgs args = new AbilityArgs()
-            {
-                OriginCard = deathtouchCard,
-                TargetCard = targetCard,
-                Damage = 1,
-            };
-            deathtouchCard.Abilities[0].Process(args);
-            Assert.IsFalse(targetCard.SufferingFromDeathtouchEffect);
+            damage.OnApplyDamage += delegate (object sender, EventArgs e) 
+                {
+                    foreach(DamageTypes type in ((ApplyDamageEventArgs)e).Types)
+                    applyDamageTypes.Add(type.ToString());
+                };
+            damage.Process();
+            Assert.IsTrue(applyDamageTypes.Contains(DamageTypes.Deathtouch.ToString()));
         }
     }
 }

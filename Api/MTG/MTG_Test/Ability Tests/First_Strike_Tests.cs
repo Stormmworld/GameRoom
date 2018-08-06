@@ -14,9 +14,8 @@ namespace MTG_Test.Ability_Tests
             firstStrikeCard.Add(new First_Strike());
             Card normalStrikeCard = Mockers.Card_Mocker.MockCreature();
 
-            Assert.IsFalse(normalStrikeCard.HasFirstStrike);
-            Assert.IsFalse(firstStrikeCard.HasNormalStrike);
-            Assert.IsTrue(firstStrikeCard.HasFirstStrike);
+            Assert.IsTrue(firstStrikeCard.HasAbility(typeof(First_Strike)));
+            Assert.IsFalse(normalStrikeCard.HasAbility(typeof(First_Strike)));
         }
     }
 }

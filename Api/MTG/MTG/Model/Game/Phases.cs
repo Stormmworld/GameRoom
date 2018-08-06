@@ -1,12 +1,8 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
-using MTG.Model.Abilities;
-using MTG.Model.Objects;
-using MTG.Model.Pending_Actions;
 using MTG.Model.Objects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace MTG.Model.Game
@@ -396,7 +392,9 @@ namespace MTG.Model.Game
             };
             if (game.Modifiers.Contains(GameModifier.CombatDamagePrevented))
                 return;
-            game.ActiveCombat.Process();
+            game.ActiveCombat.AssignDamage(true);
+            game.ActiveCombat.CommitDamage();
+            game.ActiveCombat.AssignDamage(false);
         }
         public static void CombatPhase_EndStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
@@ -415,7 +413,7 @@ namespace MTG.Model.Game
                 Trigger = EffectTrigger.Phases_CombatPhase_EndStep,
             };
             //resolve damage and process cards to graveyard
-            game.ProcessDamage();
+            game.ActiveCombat.CommitDamage();
             //remove effects that end with combat phase
             game.RemoveEffects(GamePhases.Combat_Ending);
         }

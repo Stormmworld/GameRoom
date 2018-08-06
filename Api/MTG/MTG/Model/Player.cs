@@ -23,11 +23,9 @@ namespace MTG.Model
         public List<Effect> ActiveEffects { get; set; }
         public int AdditionalTurnCount { get; set; }
         public Battlefield Battlefield { get; set; }
-        public int CombatDamage { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
         public List<Counter> Counters { get; private set; }
-        public int DamageTaken { get; set; }
         public Deck Deck { get; private set; }
         public bool FailedDraw { get; set; }
         public bool ForceLose { get; set; }
@@ -48,6 +46,7 @@ namespace MTG.Model
         #region Constructors
         public Player()
         {
+            Id = Guid.NewGuid();
             ResetPlayer();
         }
         public Player(string name):this()
@@ -92,49 +91,6 @@ namespace MTG.Model
         #endregion
 
         #region Methods
-        public List<IPendingDamageResolution> AddDamage(ActiveGame game, int damage, Card originCard, bool BlockedDamage = false)
-        {
-            List<IPendingDamageResolution> retVal = new List<IPendingDamageResolution>();
-            List<Card> bodyguards = Battlefield.CardsWithAbility(typeof(Bodyguard));
-            List<Card> cardsThatAffectDamage = GetCardsThatAffectDamage();
-            if (cardsThatAffectDamage.Count > 0)
-            {
-                throw new NotImplementedException("Player.AddDamage-cardsThatAffectDamage");
-            }
-            else if (!BlockedDamage && bodyguards.Count > 1)
-            {
-                retVal.Add(new BodyGuardPendingDamageResolution()
-                {
-                    ActionPlayerId = Id,
-                    BodyGuards = bodyguards,
-                    Damage = damage,
-                });
-                damage = 0;
-            }
-            else if (!BlockedDamage && bodyguards.Count == 1)
-            {
-                bodyguards[0].AddDamage(game, damage, originCard);
-                damage = 0;
-            }
-            if (damage > 0)
-            {
-                DamageTaken = DamageTaken + damage;
-                Player originPlayer = game.Players.First(o => o.Id == originCard.OwnerId);
-                originCard.CheckTriggeredAbilities(EffectTrigger.Card_DamagePlayer, new AbilityArgs() { Damage = damage, OriginCard = originCard, OriginPlayer = originPlayer, TargetPlayer = this });
-
-                EffectTriggerEventArgs args = new EffectTriggerEventArgs()
-                {
-                    Args = new DamageTakenTriggerArgs()
-                    {
-                        ActivePlayer = this,
-                        Damage = damage,
-                    },
-                    Trigger = EffectTrigger.Player_Damaged,
-                };
-                OnEffectTrigger?.Invoke(null, args);
-            }
-            return retVal;
-        }
         public void AddLife(int amount)
         {
             Life += amount;
@@ -149,6 +105,15 @@ namespace MTG.Model
                 Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
             };
             OnEffectTrigger?.Invoke(null, args);
+        }
+        public void ApplyDamage(ApplyDamageEventArgs args)
+        {
+            if (args.Target.Type == TargetType.Player && Id == args.Target.Id)
+                Life = Life - args.DamageValue;
+            else if (args.Target.Type == TargetType.Card || args.Target.Type == TargetType.Planeswalker)
+                FindCard(args.Target.Id)?.ApplyDamage(args);
+            else
+                throw new Exception("Player.ApplyDamage - No valid target for damage");
         }
         public bool CheckLoseConditions()
         {
@@ -249,16 +214,10 @@ namespace MTG.Model
         {
             ManaPool.EmptyManaPool();
         }
-        public List<Card> GetCardsThatAffectDamage()
+        public Card FindCard(Guid cardId)
         {
-            throw new NotImplementedException("Player.GetCardsThatAffectDamage");//COP
-        }
-        public void ProcessDamage()
-        {
-            Life = Life - DamageTaken;
-            DamageTaken = 0;
-            foreach (Card card in Battlefield.Cards)
-                card.ProcessDamage();
+
+            throw new NotImplementedException("Player.FindCard");
         }
         public void ResetPlayer()
         {

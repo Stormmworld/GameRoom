@@ -23,6 +23,7 @@ namespace MTG.Model.Objects
         private List<CardType> _CardTypes;
         private List<Colors> _Colors;
         private List<Counter> _Counters;
+        private List<int> _Damage;
         private List<SubType> _SubTypes;
         private List<SuperType> _SuperTypes;
         private int _Power, _Toughness;
@@ -33,24 +34,15 @@ namespace MTG.Model.Objects
         public IReadOnlyList<CardType> CardTypes { get { return _CardTypes.AsReadOnly(); } }
         public IReadOnlyList<Colors> Colors { get { return _Colors.AsReadOnly(); } }
         public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
+        public IReadOnlyList<int> Damage { get { return _Damage.AsReadOnly(); } }
         public IReadOnlyList<SubType> SubTypes { get { return _SubTypes.AsReadOnly(); } }
         public IReadOnlyList<SuperType> SuperTypes { get { return _SuperTypes.AsReadOnly(); } }
         #endregion
 
         #region Properties
-        public bool CanBeDestroyed { get; set; }
         public Guid ControllerId { get; set; }
-        public int DamageTaken { get; set; }
         public int FaceUpSide { get; set; }
-        public Guid Id { get; set; }
-        public bool HasFirstStrike
-        {
-           get { return (Abilities.FirstOrDefault(p => p is First_Strike) != null)||(Abilities.FirstOrDefault(p => p is Double_Strike) != null); }
-        }
-        public bool HasNormalStrike
-        {
-            get { return Abilities.FirstOrDefault(p => p is First_Strike) == null; }
-        }
+        public Guid Id { get; private set; }
         public string ImageUrl { get; set; }
         public string Name { get; set; }
         public Guid OwnerId { get; set; }
@@ -77,8 +69,6 @@ namespace MTG.Model.Objects
                 return retVal < 0 ? 0 : retVal;
             }
         }
-        public int PreventDamage { get; set; }
-        public bool SufferingFromDeathtouchEffect { get; set; }
         public bool Tapped
         {
             get { return _Tapped; }
@@ -117,9 +107,9 @@ namespace MTG.Model.Objects
             _CardTypes = new List<CardType>();
             _Colors = new List<Colors>();
             _Counters = new List<Counter>();
+            _Damage = new List<int>();
             _SubTypes = new List<SubType>();
             _SuperTypes = new List<SuperType>();
-            CanBeDestroyed = true;
         }
         public Card(int power, int toughness):this()
         {
@@ -183,15 +173,49 @@ namespace MTG.Model.Objects
         {
             _CardTypes.Add(cardType);
         }
+        public void Add(Colors color)
+        {
+            _Colors.Add(color);
+        }
+        public void Add(Effect effect)
+        {
+            throw new NotImplementedException("Card.Add Effect");
+        }
         public void Add(SubType subType)
         {
             _SubTypes.Add(subType);
         }
-        public void AddDamage(ActiveGame game, int damage, Card originCard)
+        public void Add(SuperType superType)
         {
-            if (game.Modifiers.Contains(GameModifier.CreaturesTakeNoDamage))
-                return; 
-            DamageTaken += damage;
+            _SuperTypes.Add(superType);
+        }
+        public void ApplyDamage(ApplyDamageEventArgs args)
+        {
+            if (HasType(CardType.Planeswalker))
+            {
+                for (int i = 0; i < args.DamageValue; i++)
+                    Remove(CounterType.Loyalty);
+            }
+            else
+            {
+                if (args.Types.Contains(DamageTypes.Trample) && args.DamageValue > Toughness)
+                {
+                    _Damage.Add(Toughness);
+                    throw new NotImplementedException("Card.ApplyDmage - Trample");
+                }
+                else
+                    _Damage.Add(args.DamageValue);
+                if (args.Types.Contains(DamageTypes.Deathtouch) && args.DamageValue > 0)
+                    Destroy();
+                else
+                {
+                    int totalDamage = 0;
+                    foreach (int damage in Damage)
+                        totalDamage += damage;
+                    if (totalDamage >= Toughness)
+                        Destroy();
+                }
+            }
         }
         public void CheckTriggeredAbilities(EffectTrigger trigger, AbilityArgs args = null)
         {
@@ -202,9 +226,16 @@ namespace MTG.Model.Objects
                 ability.Process(new AbilityArgs() { OriginCard = this });
             throw new NotImplementedException("Card.CheckTriggeredAbilities");// add feed from parameter args
         }
+        public void ClearDamage()
+        {
+            _Damage.Clear();
+        }
         public void Destroy()
-        {        
-            if (CanBeDestroyed)
+        {
+            if (!HasAbility(typeof(Indestructible)))
+            {
+                _Counters.Clear();
+                _Damage.Clear();
                 OnEffectTrigger?.Invoke(this, new EffectTriggerEventArgs()
                 {
                     Args = new DestroyedTriggerArgs()
@@ -213,11 +244,21 @@ namespace MTG.Model.Objects
                     },
                     Trigger = EffectTrigger.Card_Destroyed,
                 });
+                OnCardDestroyed(this, new CardEventArgs() { Card = this });
+            }
         }
         public override bool Equals(object obj)
         {
             if (!(obj is Card)) return false;  
             return Id == ((Card)obj).Id;
+        }
+        public Target GenerateTarget()
+        {
+            return new Target()
+            {
+                Type = HasType(CardType.Planeswalker)? TargetType.Planeswalker: TargetType.Card,
+                Id = Id,
+            };
         }
         public List<Counter> GetCountersByType(CounterType type)
         {
@@ -227,30 +268,27 @@ namespace MTG.Model.Objects
         {
             return 2108858624 + Id.GetHashCode();
         }
+        public bool HasAbility(Type abilityType)
+        {
+            return _Abilities.FirstOrDefault(o => o.GetType() == abilityType) != null;
+        }
+        public bool HasCounterType(CounterType counterType)
+        {
+            return _Counters.FirstOrDefault(o => o.CounterType == counterType) != null;
+        }
         public bool HasType(CardType cardType)
         {
             return _CardTypes.Contains(cardType);
         }
-        public void ProcessDamage()
-        {
-            if (CardTypes.Contains(CardType.Planeswalker))
-            {
-                for (int i = 0; i < DamageTaken; i++)
-                {
-                    Counter loyaltyCounter = Counters.FirstOrDefault(o => o.CounterType == CounterType.Loyalty);
-                    if (loyaltyCounter != null)
-                        _Counters.Remove(loyaltyCounter);
-                }
-                if (Counters.FirstOrDefault(o => o.CounterType == CounterType.Loyalty) == null)
-                    Destroy();
-            }
-            else if (SufferingFromDeathtouchEffect ||DamageTaken >= Toughness)
-                Destroy();
-            DamageTaken = 0;
-        }
         public void Remove(Counter counter)
         {
-            throw new NotImplementedException("Card.RemoveCounter");
+            _Counters.Remove(counter);
+        }
+        public void Remove(CounterType counterType)
+        {
+            Counter counter = Counters.FirstOrDefault(o => o.CounterType == CounterType.Loyalty);
+            if (counter != null)
+                Remove(counter);
         }
         #endregion
     }

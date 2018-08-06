@@ -7,9 +7,19 @@ namespace MTG.Model.Objects
     {
         #region Properties
         public AttackableType AttackableType { get; set; }
-        public Guid PlaneswalkerId { get; set; }
-        public Guid PlayerId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        #endregion
+
+        #region Methods
+        public Target GenerateTarget()
+        {
+            return new Target()
+            {
+                Type = AttackableType == Enumerations.AttackableType.Planeswalker ? Enumerations.TargetType.Planeswalker : Enumerations.TargetType.Player,
+                Id = Id,
+            };
+        }
         #endregion
     }
 }

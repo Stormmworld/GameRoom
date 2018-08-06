@@ -13,13 +13,23 @@ namespace MTG_Test.Mockers
                 Name = "Test Card",
             };
         }        
-        public static Card MockCreature()
+        public static Card MockCreature( int power = 3, int toughness = 3)
         {
-            Card retVal = new Card(3,3)
+            Card retVal = new Card(power, toughness)
             {
                 Name = "Test Creature"
             };
             retVal.Add(CardType.Creature);
+            return retVal;
+        }
+        public static Card MockCreatureWithAbility(IAbility ability, int power = 3, int toughness = 3)
+        {
+            Card retVal = new Card(power, toughness)
+            {
+                Name = "Test Creature with " + ability.ToString()
+            };
+            retVal.Add(CardType.Creature);
+            retVal.Add(ability);
             return retVal;
         }
         public static Card MockPlaneswalker(int loyaltyCount)

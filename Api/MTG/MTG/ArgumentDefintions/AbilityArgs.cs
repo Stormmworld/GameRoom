@@ -5,12 +5,21 @@ namespace MTG.ArgumentDefintions
 {
     public class AbilityArgs 
     {
-        public int Damage { get; set; }
+        #region Properties
+        public Damage Damage { get; set; }
         public ActiveGame Game { get; set; }
-        public int Life { get; set; }
+        public int LifeGain { get; set; }
         public Card OriginCard { get; set; }
         public Player OriginPlayer { get; set; }
         public Card TargetCard { get; set; }
         public Player TargetPlayer { get; set; }
+        #endregion
+
+        #region Constructors
+        public AbilityArgs()
+        {
+            Damage = new Damage();
+        }
+        #endregion
     }
 }

@@ -43,6 +43,10 @@ namespace MTG.Model.Abilities
         {
             throw new NotImplementedException("Ascend.Process");
         }
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
         #endregion
     }
 }

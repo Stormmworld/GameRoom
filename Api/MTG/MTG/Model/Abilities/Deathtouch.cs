@@ -40,9 +40,11 @@ namespace MTG.Model.Abilities
         #region Methods
         public void Process(AbilityArgs args)
         {
-            if (args.TargetCard.HasType(CardType.Planeswalker))
-                return;
-            args.TargetCard.SufferingFromDeathtouchEffect = args.TargetCard.SufferingFromDeathtouchEffect || args.Damage > 0;
+            throw new NotImplementedException("Deathtouch.Process - Do not use process");
+        }
+        public override string ToString()
+        {
+            return this.GetType().Name;
         }
         #endregion
     }

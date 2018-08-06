@@ -76,6 +76,10 @@ namespace MTG.Model.Abilities
         {
             args.OriginCard.PhasedOut = !args.OriginCard.PhasedOut;
         }
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
         #endregion
     }
 }

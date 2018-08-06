@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,14 @@ namespace MTG.Helpers
                 }
             }
             return false;
+        }
+        public static bool HasFirstStrikeDamage(Card card)
+        {
+            return (card.HasAbility(typeof(First_Strike)) || card.HasAbility(typeof(Double_Strike)));
+        }
+        public static bool HasNormalStrikeDamage(Card card)
+        {
+            return !card.HasAbility(typeof(First_Strike));
         }
     }
 }

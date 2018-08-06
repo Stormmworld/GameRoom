@@ -1,15 +1,12 @@
-﻿using MTG.Enumerations;
-using MTG.Model.Abilities;
-using MTG.Model.Objects;
+﻿using MTG.Interfaces;
+using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace MTG.Model.Objects
-{
-    public class Band
+namespace MTG.Model.Abilities
+{ 
+    public class Banding : IAbility
     {
-        #region Rules
         /* Rules
          * https://mtg.gamepedia.com/Banding
             702.21. Banding
@@ -62,76 +59,31 @@ namespace MTG.Model.Objects
             702.21m Multiple instances of banding on the same creature are redundant. Multiple instances 
                     of “bands with other” of the same kind on the same creature are redundant.
          */
-        #endregion
 
-        #region Variables
-        private List<Card> _BandMembers;
+        #region Events
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Properties
-        public BandTypes BandType { get; private set; }
-        public IReadOnlyCollection<Card> BandMembers { get { return _BandMembers.AsReadOnly(); } }
-        public Blocker Blocker { get; set; }
-        public Guid Id { get; set; }
+        public EffectTrigger Trigger { get { return EffectTrigger.Phases_CombatPhase_BeginningStep; } }
+        public AbilityType Type { get { return AbilityType.Static; } }
         #endregion
 
         #region Constructors
-        public Band(BandTypes bandType)
+        public Banding()
         {
-            Id = Guid.NewGuid();
-            BandType = bandType;
-            Blocker = new Blocker();
-            _BandMembers = new List<Card>();
+            
         }
         #endregion
 
         #region Methods
-        public void AddBlocker(Card card, Guid bandId)
+        public void Process(AbilityArgs args)
         {
-            if (BandType != BandTypes.Attacking)
-                throw new Exception("Band.AddBlocker: Cannot add a blocker to a band that is not attacking");
-            Blocker.Add(card, bandId);
+            throw new NotImplementedException("Banding.Process");
         }
-        public void AddMember(Card member)
+        public override string ToString()
         {
-            #region Rules
-            /*
-            702.21c As a player declares attackers, they may declare that one or more
-                    attacking creatures with banding and up to one attacking creature
-                    without banding(even if it has “bands with other”) are all in a
-                    “band.” They may also declare that one or more attacking[quality]
-                    creatures with “bands with other[quality]” and any number of
-                    other attacking[quality] creatures are all in a band. A player may
-                    declare as many attacking bands as they want, but each creature may
-                    be a member of only one of them. (Defending players can’t declare
-                    bands but may use banding in a different way; see rule 702.21j.)
-            */
-            #endregion
-            if (member.HasAbility(typeof(Banding)))
-                _BandMembers.Add(member);
-            else if (_BandMembers.FirstOrDefault(o=>!o.HasAbility(typeof(Banding))) != null)
-                _BandMembers.Add(member);
-            else
-                throw new Exception("Band.AddMember:(Rule 702.21c) Cannot add another member without the banding ability.");
-        }
-        public void AssignDamage(bool isFirstStrike)
-        {
-            throw new NotImplementedException("Band.AssignDamage");
-        }
-        public bool HasAbility(Type abilityType)
-        {
-            throw new NotImplementedException("Band.HasAbility");
-        }
-        public void CommitDamage(DamageSelection selections = null)
-        {
-            if (selections == null)
-            {//create pending Damage Selection Event
-                throw new NotImplementedException("Band.ProcessDamage - Unselected");
-            }
-            else
-            {//Process Damage Selections
-                throw new NotImplementedException("Band.ProcessDamage - Selected");
-            }
+            return this.GetType().Name;
         }
         #endregion
     }

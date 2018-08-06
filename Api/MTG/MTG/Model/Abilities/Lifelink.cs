@@ -45,7 +45,11 @@ namespace MTG.Model.Abilities
         #region Methods
         public void Process(AbilityArgs args)
         {
-            args.OriginPlayer.AddLife(args.Damage);
+            args.OriginPlayer.AddLife(args.LifeGain);
+        }
+        public override string ToString()
+        {
+            return this.GetType().Name;
         }
         #endregion
     }

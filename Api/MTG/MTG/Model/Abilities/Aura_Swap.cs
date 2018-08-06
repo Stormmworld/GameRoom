@@ -40,6 +40,10 @@ namespace MTG.Model.Abilities
         {
             throw new NotImplementedException("Aura_Swap.Process");
         }
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
         #endregion
     }
 }

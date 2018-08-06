@@ -37,6 +37,10 @@ namespace MTG.Model.Abilities
         {
             throw new NotImplementedException("Aftermath.Process");
         }
+        public override string ToString()
+        {
+            return this.GetType().Name;
+        }
         #endregion
     }
 }

@@ -35,7 +35,11 @@ namespace MTG.Model.Abilities
         #region Methods
         public void Process(AbilityArgs args)
         {
-            args.OriginCard.CanBeDestroyed = false;
+            throw new NotImplementedException("Indestructible.Process - no process required");
+        }
+        public override string ToString()
+        {
+            return this.GetType().Name;
         }
         #endregion
     }

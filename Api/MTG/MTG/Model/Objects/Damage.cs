@@ -1,5 +1,7 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Helpers;
+using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using System;
 
@@ -7,26 +9,34 @@ namespace MTG.Model.Objects
 {
     public class Damage
     {
+        #region Events
+        public event EventHandler OnApplyDamage;
+        #endregion
+
         #region Properties
-        public int FinalValue { get { return Value - Prevention; } }
-        public Card OriginCard { get; private set; }
-        public Player OriginPlayer { get; private set; }
+        public int BaseValue { get; set; }
+        public int FinalValue { get { return BaseValue - Prevention; } }
+        public Guid Id { get; private set; }
+        public Card OriginCard { get; set; }
+        public Player OriginPlayer { get; set; }
         public int Prevention { get; private set; }
-        public Target Target { get; private set; }
-        public DamageTypes Type { get; private set; }
-        private int Value { get; set; }
+        public Target Target { get; set; }
         #endregion
 
         #region Constructors
-        public Damage(Player originPlayer, Card originCard, Target target, DamageTypes type, int value)
+        public Damage()
         {
-            OriginCard = originCard;
-            OriginPlayer = originPlayer;
-            Target = target;
-            Type = type;
-            Value = value;
-            if (TargetHelper.TargetIsCard(Target.Type))
-                ProcessTargetCard();
+        }
+        #endregion
+
+        #region Operators
+        public static bool operator ==(Damage x, Damage y)
+        {
+            return x.Equals(y);
+        }
+        public static bool operator !=(Damage x, Damage y)
+        {
+            return !(x == y);
         }
         #endregion
 
@@ -35,13 +45,50 @@ namespace MTG.Model.Objects
         {
             Prevention += value;
         }
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Card)) return false;
+            return Id == ((Card)obj).Id;
+        }
+        public override int GetHashCode()
+        {
+            return 2108858624 + Id.GetHashCode();
+        }
         public void Process()
         {
-            throw new NotImplementedException("Damage.Process");
-        }
-        private void ProcessTargetCard()
-        {//
-
+            if (FinalValue > 0)
+            {
+                if (Target.Type == TargetType.Player || Target.Type == TargetType.Planeswalker)
+                {
+                    ApplyDamageEventArgs args = new ApplyDamageEventArgs()
+                    {
+                        DamageValue = FinalValue,
+                        Target = Target,
+                    };
+                    args.addDamageAttributtes(OriginCard);
+                    OnApplyDamage?.Invoke(this, args);
+                }
+                else if (Target.Type == TargetType.Card)
+                {
+                    if (OriginCard.HasAbility(typeof(Trample)))
+                    {
+                        //handle trample damage
+                        throw new NotImplementedException("Damage.Process: Trample damage has not been accounted for");
+                    }
+                    else
+                    {
+                        ApplyDamageEventArgs args = new ApplyDamageEventArgs()
+                        {
+                            DamageValue = FinalValue,
+                            Target = Target,
+                        };
+                        args.addDamageAttributtes(OriginCard);
+                        OnApplyDamage?.Invoke(this, args);
+                    }
+                }
+                else
+                    throw new NotImplementedException("Damage.Process: Target Type has no damage rules assignerd for it");
+            }
         }
         #endregion
     }
