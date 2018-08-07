@@ -6,7 +6,7 @@ namespace MTG.DTO.Objects
     public class Band
     {
         public BandTypes BandType { get; set; }
-        public List<Card> BandMembers { get; set; }
+        public List<Creature> BandMembers { get; set; }
         public Blocker Blocker { get; set; }
     }
 }

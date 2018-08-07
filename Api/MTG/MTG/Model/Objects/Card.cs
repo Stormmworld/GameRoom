@@ -40,6 +40,7 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Properties
+        public CastingCost CastingCost { get; set; }
         public Guid ControllerId { get; set; }
         public int FaceUpSide { get; set; }
         public Guid Id { get; private set; }
@@ -110,6 +111,7 @@ namespace MTG.Model.Objects
             _Damage = new List<int>();
             _SubTypes = new List<SubType>();
             _SuperTypes = new List<SuperType>();
+            CastingCost = new CastingCost();
         }
         public Card(int power, int toughness):this()
         {
@@ -118,17 +120,33 @@ namespace MTG.Model.Objects
         }
         public Card(Card card):this()
         {
-            throw new NotImplementedException("Card.Constructor");
+            _Abilities = card.Abilities.ToList();
+            _CardTypes = card.CardTypes.ToList();
+            _Colors = card.Colors.ToList();
+            _Counters = card.Counters.ToList();
+            _Damage = card.Damage.ToList();
+            _SubTypes = card.SubTypes.ToList();
+            _SuperTypes = card.SuperTypes.ToList();
+            _Power = card.Power;
+            _Toughness = card.Toughness;
+            Id = Guid.NewGuid();
+            ImageUrl = card.ImageUrl;
+            Name = card.Name;
+            OwnerId = card.OwnerId;
         }
         #endregion
 
         #region Operators
         public static bool operator ==(Card x, Card y)
         {
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return ReferenceEquals(y, null) && ReferenceEquals(x, null);
             return x.Equals(y);
         }
         public static bool operator !=(Card x, Card y)
         {
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return ReferenceEquals(y, null) && ReferenceEquals(x, null);
             return !(x == y);
         }
         #endregion

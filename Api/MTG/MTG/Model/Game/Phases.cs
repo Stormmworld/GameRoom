@@ -9,6 +9,10 @@ namespace MTG.Model.Game
 {
     public static class Phases
     {
+        public static void InitializationPhase(ActiveGame game)
+        {
+            throw new NotImplementedException("Phases.InitializationPhase");
+        }
         public static void BegginingPhase_UntapStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
             /*
@@ -53,7 +57,6 @@ namespace MTG.Model.Game
                 Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
             };
             OnEffectTrigger?.Invoke(null, args);
-            throw new NotImplementedException("Phases.BegginingPhase_UpkeepStep");
         }
         public static void BegginingPhase_UpkeepStep_End(ActiveGame game, EventHandler OnEffectTrigger)
         {
@@ -67,7 +70,6 @@ namespace MTG.Model.Game
                 503.2. If a spell states that it may be cast only “after [a player’s] upkeep step,” and the turn 
                         has multiple upkeep steps, that spell may be cast any time after the first upkeep step ends.
              */
-            throw new NotImplementedException("Phases.BegginingPhase_UpkeepStep_End");
         }
         public static void BegginingPhase_DrawStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
@@ -511,9 +513,8 @@ namespace MTG.Model.Game
                         spell or ability, so it can’t be countered, and players can’t respond to it with instants or activated abilities. 
                         (See rule 305, “Lands.”)
              */
-            throw new NotImplementedException("Phases.MainPhase");
         }
-        private static void NextPhase(ActiveGame game)
+        internal static void NextPhase(ActiveGame game)
         {
             if (game.PendingActions.Count > 0)
                 return;
@@ -526,6 +527,9 @@ namespace MTG.Model.Game
             {
                 switch (game.ActivePhase)
                 {
+                    case GamePhases.None:
+                        game.ActivePhase = GamePhases.Beginning_Untap;
+                        break;
                     case GamePhases.Beginning_Untap:
                         game.ActivePhase = GamePhases.Beginning_Upkeep;
                         break;
@@ -542,7 +546,7 @@ namespace MTG.Model.Game
                         game.ActivePhase = GamePhases.Combat_DeclareAttackers;
                         break;
                     case GamePhases.Combat_DeclareAttackers:
-                        if(game.Attackers.Count > 0)
+                        if(game.ActiveCombat.HasAttackers())
                             game.ActivePhase = GamePhases.Combat_DeclareDefenders;
                         else
                             game.ActivePhase = GamePhases.Combat_Ending;

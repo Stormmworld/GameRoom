@@ -274,6 +274,7 @@ namespace MTG.Model
             Graveyard = new Graveyard();
             Hand = new Hand();
             Library = new Library();
+            SkipPhases = new List<GamePhases>();
             Life = 20;
             LoseMessage = @"";
             ManaPool = new ManaPool();
@@ -285,8 +286,6 @@ namespace MTG.Model
         public void SelectDeck(Deck deck)
         {
             Deck = deck;
-            foreach (Card card in Deck.Cards)
-                card.OwnerId = this.Id;
             Library.Add(Deck.CloneCards());
             Library.Shuffle();
         }

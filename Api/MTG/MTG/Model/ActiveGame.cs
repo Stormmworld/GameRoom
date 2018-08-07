@@ -10,6 +10,7 @@ using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MTG.DTO.Objects;
 
 namespace MTG.Model
 {
@@ -21,12 +22,10 @@ namespace MTG.Model
         private List<GamePhases> _SkipPhases;
         private List<GameModifier> _Modifiers;
         private List<Effect> _ActiveEffects;
-        private List<AttackingCreature> _Attackers;
         #endregion
 
         #region Collection Properties
         internal IReadOnlyCollection<Effect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
-        internal IReadOnlyCollection<AttackingCreature> Attackers { get { return _Attackers.AsReadOnly(); } }
         internal IReadOnlyCollection<GameModifier> Modifiers { get { return _Modifiers.AsReadOnly(); } }
         internal IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
         internal IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
@@ -35,7 +34,7 @@ namespace MTG.Model
 
         #region Properties
         internal Combat ActiveCombat { get; set; }
-        internal Player ActivePlayer 
+        public Player ActivePlayer 
         {
             get
             {
@@ -43,7 +42,7 @@ namespace MTG.Model
             }
         }
         internal int ActivePlayerIndex { get; set; }
-        internal GamePhases ActivePhase { get; set; }
+        public GamePhases ActivePhase { get; internal set; }
         internal Ante Ante { get; set; }
         internal Exile Exile { get; set; }
         internal GameType GameType { get; private set; }
@@ -57,6 +56,7 @@ namespace MTG.Model
         {
             ActivePlayerIndex = 0;
             Ante = new Ante();
+            ActiveCombat = new Combat();
             Exile = new Exile();
             Stack = new Stack();
             ActivePhase = GamePhases.None;
@@ -67,8 +67,6 @@ namespace MTG.Model
             _SkipPhases = new List<GamePhases>();
             _Modifiers = new List<GameModifier>();
             _ActiveEffects = new List<Effect>();
-            _Attackers = new List<AttackingCreature>();
-            ActiveCombat = new Combat();
         }
         #endregion
 
@@ -139,23 +137,17 @@ namespace MTG.Model
         {
             EffectTriggerEventArgs args = (EffectTriggerEventArgs)e;
 
-            throw new NotImplementedException("ActiveGame.OnEffectTrigger");
+           // throw new NotImplementedException("ActiveGame.OnEffectTrigger");
         }
         #endregion
 
         #region Interfacing Methods
-        public CombatResponse DeclareAttacker(DeclareAttackerRequest request)
+        public void Add(string socketId, string playerName, Deck deck)
         {
-            throw new NotImplementedException("ActiveGame.DeclareAttacker");
+            Add(new Player(playerName) { SocketId = socketId }, deck);
         }
-        public CombatResponse DeclareBlocker(DeclareBlockerRequest request)
+        public void Add(Player player, Deck deck)
         {
-            throw new NotImplementedException("ActiveGame.DeclareBlocker");
-        }
-        public void AddPlayer(string socketId, string name, Deck deck)
-        {
-            //create player
-            Player player = new Player(name) { SocketId = socketId };
             //add event handlers
             player.OnAddCardToZone += OnAddCardToZone;
             player.OnAddPendingAction += OnAddPendingAction;
@@ -164,6 +156,44 @@ namespace MTG.Model
             player.SelectDeck(deck);
 
             _Players.Add(player);
+        }
+        public void DeclareAttacker(DeclareAttackerRequest request)
+        {
+            Card attacker = FindCard(request.AttackerId);
+            ActiveCombat.AddAttacker(new AttackingCreature(attacker) { Defender = request.Target }, request.JoinBandId);
+        }
+        public void DeclareBlocker(DeclareBlockerRequest request)
+        {
+            Card Blocker = FindCard(request.BlockerId);
+            ActiveCombat.AddBlocker(Blocker, request.AttackerId, request.BlockerId);
+        }
+        public CombatResponse GetActiveCombat()
+        {
+            return new CombatResponse(this);
+        }
+        public PlayerHand GetPlayerHand(Guid playerId)
+        {
+            Player player = _Players.First(o => o.Id == playerId);
+            return new PlayerHand(player.Hand, player.Id == ActivePlayer.Id, ActivePhase );
+        }
+        public void EndCurrentPhase()
+        {
+            Phases.NextPhase(this);
+            if (ActivePhase != GamePhases.None)
+                ProcessPhase();
+        }
+        public void StartGame()
+        {
+            foreach (Player player in _Players)
+            {
+                player.DrawCards(7, GamePhases.None);
+                if (player.Hand.LandMulligan())
+                {
+                    throw new NotImplementedException("ActiveGame.StartGame - Mulligan: Add Pending Action");
+                }
+            }
+            if (PendingActions.Count == 0)
+                ActivePhase = GamePhases.Beginning_Untap;
         }
         #endregion
 

@@ -52,11 +52,12 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            throw new NotImplementedException("Hand.Add");
+            _Cards.Add(card);
         }
         public void Add(List<Card> cards)
         {
-            throw new NotImplementedException("Library.Add");
+            foreach (Card card in cards)
+                Add(card);
         }
         public List<Card> CardsWithAbility(Type type)
         {

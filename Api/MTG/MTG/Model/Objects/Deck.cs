@@ -1,4 +1,5 @@
 ﻿using MTG.Model.Objects;
+using System;
 using System.Collections.Generic;
 
 namespace MTG.Model.Objects
@@ -19,6 +20,11 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
+        public void AssignOwner(Guid ownerId)
+        {
+            foreach (Card card in Cards)
+                card.OwnerId = ownerId;
+        }
         public List<Card> CloneCards()
         {
             List<Card> cardsClone = new List<Card>();

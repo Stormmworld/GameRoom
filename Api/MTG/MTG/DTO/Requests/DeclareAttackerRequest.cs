@@ -5,7 +5,8 @@ namespace MTG.DTO.Requests
 {
     public class DeclareAttackerRequest
     {
-        public Card Attacker { get; set; }
+        public Guid AttackerId { get; set; }
         public Guid JoinBandId { get; set; }
+        public AttackableTarget Target { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace MTG_Test.Game_Tests
             Player receivingPlayer = Player_Mocker.Mock();
             int initialLife = receivingPlayer.Life;
             ApplyDamageEventArgs deathtouchDamageArgs = ApplyDamageEventArgs_Mocker.Mock_Deathtoucn();
+            deathtouchDamageArgs.Target = new Target() { Id = receivingPlayer.Id, Type = TargetType.Player };
             receivingPlayer.ApplyDamage(deathtouchDamageArgs);
             Assert.AreEqual(receivingPlayer.Life, initialLife - deathtouchDamageArgs.DamageValue);
         }
@@ -28,6 +29,7 @@ namespace MTG_Test.Game_Tests
             Card planeswalker = Card_Mocker.MockPlaneswalker(4);
             int initialLoyalty = planeswalker.GetCountersByType(CounterType.Loyalty).Count;
             ApplyDamageEventArgs deathtouchDamageArgs = ApplyDamageEventArgs_Mocker.Mock_Deathtoucn();
+            deathtouchDamageArgs.Target = new Target() { Id = planeswalker.Id, Type = TargetType.Planeswalker };
             planeswalker.ApplyDamage(deathtouchDamageArgs);
             Assert.AreEqual(planeswalker.GetCountersByType(CounterType.Loyalty).Count, initialLoyalty - deathtouchDamageArgs.DamageValue);
         }
@@ -39,6 +41,7 @@ namespace MTG_Test.Game_Tests
             creature.OnCardDestroyed += delegate (object sender, EventArgs e) { creatureCardEvents.Add("Destroyed"); };
 
             ApplyDamageEventArgs deathtouchDamageArgs = ApplyDamageEventArgs_Mocker.Mock_Deathtoucn();
+            deathtouchDamageArgs.Target = new Target() { Id = creature.Id, Type = TargetType.Card };
             creature.ApplyDamage(deathtouchDamageArgs);
 
             Assert.IsTrue(creatureCardEvents.Contains("Destroyed"));

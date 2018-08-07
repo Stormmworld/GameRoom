@@ -16,7 +16,7 @@ namespace MTG_Test.Game_Tests
             Card AttackerWithDoubleStrike = Card_Mocker.MockCreatureWithAbility(new Double_Strike(),2, 3);
             Card BlockerWithNormalStrike = Card_Mocker.MockCreature(4, 4);
 
-            combat.AddAttacker(AttackerWithDoubleStrike);
+            combat.AddAttacker(new AttackingCreature(AttackerWithDoubleStrike));
             foreach (AttackingCreature attacker in combat.Attackers)
                 combat.AddBlocker(BlockerWithNormalStrike, attacker.Id);
             throw new NotImplementedException();
@@ -28,7 +28,7 @@ namespace MTG_Test.Game_Tests
             Card BlockerWithDoubleStrike = Card_Mocker.MockCreatureWithAbility(new Double_Strike(), 2, 3);
             Card AttackerWithNormalStrike = Card_Mocker.MockCreature(4, 4);
 
-            combat.AddAttacker(AttackerWithNormalStrike);
+            combat.AddAttacker(new AttackingCreature(AttackerWithNormalStrike));
             foreach (AttackingCreature attacker in combat.Attackers)
                 combat.AddBlocker(BlockerWithDoubleStrike, attacker.Id);
             throw new NotImplementedException();

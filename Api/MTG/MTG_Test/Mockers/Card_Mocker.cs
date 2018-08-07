@@ -29,8 +29,11 @@ namespace MTG_Test.Mockers
             {
                 Name = "Test Deck"
             };
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 30; i++)
+            {
                 retVal.Cards.Add(MockCreature());
+                retVal.Cards.Add(MockLand());
+            }
             return retVal;
         }
 
@@ -53,6 +56,15 @@ namespace MTG_Test.Mockers
             for (int i = 0; i < loyaltyCount; i++)
                 retVal.Add(new Counter() { CounterType = MTG.Enumerations.CounterType.Loyalty });
             retVal.Add(CardType.Planeswalker);
+            return retVal;
+        }
+        public static Card MockLand()
+        {
+            Card retVal = new Card()
+            {
+                Name = "Test Land"
+            };
+            retVal.Add(CardType.Land);
             return retVal;
         }
     }

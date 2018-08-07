@@ -65,7 +65,7 @@ namespace MTG.Model.Zones
         }
         public void Add(List<Card> cards)
         {
-            throw new NotImplementedException("Library.Add");
+            _Cards.AddRange(cards);
         }
         public List<Card> CardsWithAbility(Type abilityType)
         {

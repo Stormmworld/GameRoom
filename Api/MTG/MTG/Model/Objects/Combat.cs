@@ -27,19 +27,19 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
-        public void AddAttacker(Card card, Guid bandId = new Guid())
+        public void AddAttacker(AttackingCreature attacker, Guid bandId = new Guid())
         {
             if (bandId == new Guid())
-                _Attackers.Add(new AttackingCreature(card));
+                _Attackers.Add(attacker);
             else
             {
                 Band bandToJoin = _AttackingBands.FirstOrDefault(o=>o.Id == bandId);
                 if (bandToJoin != null)
-                    bandToJoin.AddMember(card);
+                    bandToJoin.AddMember(attacker.Card);
                 else
                 {
                     Band newBand = new Band(Enumerations.BandTypes.Attacking);
-                    newBand.AddMember(card);
+                    newBand.AddMember(attacker.Card);
                     _AttackingBands.Add(newBand);
                 }
             }
@@ -69,6 +69,10 @@ namespace MTG.Model.Objects
                 attacker.CommitDamage();
             foreach (Band attackerBand in _AttackingBands)
                 attackerBand.CommitDamage();
+        }
+        public bool HasAttackers()
+        {
+            return Attackers.Count > 0 || AttackingBands.Count > 0;
         }
         #endregion
     }
