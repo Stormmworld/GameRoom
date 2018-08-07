@@ -8,6 +8,7 @@ namespace MTG.Model.Objects
         #region Properties
         public List<Card> Cards { get; set; }
         public int Id { get; set; }
+        public string Name { get; set; }
         #endregion
 
         #region Constructors

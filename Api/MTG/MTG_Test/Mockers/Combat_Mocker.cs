@@ -8,5 +8,9 @@ namespace MTG_Test.Mockers
         {
             return new Combat();
         }
+        public static AttackingCreature MockAttackingCreature(int power = 3, int toughness = 3)
+        {
+            return new AttackingCreature(Card_Mocker.MockCreature(power,toughness));
+        }
     }
 }

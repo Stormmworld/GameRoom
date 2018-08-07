@@ -152,6 +152,19 @@ namespace MTG.Model
         {
             throw new NotImplementedException("ActiveGame.DeclareBlocker");
         }
+        public void AddPlayer(string socketId, string name, Deck deck)
+        {
+            //create player
+            Player player = new Player(name) { SocketId = socketId };
+            //add event handlers
+            player.OnAddCardToZone += OnAddCardToZone;
+            player.OnAddPendingAction += OnAddPendingAction;
+            player.OnEffectTrigger += OnEffectTrigger;
+            //add deck
+            player.SelectDeck(deck);
+
+            _Players.Add(player);
+        }
         #endregion
 
         #region Methods
@@ -165,19 +178,6 @@ namespace MTG.Model
         internal void AddEffect(Effect effect)
         {
             _ActiveEffects.Add(effect);
-        }
-        internal void AddPlayer(string name, Deck deck)
-        {
-            //create player
-            Player player = new Player(name);
-            //add event handlers
-            player.OnAddCardToZone += OnAddCardToZone;
-            player.OnAddPendingAction += OnAddPendingAction;
-            player.OnEffectTrigger += OnEffectTrigger;
-            //add deck
-            player.SelectDeck(deck);
-
-            _Players.Add(player);
         }
         internal void AddToStack(Card card)
         {

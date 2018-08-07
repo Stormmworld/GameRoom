@@ -22,6 +22,18 @@ namespace MTG_Test.Mockers
             retVal.Add(CardType.Creature);
             return retVal;
         }
+
+        public static Deck MockDeck()
+        {
+            Deck retVal = new Deck()
+            {
+                Name = "Test Deck"
+            };
+            for (int i = 0; i < 60; i++)
+                retVal.Cards.Add(MockCreature());
+            return retVal;
+        }
+
         public static Card MockCreatureWithAbility(IAbility ability, int power = 3, int toughness = 3)
         {
             Card retVal = new Card(power, toughness)

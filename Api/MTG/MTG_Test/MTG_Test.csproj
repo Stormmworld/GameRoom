@@ -54,6 +54,7 @@
     <Compile Include="Ability Tests\Deathtouch_Tests.cs" />
     <Compile Include="Game Tests\Combat_Tests.cs" />
     <Compile Include="Game Tests\Damage_Tests.cs" />
+    <Compile Include="Game Tests\Game_Tests.cs" />
     <Compile Include="Mockers\ApplyDamageEventArgs_Mocker.cs" />
     <Compile Include="Mockers\Card_Mocker.cs" />
     <Compile Include="Mockers\Combat_Mocker.cs" />
