@@ -56,12 +56,22 @@ namespace MTG.Model.Zones
         }
         public void Add(List<Card> cards)
         {
-            foreach (Card card in cards)
-                Add(card);
+            _Cards.AddRange(cards);
         }
-        public List<Card> CardsWithAbility(Type type)
+        public void Add(IEffect effect)
         {
-            return _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.GetType() == type) != null);
+            foreach (Card card in _Cards)
+            {
+                if (card.Id == effect.Target.Id)
+                {
+                    card.Add(effect);
+                    break;
+                }
+            }
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            return _Cards.FindAll(o => o.HasAbility(abilityType));
         }
         public void Discard(bool random, int cardIndex)
         {
@@ -101,18 +111,20 @@ namespace MTG.Model.Zones
             else
                 return landInHand.Count == MaximumSize;
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
-                card.CheckTriggeredAbilities(trigger);
+                card.CheckTriggeredAbilities(trigger, args);
         }
         public void Remove(TargetZone targetZone)
         {//send all cards to targetZone
-            throw new NotImplementedException("Graveyard.Remove");
-        }
-        public void Remove(Card card, TargetZone targetZone)
-        {
             throw new NotImplementedException("Hand.Remove");
+        }
+        public void Remove(Guid cardId)
+        {
+            Card cardToRemove = _Cards.FirstOrDefault(o => o.Id == cardId);
+            if (cardToRemove != null)
+                _Cards.Remove(cardToRemove);
         }
         #endregion
     }

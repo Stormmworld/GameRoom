@@ -1,6 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTG.Model.Objects;
-using System.Collections.Generic;
+using MTG.Interfaces;
 
 namespace MTG.Model.Objects
 {
@@ -9,7 +8,7 @@ namespace MTG.Model.Objects
         #region Properties
         public int Id { get; set; }
         public Card Card { get; set; }
-        public Effect Effect { get; set; }
+        public IEffect Effect { get; set; }
         public StackEntryType EntryType { get; set; }
         public string ImageUrl { get; set; }
         #endregion
@@ -22,7 +21,7 @@ namespace MTG.Model.Objects
             Card = card;
             ImageUrl = Card.ImageUrl;
         }
-        public StackEntry(int id, Effect effect, string imageUrl)
+        public StackEntry(int id, IEffect effect, string imageUrl)
         {
             Id = id;
             EntryType = StackEntryType.Effect;

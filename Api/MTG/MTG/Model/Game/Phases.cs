@@ -1,7 +1,7 @@
 ﻿using MTG.ArgumentDefintions;
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
-using MTG.Model.Objects;
+using MTG.Interfaces;
 using System;
 using System.Linq;
 
@@ -86,8 +86,8 @@ namespace MTG.Model.Game
                 },
                 Trigger = EffectTrigger.Phases_BegginingPhase_DrawStep,
             };
-            int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.EffectType == EffectTypes.SkipDrawCard) != null ? 0 : 1);
-            foreach (Effect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
+            int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.Type == EffectTypes.SkipDrawCard) != null ? 0 : 1);
+            foreach (IEffect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
                 cardDrawCount += drawEffect.Value;
             game.ActivePlayer.DrawCards(cardDrawCount, GamePhases.Beginning_Draw);
         }
@@ -459,7 +459,6 @@ namespace MTG.Model.Game
                 Trigger = EffectTrigger.Phases_CombatPhase_EndStep,
             };
             game.RemoveEffects(GamePhases.Combat_Ending);
-            throw new NotImplementedException("Phases.EndingPhase_EndStep");
         }
         public static void EndingPhase_CleanupStep(ActiveGame game, EventHandler OnEffectTrigger)
         {
@@ -483,7 +482,6 @@ namespace MTG.Model.Game
 
             game.RemoveEffects(GamePhases.Ending_Cleanup);
             game.TurnSpellCount = 0;
-            throw new NotImplementedException("Phases.EndingPhase_CleanupStep");
         }
         private static void MainPhase(bool preCombat, ActiveGame game)
         {

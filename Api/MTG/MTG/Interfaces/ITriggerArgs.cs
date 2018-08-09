@@ -1,8 +1,4 @@
-﻿using MTG.Enumerations;
-using MTG.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MTG.Model;
 
 namespace MTG.Interfaces
 {

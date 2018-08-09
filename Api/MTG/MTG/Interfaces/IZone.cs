@@ -1,4 +1,5 @@
 ﻿
+using MTG.ArgumentDefintions;
 using MTG.Enumerations;
 using MTG.Model.Objects;
 using System;
@@ -84,9 +85,10 @@ namespace MTG.Interfaces
 
         void Add(Card card);
         void Add(List<Card> cards);
+        void Add(IEffect effect);
         List<Card> CardsWithAbility(Type abilityType);
         List<Card> FilteredCards(Predicate<Card> predicate);
-        void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args);
-        void Remove(Card card, TargetZone targetZone);
+        void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args);
+        void Remove(Guid cardId);
     }
 }

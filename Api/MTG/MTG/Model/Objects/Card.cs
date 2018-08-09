@@ -195,7 +195,7 @@ namespace MTG.Model.Objects
         {
             _Colors.Add(color);
         }
-        public void Add(Effect effect)
+        public void Add(IEffect effect)
         {
             throw new NotImplementedException("Card.Add Effect");
         }

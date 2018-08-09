@@ -6,29 +6,35 @@ using MTG.Interfaces;
 using MTG.Model.Game;
 using MTG.Model.Objects;
 using MTG.Model.Zones;
-using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using MTG.DTO.Objects;
+using MTG.Model.Pending_Actions;
+using MTG.DTO.Requests.CompleteActions;
+using MTG.Model.Effects;
 
 namespace MTG.Model
 {
     public class ActiveGame
     {
+        #region Events
+        public event EventHandler OnPendingAction;
+        #endregion
+
         #region Variables
         private List<IPendingAction> _PendingActions;
         private List<Player> _Players;
         private List<GamePhases> _SkipPhases;
         private List<GameModifier> _Modifiers;
-        private List<Effect> _ActiveEffects;
+        private List<IEffect> _ActiveEffects;
         #endregion
 
         #region Collection Properties
-        internal IReadOnlyCollection<Effect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
+        internal IReadOnlyCollection<IEffect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
         internal IReadOnlyCollection<GameModifier> Modifiers { get { return _Modifiers.AsReadOnly(); } }
         internal IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
-        internal IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
+        public IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
         internal IReadOnlyCollection<GamePhases> SkipPhases { get { return _SkipPhases.AsReadOnly(); } }
         #endregion
 
@@ -38,7 +44,7 @@ namespace MTG.Model
         {
             get
             {
-                return _Players[ActivePlayerIndex];
+                return ActivePlayerIndex < 0 ? null : _Players[ActivePlayerIndex];
             }
         }
         internal int ActivePlayerIndex { get; set; }
@@ -54,7 +60,7 @@ namespace MTG.Model
         #region Constructors
         public ActiveGame()
         {
-            ActivePlayerIndex = 0;
+            ActivePlayerIndex = -1;
             Ante = new Ante();
             ActiveCombat = new Combat();
             Exile = new Exile();
@@ -66,41 +72,42 @@ namespace MTG.Model
             _Players = new List<Player>();
             _SkipPhases = new List<GamePhases>();
             _Modifiers = new List<GameModifier>();
-            _ActiveEffects = new List<Effect>();
+            _ActiveEffects = new List<IEffect>();
         }
         #endregion
 
         #region Event Handlers
         private void OnAddCardToZone(object sender, EventArgs e)
         {
-            AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
-            switch (args.TargetZone)
-            {
-                case TargetZone.Ante:
-                    Ante.Add(args.Card);
-                    break;
-                case TargetZone.Battlefield:
-                    args.ZoneOwner.Battlefield.Add(args.Card);
-                    break;
-                case TargetZone.Command:
-                    args.ZoneOwner.Command.Add(args.Card);
-                    break;
-                case TargetZone.Exile:
-                    Exile.Add(args.Card);
-                    break;
-                case TargetZone.Graveyard:
-                    args.ZoneOwner.Graveyard.Add(args.Card);
-                    break;
-                case TargetZone.Hand:
-                    args.ZoneOwner.Hand.Add(args.Card);
-                    break;
-                case TargetZone.Library:
-                    args.ZoneOwner.Library.Add(args.Card);
-                    break;
-                case TargetZone.Stack:
-                    Stack.Add(args.Card);
-                    break;
-            }
+            //AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
+            //switch (args.TargetZone)
+            //{
+            //    case TargetZone.Ante:
+            //        Ante.Add(args.Card);
+            //        break;
+            //    case TargetZone.Battlefield:
+            //        args.ZoneOwner.Battlefield.Add(args.Card);
+            //        break;
+            //    case TargetZone.Command:
+            //        args.ZoneOwner.Command.Add(args.Card);
+            //        break;
+            //    case TargetZone.Exile:
+            //        Exile.Add(args.Card);
+            //        break;
+            //    case TargetZone.Graveyard:
+            //        args.ZoneOwner.Graveyard.Add(args.Card);
+            //        break;
+            //    case TargetZone.Hand:
+            //        args.ZoneOwner.Hand.Add(args.Card);
+            //        break;
+            //    case TargetZone.Library:
+            //        args.ZoneOwner.Library.Add(args.Card);
+            //        break;
+            //    case TargetZone.Stack:
+            //        Stack.Add(args.Card);
+            //        break;
+            //}
+            throw new NotImplementedException("ActiveGame.OnAddCardToZone");
         }
         private void OnAddPendingAction(object sender, EventArgs e)
         {
@@ -157,6 +164,28 @@ namespace MTG.Model
 
             _Players.Add(player);
         }
+        public CastSpellResponse CastSpell(CastSpellRequest request)
+        {
+            Player castingPlayer = _Players.FirstOrDefault(o=>o.Id == request.PlayerId);
+            if (castingPlayer != null)
+                return castingPlayer.CastSpell(request.SpellId);
+            return new CastSpellResponse() { Message = "Player not found" };
+        }
+        public void CompleteAction(ICompleteActionRequest request)
+        {
+            IPendingAction actionToComplete = _PendingActions.First(o=>o.Id == request.ActionId);
+            if (actionToComplete is MulliganPendingAction)
+            {
+                if (((MulliganCompleteActionRequest)request).Reshuffle)
+                {
+                    Player mulliganPlayer = _Players.First(o => o.Id == request.ActionPlayerId);
+                    mulliganPlayer.Add(new Mulligan(new Target() { Id = request.ActionPlayerId, Type = TargetType.Player }));
+                }
+            }
+            else
+                throw new Exception("ActiveGame.CompleteAction - The request has not been defined yet");
+            _PendingActions.Remove(actionToComplete);
+        }
         public void DeclareAttacker(DeclareAttackerRequest request)
         {
             Card attacker = FindCard(request.AttackerId);
@@ -188,33 +217,48 @@ namespace MTG.Model
             {
                 player.DrawCards(7, GamePhases.None);
                 if (player.Hand.LandMulligan())
-                {
-                    throw new NotImplementedException("ActiveGame.StartGame - Mulligan: Add Pending Action");
-                }
+                    OnAddPendingAction(this, new PendingActionEventArgs() { PendingAction = new MulliganPendingAction() { ActionPlayerId = player.Id } });
             }
-            if (PendingActions.Count == 0)
+            if (PendingActions.Count == 0 && _Players.Count > 1)
+            {
+                ActivePlayerIndex = (new Random()).Next(0, Players.Count);
                 ActivePhase = GamePhases.Beginning_Untap;
+            }
         }
         #endregion
 
         #region Methods
-        internal List<Effect> ActiveEffectsByType(EffectTypes effectType)
+        internal List<IEffect> ActiveEffectsByType(EffectTypes effectType)
         {
             if (effectType == EffectTypes.None)
                 return _ActiveEffects;
             else
-                return _ActiveEffects.FindAll(o=>o.EffectType == effectType);
+                return _ActiveEffects.FindAll(o=>o.Type == effectType);
         }
-        internal void AddEffect(Effect effect)
+        internal void AddEffect(IEffect effect)
         {
-            _ActiveEffects.Add(effect);
+            switch (effect.Target.Type)
+            {
+                case TargetType.Player:
+                    Player targetPlayer = _Players.First(o=>o.Id == effect.Target.Id);
+                    targetPlayer.Add(effect);
+                    break;
+                case TargetType.Card:
+                    Card targetCard = FindCard(effect.Target.Id);
+                    Player targetController = _Players.First(o => o.Id == targetCard.ControllerId);
+                    targetController.Add(effect);
+                    break;
+                default:
+                    _ActiveEffects.Add(effect);
+                    break;
+            }
         }
         internal void AddToStack(Card card)
         {
 
             throw new NotImplementedException("ActiveGame.AddToStack");
         }
-        internal void AddToStack(Effect effect)
+        internal void AddToStack(IEffect effect)
         {
             throw new NotImplementedException("ActiveGame.AddToStack");
         }
@@ -364,10 +408,10 @@ namespace MTG.Model
                 int nextIndex = 0;
                 if (ActivePlayerIndex != Players.Count - 1)
                     nextIndex = ActivePlayerIndex + 1;
-                while (_Players[nextIndex].LoseMessage != null)
+                while (!string.IsNullOrEmpty(_Players[nextIndex].LoseMessage))
                 {
 
-                    if (nextIndex != Players.Count - 1)
+                    if (nextIndex == Players.Count - 1)
                         nextIndex = 0;
                     else
                         nextIndex++;

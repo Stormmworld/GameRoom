@@ -1,4 +1,5 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
 using MTG.Model.Objects;
@@ -61,15 +62,26 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            throw new NotImplementedException("Library.Add");
+            _Cards.Add(card);
         }
         public void Add(List<Card> cards)
         {
             _Cards.AddRange(cards);
         }
+        public void Add(IEffect effect)
+        {
+            foreach (Card card in _Cards)
+            {
+                if (card.Id == effect.Target.Id)
+                {
+                    card.Add(effect);
+                    break;
+                }
+            }
+        }
         public List<Card> CardsWithAbility(Type abilityType)
         {
-            throw new NotImplementedException("Library.CardsWithAbility");
+            return _Cards.FindAll(o => o.HasAbility(abilityType));
         }
         public List<Card> Draw(int drawCount)
         {
@@ -101,13 +113,15 @@ namespace MTG.Model.Zones
                     break;
             }
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
         {
-            throw new NotImplementedException("Library.ProcessTriggeredAbilities");
+            foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
+                card.CheckTriggeredAbilities(trigger, args);
         }
-        public void Remove(Card card, TargetZone targetZone)
+        public void Remove(Guid cardId)
         {
-            throw new NotImplementedException("Library.Remove");
+            _Cards.FirstOrDefault(o => o.Id == cardId);
+
         }
         public void Shuffle(int riffleShuffleCount = 3)
         {

@@ -15,38 +15,104 @@ namespace MTG_Test.Game_Tests
     public class Game_Tests
     {
         [TestMethod]
-        public void Game_AddAttacker()
+        public void Game_AddPlayer()
         {
             string player1SocketId = "p1";
-            string player2SocketId = "p2";
             Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
-            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player2" };
-
             ActiveGame game = new ActiveGame();
             game.Add(player1, Card_Mocker.MockDeck());
-            game.Add(player2, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == "p1"));
+        }
+        [TestMethod]
+        public void Game_StartGame()
+        {
+            ActiveGame game = new ActiveGame();
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
+
             game.StartGame();
+            Assert.IsNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.None);
 
-            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
-            PlayerHand hand =  game.GetPlayerHand(player1.Id);
-            Spell spellToCast = hand.Spells.FirstOrDefault(o=>o.Enabled && !o.IsLand);
-            //fill manapool
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
 
+            game.StartGame();
+            Assert.IsNotNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+        }
+        [TestMethod]
+        public void Game_Mulligan()
+        {
+            ActiveGame game = new ActiveGame();
 
-            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Combat_DeclareAttackers, ref game);
-            DeclareAttackerRequest attackRequest = new DeclareAttackerRequest()
-            {
-                AttackerId = Card_Mocker.MockCreature(3, 3).Id,
-                Target = new AttackableTarget()
-                {
-                    Id = player1.Id,
-                    AttackableType = AttackableType.Player,
-                    Name = player1.Name,
-                },
-            };
-            game.DeclareAttacker(attackRequest);
-            CombatResponse combat = game.GetActiveCombat();
-            Assert.IsTrue(combat.AttackingCreatures.FirstOrDefault(o => o.Card.Id == attackRequest.AttackerId) != null);
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_LandOnly());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
+
+            game.StartGame();
+            Assert.IsNotNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+        }
+        [TestMethod]
+        public void Game_DrawPhase()
+        {
+            ActiveGame game = new ActiveGame();
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
+
+            game.StartGame();
+            Assert.IsNotNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+
+            int player1HandSizeBeforeDraw = player1.Hand.Cards.Count;
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Draw,ref game);
+            Assert.AreEqual(player1HandSizeBeforeDraw + 1, player1.Hand.Cards.Count);
+
+            int player2HandSizeBeforeDraw = player2.Hand.Cards.Count;
+            Game_Helper.ProcessToPhase(player2.Id, GamePhases.Beginning_Draw, ref game);
+            Assert.AreEqual(player2HandSizeBeforeDraw + 1, player2.Hand.Cards.Count);
+
+        }
+        [TestMethod]
+        public void Game_PlayLand()
+        {
+            ActiveGame game = new ActiveGame();
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
+
+            game.StartGame();
+            Assert.IsNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.None);
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
+
+            game.StartGame();
+            Assert.IsNotNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
         }
     }
 }

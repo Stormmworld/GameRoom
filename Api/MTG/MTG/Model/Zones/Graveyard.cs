@@ -49,15 +49,26 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            throw new NotImplementedException("Graveyard.Add");
+            _Cards.Add(card);
         }
         public void Add(List<Card> cards)
         {
-            throw new NotImplementedException("Graveyard.Add");
+            _Cards.AddRange(cards);
+        }
+        public void Add(IEffect effect)
+        {
+            foreach (Card card in _Cards)
+            {
+                if (card.Id == effect.Target.Id)
+                {
+                    card.Add(effect);
+                    break;
+                }
+            }
         }
         public List<Card> CardsWithAbility(Type abilityType)
         {
-            throw new NotImplementedException("Graveyard.CardsWithAbility");
+            return _Cards.FindAll(o => o.HasAbility(abilityType));
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
@@ -67,18 +78,20 @@ namespace MTG.Model.Zones
         {
             return _Cards.FirstOrDefault(o => o.Id == cardId);
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
-                card.CheckTriggeredAbilities(trigger);
+                card.CheckTriggeredAbilities(trigger, args);
         }
         public void Remove(TargetZone targetZone)
         {//send all cards to targetZone
             throw new NotImplementedException("Graveyard.Remove");
         }
-        public void Remove(Card card, TargetZone targetZone)
+        public void Remove(Guid cardId)
         {
-            throw new NotImplementedException("Graveyard.Remove");
+            Card cardToRemove = _Cards.FirstOrDefault(o => o.Id == cardId);
+            if (cardToRemove != null)
+                _Cards.Remove(cardToRemove);
         }
         #endregion
     }

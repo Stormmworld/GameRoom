@@ -1,4 +1,5 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions;
+using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
 using MTG.Model.Objects;
@@ -85,13 +86,17 @@ namespace MTG.Model.Zones
         {
             throw new NotImplementedException("Stack.Add");
         }
-        public void Add(Effect effect, Card originCard)
+        public void Add(IEffect effect, Card originCard)
         {
             Entries.Add(new StackEntry(Entries.Count + 1, effect, originCard.ImageUrl));
         }
+        public void Add(IEffect effect)
+        {
+            throw new NotImplementedException("Stack.Find - Card: cannot add effect to card in the stack");
+        }
         public List<Card> CardsWithAbility(Type abilityType)
         {
-            throw new NotImplementedException("Stack.CardsWithAbility");
+            throw new NotImplementedException("Stack.CardsWithAbility - Card: Do not use this method from the stack");
         }
         public void CounterSpell(Card targetSpell, Card counteringSpell)
         {
@@ -126,13 +131,15 @@ namespace MTG.Model.Zones
             }
             throw new NotImplementedException("Stack.Process");
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
         {
-            throw new NotImplementedException("Stack.ProcessTriggeredAbilities");
+            throw new NotImplementedException("Stack.ProcessTriggeredAbilities: Cards on the stack do not trigger abilities");
         }
-        public void Remove(Card card, TargetZone targetZone)
+        public void Remove(Guid cardId)
         {
-            throw new NotImplementedException("Stack.Remove");
+            StackEntry entryToRemove = Entries.FirstOrDefault(o => o.Card.Id == cardId);
+            if (entryToRemove != null)
+                Entries.Remove(entryToRemove);
         }
         #endregion
     }

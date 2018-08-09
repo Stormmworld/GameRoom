@@ -3,13 +3,12 @@ using MTG.Model.Objects;
 using System;
 using MTG.Enumerations;
 using System.Collections.Generic;
-using MTG.Model.Objects;
-using MTG.Model.Abilities;
 using System.Linq;
 using MTG.ArgumentDefintions;
 using MTG.Interfaces;
-using MTG.Model.Pending_Actions;
 using MTG.ArgumentDefintions.Trigger_Arguments;
+using MTG.Model.Effects;
+using MTG.DTO.Responses;
 
 namespace MTG.Model
 {
@@ -20,7 +19,7 @@ namespace MTG.Model
         #endregion
 
         #region Properties
-        public List<Effect> ActiveEffects { get; set; }
+        public List<IEffect> ActiveEffects { get; set; }
         public Battlefield Battlefield { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
@@ -57,7 +56,8 @@ namespace MTG.Model
         #region EventHandlers
         private void Card_CardDestroyed(object sender, EventArgs e)
         {
-            Battlefield.Remove(((CardEventArgs)e).Card, TargetZone.Graveyard);
+            Battlefield.Remove(((CardEventArgs)e).Card.Id);
+            OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = ((CardEventArgs)e).Card, TargetZone = TargetZone.Graveyard, ZoneOwnerId = this.Id });
         }
         private void Card_EffectTriggered(object sender, EventArgs e)
         {
@@ -128,9 +128,24 @@ namespace MTG.Model
                     throw new Exception("Player.Add - Card: Invalid Zone for player add card");
             }
         }
-        public void Add(Effect effect)
+        public void Add(IEffect effect)
         {
-            ActiveEffects.Add(effect);
+            switch (effect.Target.Type)
+            {
+                case TargetType.Card:
+                    ZoneWithCard(effect.Target.Id).Add(effect);
+                    break;
+                default:
+                    if (effect is AddManaToPoolEffect)
+                        ManaPool.Add(((AddManaToPoolEffect)effect).Mana);
+                    else if (effect is Mulligan)
+                    {
+                        throw new NotImplementedException("Player.Add - Effect: Mulligan");
+                    }
+                    else
+                        ActiveEffects.Add(effect);
+                    break;
+            }
         }
         public void ApplyDamage(ApplyDamageEventArgs args)
         {
@@ -143,6 +158,27 @@ namespace MTG.Model
                 Battlefield.Find(args.Target.Id).ApplyDamage(args);// damage only exists in the battlefield
             else
                 throw new Exception("Player.ApplyDamage - No valid target for damage");
+        }
+        public CastSpellResponse CastSpell(Guid spellId)
+        {
+            CastSpellResponse retVal = new CastSpellResponse() { SpellId = spellId };
+            Card castingSpell = Hand.Find(spellId);
+            if (castingSpell != null)
+            {
+                List<Guid> castingMana = new List<Guid>();
+                if (ManaPool.CanCast(castingSpell.CastingCost, ref castingMana))
+                {
+                    ManaPool.UseMana(castingMana);
+                    Hand.Remove(castingSpell.Id);
+                    OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Stack, ZoneOwnerId = this.Id});
+                    retVal.Success = true;
+                }
+                else
+                    retVal.Message = "Insufficient mana in the pool";
+            }
+            else
+                retVal.Message = "Selected spell is not in hand any longer" ;
+            return retVal;
         }
         public bool CheckLoseConditions()
         {
@@ -206,14 +242,15 @@ namespace MTG.Model
         }
         private void Discard(Card card)
         {
-            Hand.Remove(card, TargetZone.Graveyard);
+            Hand.Remove(card.Id);
+            OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = card, TargetZone = TargetZone.Graveyard, ZoneOwnerId = this.Id });
         }
         public void DrawCards(int drawCount, GamePhases currentPhase)
         {
             int cardDrawCount = drawCount;
 
             if (currentPhase == GamePhases.Beginning_Draw)
-                foreach (Effect drawEffect in ActiveEffects.FindAll(o => o.EffectType == EffectTypes.DrawPhaseExtraCards))
+                foreach (IEffect drawEffect in ActiveEffects.FindAll(o => o.Type == EffectTypes.DrawPhaseExtraCards))
                     cardDrawCount += drawEffect.Value;
 
             List<Card> cardsDrawn = new List<Card>();
@@ -258,17 +295,17 @@ namespace MTG.Model
         }
         public bool HasEffectType(EffectTypes effectType)
         {
-            return ActiveEffects.FirstOrDefault(o => o.EffectType == effectType) != null;
+            return ActiveEffects.FirstOrDefault(o => o.Type == effectType) != null;
         }
         public void Remove(EffectTypes effectType)
         {
-            Effect removeEffect = ActiveEffects.FirstOrDefault(o => o.EffectType == effectType);
+            IEffect removeEffect = ActiveEffects.FirstOrDefault(o => o.Type == effectType);
             if (removeEffect != null)
                 ActiveEffects.Remove(removeEffect);
         }
         public void ResetPlayer()
         {
-            ActiveEffects = new List<Effect>();
+            ActiveEffects = new List<IEffect>();
             Battlefield = new Battlefield();
             Command = new Command();
             Graveyard = new Graveyard();
@@ -291,7 +328,21 @@ namespace MTG.Model
         }
         public void UntapPermanents()
         {
-            throw new NotImplementedException("Player.UntapPermanents");
+            Battlefield.Untap();
+        }
+        public IZone ZoneWithCard(Guid cardId)
+        {
+            if (Battlefield.Find(cardId) != null)
+                Battlefield.Find(cardId);
+            if (Command.Find(cardId) != null)
+                Command.Find(cardId);
+            if (Library.Find(cardId) != null)
+                Library.Find(cardId);
+            if (Hand.Find(cardId) != null)
+                return Hand;
+            if (Graveyard.Find(cardId) != null)
+                return Graveyard;
+            return null;
         }
         #endregion
     }

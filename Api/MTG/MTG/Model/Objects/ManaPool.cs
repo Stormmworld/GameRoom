@@ -2,6 +2,7 @@
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MTG.Model.Objects
 {
@@ -29,13 +30,37 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
-        public void AddMana(Mana mana)
+        public void Add(Mana mana)
         {
-            throw new NotImplementedException("ManaPool.AddMana");
+            switch (mana.Color)
+            {
+                case Colors.Black:
+                    BlackMana.Add(mana);
+                    break;
+                case Colors.Blue:
+                    BlueMana.Add(mana);
+                    break;
+                case Colors.Colorless:
+                    ColorlessMana.Add(mana);
+                    break;
+                case Colors.Green:
+                    GreenMana.Add(mana);
+                    break;
+                case Colors.Red:
+                    RedMana.Add(mana);
+                    break;
+                case Colors.White:
+                    WhiteMana.Add(mana);
+                    break;
+            }
         }
-        public void AddMana(Colors color, int count)
+        public void Add(Colors color, int count)
         {
-            AddMana(new Mana() { Color = color, Count = count });
+            Add(new Mana() { Color = color, Count = count });
+        }
+        public bool CanCast(CastingCost cost, ref List<Guid> mana)
+        {
+            throw new NotImplementedException("ManaPool.CanCast");
         }
         public void EmptyManaPool()
         {
@@ -46,9 +71,54 @@ namespace MTG.Model.Objects
             RedMana.Clear();
             WhiteMana.Clear();
         }
-        public void UseMana(Colors color, int count, bool activatingAbility, Card cardConsumingMana)
+        public Mana FindMana(Guid manaId)
         {
-            throw new NotImplementedException("ManaPool.UseMana");
+            Mana retVal = BlackMana.FirstOrDefault(o=>o.Id == manaId);
+            if (retVal != null)
+                return retVal;
+            retVal = BlueMana.FirstOrDefault(o => o.Id == manaId);
+            if (retVal != null)
+                return retVal;
+            retVal = ColorlessMana.FirstOrDefault(o => o.Id == manaId);
+            if (retVal != null)
+                return retVal;
+            retVal = GreenMana.FirstOrDefault(o => o.Id == manaId);
+            if (retVal != null)
+                return retVal;
+            retVal = RedMana.FirstOrDefault(o => o.Id == manaId);
+            if (retVal != null)
+                return retVal;
+            retVal = WhiteMana.FirstOrDefault(o => o.Id == manaId);
+            return retVal;
+        }
+        private void Remove(Mana mana)
+        {
+            switch (mana.Color)
+            {
+                case Colors.Black:
+                    BlackMana.Remove(mana);
+                    break;
+                case Colors.Blue:
+                    BlueMana.Remove(mana);
+                    break;
+                case Colors.Colorless:
+                    ColorlessMana.Remove(mana);
+                    break;
+                case Colors.Green:
+                    GreenMana.Remove(mana);
+                    break;
+                case Colors.Red:
+                    RedMana.Remove(mana);
+                    break;
+                case Colors.White:
+                    WhiteMana.Remove(mana);
+                    break;
+            }
+        }
+        public void UseMana(List<Guid> usedMana)
+        {
+            foreach (Guid id in usedMana)
+                Remove(FindMana(id));
         }
         #endregion
     }

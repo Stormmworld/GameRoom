@@ -39,7 +39,6 @@ namespace MTG.Model.Zones
                 return _Cards.AsReadOnly();
             }
         }
-
         #endregion
 
         #region Constructors
@@ -52,15 +51,26 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            throw new NotImplementedException("BattleField.Add");
+            _Cards.Add(card);
         }
         public void Add(List<Card> cards)
         {
-            throw new NotImplementedException("BattleField.Add");
+            _Cards.AddRange(cards);
         }
-        public List<Card> CardsWithAbility(Type type)
+        public void Add(IEffect effect)
         {
-            return _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.GetType() == type) != null);
+            foreach (Card card in _Cards)
+            {
+                if (card.Id == effect.Target.Id)
+                {
+                    card.Add(effect);
+                    break;
+                }
+            }
+        }
+        public List<Card> CardsWithAbility(Type abilityType)
+        {
+            return _Cards.FindAll(o => o.HasAbility(abilityType));
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
@@ -70,14 +80,22 @@ namespace MTG.Model.Zones
         {
             return _Cards.FirstOrDefault(o=>o.Id == cardId);
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggerArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
         {
             foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
-                card.CheckTriggeredAbilities(trigger);
+                card.CheckTriggeredAbilities(trigger, args);
         }
-        public void Remove(Card card,TargetZone targetZone)
+        public void Remove(Guid cardId)
         {
-            throw new NotImplementedException("BattleField.Remove");
+            Card cardToRemove = _Cards.FirstOrDefault(o => o.Id == cardId);
+            if (cardToRemove != null)
+                _Cards.Remove(cardToRemove);
+        }
+        public void Untap()
+        {
+            foreach (Card card in _Cards)
+                if(card.Tapped)
+                    card.Tapped = false;
         }
         #endregion
     }

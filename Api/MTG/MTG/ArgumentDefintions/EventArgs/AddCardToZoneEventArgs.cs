@@ -9,6 +9,6 @@ namespace MTG.ArgumentDefintions
     {
         public Card Card { get; set; }
         public TargetZone TargetZone { get; set; }
-        public Player ZoneOwner { get; set; }
+        public Guid ZoneOwnerId { get; set; }
     }
 }

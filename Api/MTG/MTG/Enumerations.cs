@@ -16,7 +16,7 @@ namespace MTG.Enumerations
         Destroy,
         Discard,
         Discard_Random,
-        Remove_From_Game
+        Remove_From_Game,
     }
     public enum AttackableType
     {
@@ -227,6 +227,7 @@ namespace MTG.Enumerations
         TopCardOfLibraryFaceUp,
         CannotCounter,
         AdditionalTurn,
+        AddManaToPool,
     }
     public enum EffectTrigger
     {

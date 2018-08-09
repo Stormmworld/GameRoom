@@ -5,7 +5,7 @@ namespace MTG.Model.Objects
 {
     public class CastingCost
     {
-        public List<ManaCost> manaCosts { get; set; }
+        public List<ManaCost> ManaCosts { get; set; }
         public int XCost { get; set; }
     }
 }
