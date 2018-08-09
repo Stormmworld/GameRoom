@@ -9,6 +9,7 @@ using MTG.Interfaces;
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Model.Effects;
 using MTG.DTO.Responses;
+using MTG.Model.Pending_Actions;
 
 namespace MTG.Model
 {
@@ -140,7 +141,10 @@ namespace MTG.Model
                         ManaPool.Add(((AddManaToPoolEffect)effect).Mana);
                     else if (effect is Mulligan)
                     {
-                        throw new NotImplementedException("Player.Add - Effect: Mulligan");
+                        CombineToLibrary(true, true);
+                        DrawCards(Hand.InitialSize, GamePhases.None);
+                        if (Hand.LandMulligan())
+                            OnAddPendingAction?.Invoke(this, new PendingActionEventArgs() { PendingAction = new MulliganPendingAction() { ActionPlayerId = Id } });
                     }
                     else
                         ActiveEffects.Add(effect);
@@ -223,7 +227,7 @@ namespace MTG.Model
                 LoseMessage = @"Lost the game";
             return !string.IsNullOrEmpty(LoseMessage);
         }
-        public void CombineToLibrary(bool hand, bool graveyard)
+        private void CombineToLibrary(bool hand, bool graveyard)
         {
             if (graveyard)
                 Graveyard.Remove(TargetZone.Library);
@@ -250,7 +254,7 @@ namespace MTG.Model
             int cardDrawCount = drawCount;
 
             if (currentPhase == GamePhases.Beginning_Draw)
-                foreach (IEffect drawEffect in ActiveEffects.FindAll(o => o.Type == EffectTypes.DrawPhaseExtraCards))
+                foreach (IEffect drawEffect in ActiveEffects.FindAll(o => o is DrawExtraCards))
                     cardDrawCount += drawEffect.Value;
 
             List<Card> cardsDrawn = new List<Card>();
@@ -293,13 +297,13 @@ namespace MTG.Model
                 Graveyard.Find(cardId);
             return retVal;
         }
-        public bool HasEffectType(EffectTypes effectType)
+        public bool HasEffectType(Type effectType)
         {
-            return ActiveEffects.FirstOrDefault(o => o.Type == effectType) != null;
+            return ActiveEffects.FirstOrDefault(o => o.GetType() == effectType) != null;
         }
-        public void Remove(EffectTypes effectType)
+        public void Remove(Type effectType)
         {
-            IEffect removeEffect = ActiveEffects.FirstOrDefault(o => o.Type == effectType);
+            IEffect removeEffect = ActiveEffects.FirstOrDefault(o => o.GetType() == effectType);
             if (removeEffect != null)
                 ActiveEffects.Remove(removeEffect);
         }

@@ -14,7 +14,6 @@ namespace MTG.Model.Effects
         public GamePhases EndingPhase { get; private set; }
         public Mana Mana { get; private set; }
         public Target Target { get; private set; }
-        public EffectTypes Type { get; private set; }
         public int Value { get; private set; }
         #endregion
 
@@ -22,7 +21,6 @@ namespace MTG.Model.Effects
         public AddManaToPoolEffect(Mana mana, Guid targetPlayerId)
         {
             EndingPhase = GamePhases.None;
-            Type = EffectTypes.AddManaToPool;
             Mana = mana;
             Target = new Target() { Id = targetPlayerId, Type = TargetType.Player };
         }

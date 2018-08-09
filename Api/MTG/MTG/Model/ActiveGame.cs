@@ -111,7 +111,8 @@ namespace MTG.Model
         }
         private void OnAddPendingAction(object sender, EventArgs e)
         {
-            throw new NotImplementedException("ActiveGame.OnAddPendingAction");
+            _PendingActions.Add(((PendingActionEventArgs)e).PendingAction);
+            OnPendingAction?.Invoke(this, (PendingActionEventArgs)e);
         }
         private void OnApplyDamage(object sender, EventArgs e)
         {
@@ -215,7 +216,7 @@ namespace MTG.Model
         {
             foreach (Player player in _Players)
             {
-                player.DrawCards(7, GamePhases.None);
+                player.DrawCards(player.Hand.InitialSize, GamePhases.None);
                 if (player.Hand.LandMulligan())
                     OnAddPendingAction(this, new PendingActionEventArgs() { PendingAction = new MulliganPendingAction() { ActionPlayerId = player.Id } });
             }
@@ -228,12 +229,9 @@ namespace MTG.Model
         #endregion
 
         #region Methods
-        internal List<IEffect> ActiveEffectsByType(EffectTypes effectType)
+        internal List<IEffect> ActiveEffectsByType(Type effectType)
         {
-            if (effectType == EffectTypes.None)
-                return _ActiveEffects;
-            else
-                return _ActiveEffects.FindAll(o=>o.Type == effectType);
+            return _ActiveEffects.FindAll(o => o.GetType() == effectType);
         }
         internal void AddEffect(IEffect effect)
         {
@@ -401,8 +399,8 @@ namespace MTG.Model
         }
         internal void SetNextPlayer()
         {
-            if (ActivePlayer.HasEffectType(EffectTypes.AdditionalTurn))
-                ActivePlayer.Remove(EffectTypes.AdditionalTurn);
+            if (ActivePlayer.HasEffectType(typeof(AdditionalTurn)))
+                ActivePlayer.Remove(typeof(AdditionalTurn));
             else
             {
                 int nextIndex = 0;

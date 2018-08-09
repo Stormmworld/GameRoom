@@ -39,12 +39,15 @@ namespace MTG.Model.Zones
             }
         }
         public bool HandRevealed { get; set; }
+        public int InitialSize { get; set; }
         public int MaximumSize { get; set; }
         #endregion
 
         #region Constructors
         public Hand()
         {
+            InitialSize = 7;
+            MaximumSize = 7;
             _Cards = new List<Card>();
         }
         #endregion

@@ -19,7 +19,15 @@ namespace MTG.Model.Pending_Actions
              */
         #region Properties
         public Guid ActionPlayerId { get; set; }
+        public Guid Id { get; private set; }
         public int ScryCount { get; set; }
+        #endregion
+
+        #region Constructors
+        public Scry()
+        {
+            Id = Guid.NewGuid();
+        }
         #endregion
 
     }

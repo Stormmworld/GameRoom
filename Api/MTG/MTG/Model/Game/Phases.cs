@@ -2,6 +2,7 @@
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
 using MTG.Interfaces;
+using MTG.Model.Effects;
 using System;
 using System.Linq;
 
@@ -86,8 +87,8 @@ namespace MTG.Model.Game
                 },
                 Trigger = EffectTrigger.Phases_BegginingPhase_DrawStep,
             };
-            int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o.Type == EffectTypes.SkipDrawCard) != null ? 0 : 1);
-            foreach (IEffect drawEffect in game.ActiveEffectsByType(EffectTypes.DrawPhaseExtraCards))
+            int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o is SkipDraw) != null ? 0 : 1);
+            foreach (IEffect drawEffect in game.ActiveEffectsByType(typeof(DrawExtraCards)))
                 cardDrawCount += drawEffect.Value;
             game.ActivePlayer.DrawCards(cardDrawCount, GamePhases.Beginning_Draw);
         }
