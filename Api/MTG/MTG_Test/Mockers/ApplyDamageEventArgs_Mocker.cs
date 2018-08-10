@@ -1,5 +1,6 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.Model.Abilities;
+﻿
+using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 
 namespace MTG_Test.Mockers

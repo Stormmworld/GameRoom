@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using System;
 
 namespace MTG.Model.Objects
@@ -45,6 +46,26 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
+        public bool CanUse(Card spell)
+        {
+            if (ManaRestriction == ManaRestriction.None)
+                return true;
+            return CanUse(spell, null);
+        }
+        public bool CanUse(IAbility ability)
+        {
+            if (ManaRestriction == ManaRestriction.None)
+                return true;
+            return CanUse(null, ability);
+        }
+        private bool CanUse(Card spell = null, IAbility ability = null)
+        {           
+            if (ManaRestrictionSubType != SubType.None)
+                return spell.HasSubType(ManaRestrictionSubType);
+            if (ManaRestrictionSpellType != CardType.None)
+                return spell.HasType(ManaRestrictionSpellType);
+            throw new NotImplementedException("Mana.CanUse");
+        }
         public override bool Equals(object obj)
         {
             if (!(obj is Card)) return false;

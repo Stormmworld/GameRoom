@@ -1,5 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;

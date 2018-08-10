@@ -1,8 +1,6 @@
-﻿using MTG.ArgumentDefintions;
+﻿using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Enumerations;
-using MTG.Helpers;
-using MTG.Model.Abilities;
-using MTG.Model.Objects;
+using MTG.Model.Abilities.Static;
 using System;
 
 namespace MTG.Model.Objects

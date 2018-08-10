@@ -1,4 +1,4 @@
-﻿using MTG.ArgumentDefintions;
+﻿using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
 using MTG.Interfaces;

@@ -4,12 +4,15 @@ using System;
 using MTG.Enumerations;
 using System.Collections.Generic;
 using System.Linq;
-using MTG.ArgumentDefintions;
 using MTG.Interfaces;
 using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Model.Effects;
 using MTG.DTO.Responses;
 using MTG.Model.Pending_Actions;
+using MTG.Helpers;
+using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Model.Abilities;
+using MTG.ArgumentDefintions.ActivationArguments;
 
 namespace MTG.Model
 {
@@ -88,9 +91,49 @@ namespace MTG.Model
         {
             throw new NotImplementedException("Player.Card_CardUntapped");
         }
+        private void Zone_OnAddCardToZone(object sender, EventArgs e)
+        {
+            AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
+            if (args.ZoneOwnerId != Id)
+                OnAddCardToZone?.Invoke(sender, e);
+            else
+                switch (args.TargetZone)
+                {
+                    case TargetZone.Battlefield:
+                        Battlefield.Add(args.Card);
+                        break;
+                    case TargetZone.Command:
+                        Command.Add(args.Card);
+                        break;
+                    case TargetZone.Graveyard:
+                        Graveyard.Add(args.Card);
+                        break;
+                    case TargetZone.Hand:
+                        Hand.Add(args.Card);
+                        break;
+                    case TargetZone.Library:
+                        Library.Add(args.Card);
+                        break;
+                    default:
+                        OnAddCardToZone?.Invoke(sender, e);
+                        break;
+                }
+        }
         #endregion
 
         #region Methods
+        public SelectAbilityResponse ActivateAbility(Guid cardId, Guid abilityId)
+        {
+            Card card = FindCard(cardId);
+            IActivatedAbility ability = (IActivatedAbility)card.Abilities.FirstOrDefault(a => a.Id == abilityId);
+
+            if (ability is ManaSource)
+            {
+                ManaSourceActivationArgs abilityArgs = new ManaSourceActivationArgs() { ActivatingPlayerId = this.Id, CardTypeCount = Battlefield.FilteredCards(o=>o.HasType(((ManaSource)ability).CardTypeMultiplier)).Count };
+                return card.ActivateAbility(abilityId, ManaPool, abilityArgs);
+            }
+            throw new Exception("Player.ActivateAbility - " + ability.ToString() + " has no handler associated with it");
+        }
         public void AddLife(int amount)
         {
             Life += amount;
@@ -169,16 +212,24 @@ namespace MTG.Model
             Card castingSpell = Hand.Find(spellId);
             if (castingSpell != null)
             {
-                List<Guid> castingMana = new List<Guid>();
-                if (ManaPool.CanCast(castingSpell.CastingCost, ref castingMana))
+                if (castingSpell.HasType(CardType.Land))
                 {
-                    ManaPool.UseMana(castingMana);
-                    Hand.Remove(castingSpell.Id);
-                    OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Stack, ZoneOwnerId = this.Id});
+                    OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Battlefield, ZoneOwnerId = this.Id });
                     retVal.Success = true;
                 }
                 else
-                    retVal.Message = "Insufficient mana in the pool";
+                {
+                    List<Guid> castingMana = new List<Guid>();
+                    if (Mana_Helper.CanCast(castingSpell.CastingCost, castingSpell, ManaPool, ref castingMana))
+                    {
+                        ManaPool.UseMana(castingMana);
+                        Hand.Remove(castingSpell.Id);
+                        OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Stack, ZoneOwnerId = this.Id });
+                        retVal.Success = true;
+                    }
+                    else
+                        retVal.Message = "Insufficient mana in the pool";
+                }
             }
             else
                 retVal.Message = "Selected spell is not in hand any longer" ;
@@ -311,10 +362,15 @@ namespace MTG.Model
         {
             ActiveEffects = new List<IEffect>();
             Battlefield = new Battlefield();
+            Battlefield.OnAddCardToZone += Zone_OnAddCardToZone;
             Command = new Command();
+            Command.OnAddCardToZone += Zone_OnAddCardToZone;
             Graveyard = new Graveyard();
+            Graveyard.OnAddCardToZone += Zone_OnAddCardToZone;
             Hand = new Hand();
+            Hand.OnAddCardToZone += Zone_OnAddCardToZone;
             Library = new Library();
+            Library.OnAddCardToZone += Zone_OnAddCardToZone;
             SkipPhases = new List<GamePhases>();
             Life = 20;
             LoseMessage = @"";

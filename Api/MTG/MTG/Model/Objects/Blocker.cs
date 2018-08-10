@@ -1,4 +1,4 @@
-﻿using MTG.ArgumentDefintions;
+﻿using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Helpers;
 using System;
 using System.Collections.Generic;

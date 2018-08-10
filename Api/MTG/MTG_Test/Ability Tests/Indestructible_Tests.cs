@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MTG.ArgumentDefintions;
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 
 namespace MTG_Test.Ability_Tests

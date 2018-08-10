@@ -1,7 +1,4 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.Enumerations;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace MTG.Interfaces
 {
@@ -12,12 +9,11 @@ namespace MTG.Interfaces
         #endregion
 
         #region Properties
-        AbilityType Type { get; }
-        EffectTrigger Trigger { get;  }
+        Guid Id { get; }
         #endregion
 
         #region Methods
-        void Process(AbilityArgs args);
+        string ToString();
         #endregion
     }
 }

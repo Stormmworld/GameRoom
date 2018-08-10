@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MTG.Model.Pending_Actions
 {
-    public class BandingDamageResolution : IPendingAction, IPendingDamageResolution
+    public class BandingDamageResolution : IPendingDamageResolution
     {
         #region Properties
         public Guid ActionPlayerId { get; set; }

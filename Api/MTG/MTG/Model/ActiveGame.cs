@@ -1,5 +1,4 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.DTO.Requests;
+﻿using MTG.DTO.Requests;
 using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Interfaces;
@@ -13,6 +12,7 @@ using MTG.DTO.Objects;
 using MTG.Model.Pending_Actions;
 using MTG.DTO.Requests.CompleteActions;
 using MTG.Model.Effects;
+using MTG.ArgumentDefintions.Event_Arguments;
 
 namespace MTG.Model
 {
@@ -79,35 +79,25 @@ namespace MTG.Model
         #region Event Handlers
         private void OnAddCardToZone(object sender, EventArgs e)
         {
-            //AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
-            //switch (args.TargetZone)
-            //{
-            //    case TargetZone.Ante:
-            //        Ante.Add(args.Card);
-            //        break;
-            //    case TargetZone.Battlefield:
-            //        args.ZoneOwner.Battlefield.Add(args.Card);
-            //        break;
-            //    case TargetZone.Command:
-            //        args.ZoneOwner.Command.Add(args.Card);
-            //        break;
-            //    case TargetZone.Exile:
-            //        Exile.Add(args.Card);
-            //        break;
-            //    case TargetZone.Graveyard:
-            //        args.ZoneOwner.Graveyard.Add(args.Card);
-            //        break;
-            //    case TargetZone.Hand:
-            //        args.ZoneOwner.Hand.Add(args.Card);
-            //        break;
-            //    case TargetZone.Library:
-            //        args.ZoneOwner.Library.Add(args.Card);
-            //        break;
-            //    case TargetZone.Stack:
-            //        Stack.Add(args.Card);
-            //        break;
-            //}
-            throw new NotImplementedException("ActiveGame.OnAddCardToZone");
+            AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
+            if (args.ZoneOwnerId == new Guid())
+                switch (args.TargetZone)
+                {
+                    case TargetZone.Ante:
+                        Ante.Add(args.Card);
+                        break;
+                    case TargetZone.Exile:
+                        Exile.Add(args.Card);
+                        break;
+                    case TargetZone.Stack:
+                        Stack.Add(args.Card);
+                        break;
+                    default:
+                        throw new Exception("Card attempted to add to an unknown zone. " + args.TargetZone.ToString());
+                }
+            else
+                foreach (Player player in _Players)
+                    player.Add(args.Card, args.TargetZone);
         }
         private void OnAddPendingAction(object sender, EventArgs e)
         {
@@ -150,6 +140,14 @@ namespace MTG.Model
         #endregion
 
         #region Interfacing Methods
+        public ActivateCardResponse ActivateCard(ActivateCardRequest request)
+        {
+            return new ActivateCardResponse()
+            {
+                Abilities = FindCard(request.CardId).GetActivatedAbilities()
+            };
+            throw new NotImplementedException("ActiveGame.ActivateCard");
+        }
         public void Add(string socketId, string playerName, Deck deck)
         {
             Add(new Player(playerName) { SocketId = socketId }, deck);
@@ -182,10 +180,15 @@ namespace MTG.Model
                     Player mulliganPlayer = _Players.First(o => o.Id == request.ActionPlayerId);
                     mulliganPlayer.Add(new Mulligan(new Target() { Id = request.ActionPlayerId, Type = TargetType.Player }));
                 }
+                _PendingActions.Remove(actionToComplete);
+                if (PendingActions.Count == 0 && _Players.Count > 1)
+                {
+                    ActivePlayerIndex = (new Random()).Next(0, Players.Count);
+                    ActivePhase = GamePhases.Beginning_Untap;
+                }
             }
             else
                 throw new Exception("ActiveGame.CompleteAction - The request has not been defined yet");
-            _PendingActions.Remove(actionToComplete);
         }
         public void DeclareAttacker(DeclareAttackerRequest request)
         {
@@ -197,6 +200,12 @@ namespace MTG.Model
             Card Blocker = FindCard(request.BlockerId);
             ActiveCombat.AddBlocker(Blocker, request.AttackerId, request.BlockerId);
         }
+        public void EndCurrentPhase()
+        {
+            Phases.NextPhase(this);
+            if (ActivePhase != GamePhases.None)
+                ProcessPhase();
+        }
         public CombatResponse GetActiveCombat()
         {
             return new CombatResponse(this);
@@ -206,11 +215,11 @@ namespace MTG.Model
             Player player = _Players.First(o => o.Id == playerId);
             return new PlayerHand(player.Hand, player.Id == ActivePlayer.Id, ActivePhase );
         }
-        public void EndCurrentPhase()
+        public SelectAbilityResponse SelectAbility(SelectAbilityRequest request)
         {
-            Phases.NextPhase(this);
-            if (ActivePhase != GamePhases.None)
-                ProcessPhase();
+            Card abilityCard = FindCard(request.CardId);
+            Player abilityController = _Players.FirstOrDefault(o => o.Id == abilityCard.ControllerId);
+            return abilityController.ActivateAbility(abilityCard.Id, request.AbilityId);
         }
         public void StartGame()
         {

@@ -53,6 +53,23 @@ namespace MTG_Test.Mockers
 
             return retVal;
         }
+        public static Deck MockDeck_CreaturesAndLand()
+        {
+            Deck retVal = new Deck()
+            {
+                Name = "Test Deck"
+            };
+            for (int i = 0; i < 30; i++)
+            {
+                retVal.Cards.Add(MockLand());
+            }
+            for (int i = 0; i < 30; i++)
+            {
+                retVal.Cards.Add(MockCreature(3,3));
+            }
+
+            return retVal;
+        }
         public static Deck MockDeck_LandOnly()
         {
             Deck retVal = new Deck()

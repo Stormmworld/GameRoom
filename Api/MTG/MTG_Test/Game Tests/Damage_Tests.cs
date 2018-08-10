@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MTG.ArgumentDefintions;
+using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Enumerations;
 using MTG.Model;
-using MTG.Model.Abilities;
 using MTG.Model.Objects;
 using MTG_Test.Mockers;
 using System;
@@ -51,7 +50,7 @@ namespace MTG_Test.Game_Tests
         {
             Player receivingPlayer = Player_Mocker.Mock();
             int initialLife = receivingPlayer.Life;
-            ApplyDamageEventArgs damageArgs = ApplyDamageEventArgs_Mocker.Mock();
+            ApplyDamageEventArgs damageArgs = new ApplyDamageEventArgs() { Target = new Target() { Type = TargetType.Player, Id = receivingPlayer .Id} };
             receivingPlayer.ApplyDamage(damageArgs);
             Assert.AreEqual(receivingPlayer.Life, initialLife - damageArgs.DamageValue);
         }

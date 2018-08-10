@@ -53,7 +53,7 @@ namespace MTG.Model.Zones
     public class Stack: IZone
     {
         #region Events
-        public event EventHandler OnEffectTrigger;
+        public event EventHandler OnEffectTrigger, OnAddCardToZone;
         #endregion
 
         #region Properties
@@ -131,7 +131,7 @@ namespace MTG.Model.Zones
             }
             throw new NotImplementedException("Stack.Process");
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args)
         {
             throw new NotImplementedException("Stack.ProcessTriggeredAbilities: Cards on the stack do not trigger abilities");
         }

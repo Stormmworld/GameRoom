@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using MTG.Model.Objects;
 using MTG.Model.Pending_Actions;
+using MTG.ArgumentDefintions.Upkeep_Ability_Arguments;
+using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
 
 namespace MTG.Model.UpkeepAbilities
 { 
@@ -41,7 +43,7 @@ namespace MTG.Model.UpkeepAbilities
             }
         }
         private int CumulativeAge { get; set; }
-        public IAbility FailedUpkeep { get; private set; }
+        public ITriggeredAbility FailedUpkeep { get; private set; }
         public Guid Id { get; private set; }
         public EffectTrigger Trigger { get { return EffectTrigger.Phases_BegginingPhase_UpkeepStep; } }
         public AbilityType Type { get { return AbilityType.Triggered; } }
@@ -58,18 +60,18 @@ namespace MTG.Model.UpkeepAbilities
         {
             Add(Action);
         }
-        public CumulativeUpkeep(IAbility failedUpkeep):this()
+        public CumulativeUpkeep(ITriggeredAbility failedUpkeep):this()
         {
             Add(failedUpkeep);
         }
-        public CumulativeUpkeep(UpkeepAction action, IAbility failedUpkeep):this(action)
+        public CumulativeUpkeep(UpkeepAction action, ITriggeredAbility failedUpkeep):this(action)
         {
             Add(failedUpkeep);
         }
         #endregion
 
         #region Methods
-        public void Add(IAbility failedUpkeep)
+        public void Add(ITriggeredAbility failedUpkeep)
         {
             FailedUpkeep = failedUpkeep;
             failedUpkeep.OnEffectTrigger += OnEffectTrigger;
@@ -80,13 +82,14 @@ namespace MTG.Model.UpkeepAbilities
         {
             _Action = action;
         }
-        public void CheckResolution(AbilityArgs args)
+        public void CheckResolution(UpkeepResolutionTriggeredAbilityArgs args)
         {
             if (!Action.Success && FailedUpkeep != null)
                 FailedUpkeep.Process(args);
         }
-        public void Process(AbilityArgs args)
+        public void Process(IUpkeepAbilityArgs e)
         {
+            CumulativeUpkeepAbilityArgs args = (CumulativeUpkeepAbilityArgs)e;
             args.OriginCard.Add(new Counter() { CounterType = CounterType.Age });
             CumulativeAge = args.OriginCard.GetCountersByType(CounterType.Age).Count;
             if (Action.RequiresInteraction)
@@ -94,7 +97,7 @@ namespace MTG.Model.UpkeepAbilities
                 UpkeepPendingAction action = new UpkeepPendingAction()
                 {
                     Action = this.Action,
-                    ActionPlayerId = args.OriginPlayer.Id,
+                    ActionPlayerId = args.OriginPlayerId,
                     CardId = args.OriginCard.Id,
                     UpkeepId = this.Id,
                 };

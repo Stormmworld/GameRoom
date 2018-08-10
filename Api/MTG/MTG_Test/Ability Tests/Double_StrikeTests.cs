@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 
 namespace MTG_Test.Ability_Tests

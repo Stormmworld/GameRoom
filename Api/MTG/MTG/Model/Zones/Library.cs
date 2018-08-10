@@ -33,7 +33,7 @@ namespace MTG.Model.Zones
     public class Library: IZone
     {
         #region Events
-        public event EventHandler OnEffectTrigger;
+        public event EventHandler OnEffectTrigger, OnAddCardToZone;
         #endregion
 
         #region Variables
@@ -113,9 +113,9 @@ namespace MTG.Model.Zones
                     break;
             }
         }
-        public void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args)
+        public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args)
         {
-            foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a.Trigger == trigger) != null))
+            foreach (Card card in _Cards.FindAll(o => o.Abilities.FirstOrDefault(a => a is ITriggeredAbility && ((ITriggeredAbility)a).Trigger == trigger) != null))
                 card.CheckTriggeredAbilities(trigger, args);
         }
         public void Remove(Guid cardId)

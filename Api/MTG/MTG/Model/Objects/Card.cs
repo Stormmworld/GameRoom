@@ -1,10 +1,10 @@
-﻿using MTG.ArgumentDefintions;
+﻿using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.ArgumentDefintions.Trigger_Arguments;
+using MTG.DTO.Responses;
 using MTG.Enumerations;
+using MTG.Helpers;
 using MTG.Interfaces;
-using MTG.Model;
-using MTG.Model.Abilities;
-using MTG.Model.Objects;
+using MTG.Model.Abilities.Static;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +37,7 @@ namespace MTG.Model.Objects
         public IReadOnlyList<int> Damage { get { return _Damage.AsReadOnly(); } }
         public IReadOnlyList<SubType> SubTypes { get { return _SubTypes.AsReadOnly(); } }
         public IReadOnlyList<SuperType> SuperTypes { get { return _SuperTypes.AsReadOnly(); } }
+
         #endregion
 
         #region Properties
@@ -146,7 +147,7 @@ namespace MTG.Model.Objects
         public static bool operator !=(Card x, Card y)
         {
             if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
-                return ReferenceEquals(y, null) && ReferenceEquals(x, null);
+                return !(ReferenceEquals(y, null) && ReferenceEquals(x, null));
             return !(x == y);
         }
         #endregion
@@ -167,6 +168,21 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
+        public SelectAbilityResponse ActivateAbility(Guid abilityId, ManaPool pool, IActivationArgs args)
+        {
+            SelectAbilityResponse retVal = new SelectAbilityResponse();
+            IActivatedAbility ability = (IActivatedAbility)_Abilities.FirstOrDefault(o => o.Id == abilityId);
+            List<Guid> castingMana = new List<Guid>();
+            if (Mana_Helper.CanActivate(ability.ActivationCost, ability, pool, ref castingMana))
+            {
+                pool.UseMana(castingMana);
+                ability.Activate(args);
+                retVal.Success = true;
+            }
+            else
+                retVal.Message = "Insufficient mana in the pool";
+            return retVal;
+        }
         public void Add(IAbility ability)
         {
             ability.OnEffectTrigger += Ability_EffectTrigger;
@@ -235,14 +251,12 @@ namespace MTG.Model.Objects
                 }
             }
         }
-        public void CheckTriggeredAbilities(EffectTrigger trigger, AbilityArgs args = null)
+        public void CheckTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args = null)
         {
             if (trigger == EffectTrigger.None)
                 return;
-
-            foreach (IAbility ability in _Abilities.FindAll(o => o.Trigger == trigger))
-                ability.Process(new AbilityArgs() { OriginCard = this });
-            throw new NotImplementedException("Card.CheckTriggeredAbilities");// add feed from parameter args
+            foreach (IAbility ability in _Abilities.FindAll(o => o is ITriggeredAbility &&  ((ITriggeredAbility)o).Trigger == trigger))
+                ((ITriggeredAbility)ability).Process(((ITriggeredAbility)ability).GenerateArgs( args, this));
         }
         public void ClearDamage()
         {
@@ -278,6 +292,13 @@ namespace MTG.Model.Objects
                 Id = Id,
             };
         }
+        public List<IActivatedAbility> GetActivatedAbilities()
+        {
+            List<IActivatedAbility> retVal = new List<IActivatedAbility>();
+            foreach (IAbility ability in _Abilities.FindAll(o => o is IActivatedAbility))
+                retVal.Add((IActivatedAbility)ability);
+            return retVal;
+        }
         public List<Counter> GetCountersByType(CounterType type)
         {
             return _Counters.FindAll(o=>o.CounterType == type);
@@ -293,6 +314,10 @@ namespace MTG.Model.Objects
         public bool HasCounterType(CounterType counterType)
         {
             return _Counters.FirstOrDefault(o => o.CounterType == counterType) != null;
+        }
+        public bool HasSubType(SubType subType)
+        {
+            return _SubTypes.Contains(subType);
         }
         public bool HasType(CardType cardType)
         {

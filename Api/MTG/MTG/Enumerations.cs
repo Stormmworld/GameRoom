@@ -186,8 +186,7 @@ namespace MTG.Enumerations
         Deathtouch,
         Discard1,
         Discard2,
-    }
-    
+    }    
     public enum EffectTrigger
     {
         None,

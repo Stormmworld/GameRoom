@@ -1,15 +1,18 @@
-﻿using MTG.ArgumentDefintions;
+﻿using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
 using MTG.Model.Objects;
-using System;
 
 namespace MTG.Interfaces
 {
     public interface IUpkeepAbility : IAbility
     {
-        IAbility FailedUpkeep { get; }
-        Guid Id { get; }
+        #region Properties
+        ITriggeredAbility FailedUpkeep { get; }
         UpkeepAction Action { get; }
+        #endregion
 
-        void CheckResolution(AbilityArgs args);
+        #region Methods
+        void CheckResolution(UpkeepResolutionTriggeredAbilityArgs args);
+        void Process(IUpkeepAbilityArgs e);
+        #endregion
     }
 }

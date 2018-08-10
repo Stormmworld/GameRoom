@@ -1,6 +1,4 @@
-﻿
-using MTG.ArgumentDefintions;
-using MTG.Enumerations;
+﻿using MTG.Enumerations;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
@@ -79,16 +77,22 @@ namespace MTG.Interfaces
      */
     public interface IZone
     {
-        event EventHandler OnEffectTrigger;
+        #region Events
+        event EventHandler OnEffectTrigger, OnAddCardToZone;
+        #endregion
 
+        #region Collection Properties
         IReadOnlyCollection<Card> Cards { get; }
+        #endregion
 
+        #region Methods
         void Add(Card card);
         void Add(List<Card> cards);
         void Add(IEffect effect);
         List<Card> CardsWithAbility(Type abilityType);
         List<Card> FilteredCards(Predicate<Card> predicate);
-        void ProcessTriggeredAbilities(EffectTrigger trigger, AbilityArgs args);
+        void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args);
         void Remove(Guid cardId);
+        #endregion
     }
 }

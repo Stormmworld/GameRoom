@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MTG.ArgumentDefintions;
+using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.DTO.Objects;
 using MTG.DTO.Requests;
+using MTG.DTO.Requests.CompleteActions;
 using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Model;
-using MTG.Model.Objects;
 using MTG.Model.Pending_Actions;
 using MTG_Test.Helpers;
 using MTG_Test.Mockers;
@@ -92,25 +92,86 @@ namespace MTG_Test.Game_Tests
             Assert.AreNotEqual(game.ActivePhase, GamePhases.Beginning_Untap);
             Assert.IsTrue(pendingActionsReturned.Count == 1);
             Assert.IsTrue(pendingActionsReturned[0].PendingAction is MulliganPendingAction);
+            MulliganPendingAction actionToComplete =  (MulliganPendingAction)pendingActionsReturned[0].PendingAction;
+            Assert.IsTrue(actionToComplete.ActionPlayerId == player1.Id);
+
+            MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+            {
+                ActionId = actionToComplete.Id,
+                ActionPlayerId = actionToComplete.ActionPlayerId,
+                Reshuffle = false,
+            };
+            game.CompleteAction(mulliganAction);
+            Assert.IsNotNull(game.ActivePlayer);
+            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+        }
+        [TestMethod]
+        public void Game_Mulligan_Reshuffle()
+        {
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_LandOnly());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            Assert.IsNull(game.ActivePlayer);
+            Assert.AreNotEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+            Assert.IsTrue(pendingActionsReturned.Count == 1);
+            Assert.IsTrue(pendingActionsReturned[0].PendingAction is MulliganPendingAction);
+            MulliganPendingAction actionToComplete = (MulliganPendingAction)pendingActionsReturned[0].PendingAction;
+            Assert.IsTrue(actionToComplete.ActionPlayerId == player1.Id);
+
+            MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+            {
+                ActionId = actionToComplete.Id,
+                ActionPlayerId = actionToComplete.ActionPlayerId,
+                Reshuffle = true,
+            };
+            pendingActionsReturned.Clear();
+            game.CompleteAction(mulliganAction);
+            Assert.IsNull(game.ActivePlayer);
+            Assert.AreNotEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+            Assert.IsTrue(pendingActionsReturned.Count == 1);
+            Assert.IsTrue(pendingActionsReturned[0].PendingAction is MulliganPendingAction);
             Assert.IsTrue(((MulliganPendingAction)pendingActionsReturned[0].PendingAction).ActionPlayerId == player1.Id);
         }
         [TestMethod]
         public void Game_DrawPhase()
         {
             ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
 
             string player1SocketId = "p1";
             Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
             game.Add(player1, Card_Mocker.MockDeck());
-            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
+
             string player2SocketId = "p2";
             Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
             game.Add(player2, Card_Mocker.MockDeck());
-            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
 
             game.StartGame();
-            Assert.IsNotNull(game.ActivePlayer);
-            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
 
             int player1HandSizeBeforeDraw = player1.Hand.Cards.Count;
             Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Draw,ref game);
@@ -124,25 +185,126 @@ namespace MTG_Test.Game_Tests
         [TestMethod]
         public void Game_PlayLand()
         {
+            #region Begin Game
             ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
 
             string player1SocketId = "p1";
             Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
             game.Add(player1, Card_Mocker.MockDeck());
-            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
-
-            game.StartGame();
-            Assert.IsNull(game.ActivePlayer);
-            Assert.AreEqual(game.ActivePhase, GamePhases.None);
 
             string player2SocketId = "p2";
             Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
             game.Add(player2, Card_Mocker.MockDeck());
-            Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
 
             game.StartGame();
-            Assert.IsNotNull(game.ActivePlayer);
-            Assert.AreEqual(game.ActivePhase, GamePhases.Beginning_Untap);
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            Assert.IsTrue(response.Success);
+            Assert.AreEqual(land.CardId, response.SpellId);
+        }
+        [TestMethod]
+        public void Game_TapLandForMana()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_CreaturesAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+
+            throw new NotImplementedException();
+        }
+        [TestMethod]
+        public void Game_PlayCreature()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_CreaturesAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+
+            Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            Assert.IsTrue(response.Success);
+            Assert.AreEqual(creatureSpell.CardId, response.SpellId);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MTG.Enumerations;
 using MTG.Model.Objects;
+using System;
 
 namespace MTG.Interfaces
 {
@@ -7,6 +8,7 @@ namespace MTG.Interfaces
     {
         Target Target { get; }
         GamePhases EndingPhase { get; }
+        Guid EndingPhaseOwnerId { get; }
         int Value { get; }
     }
 }

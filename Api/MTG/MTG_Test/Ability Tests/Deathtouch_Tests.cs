@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MTG.ArgumentDefintions;
+using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Enumerations;
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 using MTG_Test.Mockers;
 using System;

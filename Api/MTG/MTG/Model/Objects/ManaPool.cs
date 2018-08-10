@@ -58,10 +58,6 @@ namespace MTG.Model.Objects
         {
             Add(new Mana() { Color = color, Count = count });
         }
-        public bool CanCast(CastingCost cost, ref List<Guid> mana)
-        {
-            throw new NotImplementedException("ManaPool.CanCast");
-        }
         public void EmptyManaPool()
         {
             BlackMana.Clear();
