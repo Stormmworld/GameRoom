@@ -6,6 +6,7 @@ namespace MTG.Interfaces
     {
         #region Properties
         CastingCost ActivationCost { get; }
+        bool RequiresTap { get; }
         #endregion
 
         #region Methods

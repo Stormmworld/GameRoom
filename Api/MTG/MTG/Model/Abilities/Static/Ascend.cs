@@ -21,7 +21,7 @@ namespace MTG.Model.Abilities.Static
                         matched any trigger conditions.
              */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

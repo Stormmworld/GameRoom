@@ -11,7 +11,7 @@ namespace MTG.Templates
              
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Variables
@@ -20,11 +20,13 @@ namespace MTG.Templates
         #region Properties
         public CastingCost ActivationCost { get; private set; }
         public Guid Id { get; private set; }
+        public bool RequiresTap { get; private set; }
         #endregion
 
         #region Constructors
         private ActivatedAbilityTemplate()
         {
+            Id = Guid.NewGuid();
             ActivationCost = new CastingCost();
         }
         #endregion

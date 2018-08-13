@@ -137,13 +137,13 @@ namespace MTG.Model.Zones
             {
                 _Cards[0].ControllerId = controllingPlayerId;
                 drawnCards.Add(_Cards[0]);
-                _Cards.RemoveAt(0);
+               Remove(_Cards[0].Id);
             }
             return drawnCards;
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
-            throw new NotImplementedException("Library.FilteredCards");
+            return _Cards.FindAll(predicate);
         }
         public Card Find(Guid cardId)
         {

@@ -14,7 +14,7 @@ namespace MTG.Model.Abilities.Triggered
             702.129b If a creature has multiple instances of afflict, each triggers separately.
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

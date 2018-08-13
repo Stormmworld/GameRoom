@@ -1,6 +1,4 @@
 ﻿using MTG.Interfaces;
-using MTG.ArgumentDefintions;
-using MTG.Enumerations;
 using System;
 using MTG.Model.Objects;
 
@@ -47,7 +45,7 @@ namespace MTG.Model.Abilities.Static
                     cards with a morph ability.  
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

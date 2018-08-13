@@ -25,7 +25,7 @@ namespace MTG.Model.UpkeepAbilities
                 particular ability; each cumulative upkeep ability will count the total number of age counters on the permanent at the time that ability resolves.
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Variables

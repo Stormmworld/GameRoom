@@ -140,7 +140,7 @@ namespace MTG.Model.Zones
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
-            throw new NotImplementedException("Exile.FilteredCards");
+            return _Cards.FindAll(predicate);
         }
         public Card Find(Guid cardId)
         {

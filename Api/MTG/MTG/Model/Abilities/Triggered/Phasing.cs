@@ -57,7 +57,7 @@ namespace MTG.Model.Abilities.Triggered
             702.25n Multiple instances of phasing on the same permanent are redundant.
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

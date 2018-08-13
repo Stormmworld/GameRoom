@@ -148,7 +148,14 @@ namespace MTG.Model.Zones
         }
         public List<Card> FilteredCards(Predicate<Card> predicate)
         {
-            throw new NotImplementedException("Stack.FilteredCards");
+            throw new Exception("Stack.FilteredCards: Use the Overload for the Stack Entry Predicate");
+        }
+        public List<Card> FilteredCards(Predicate<StackEntry> predicate)
+        {
+            List<Card> retVal = new List<Card>();
+            foreach (StackEntry entry in Entries.FindAll(predicate))
+                retVal.Add(entry.Card);
+            return retVal;
         }
         public Card Find(Guid cardId)
         {
@@ -173,7 +180,6 @@ namespace MTG.Model.Zones
                 }
                 game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
             }
-            throw new NotImplementedException("Stack.Process");
         }
         public void ProcessTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args)
         {

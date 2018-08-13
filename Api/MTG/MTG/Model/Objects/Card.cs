@@ -15,7 +15,7 @@ namespace MTG.Model.Objects
     public class Card
     {
         #region Events
-        public event EventHandler OnCardPhasedIn, OnCardPhasedOut, OnCardTapped, OnCardUntapped, OnCardDestroyed, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnCardEvent, OnCardPhasedIn, OnCardPhasedOut, OnCardTapped, OnCardUntapped, OnCardDestroyed, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -166,6 +166,14 @@ namespace MTG.Model.Objects
         {
             OnPendingActionTriggered?.Invoke(this, e);
         }
+        private void Ability_OnCardEvent(object sender, EventArgs e)
+        {
+            ICardEventArgs args = (ICardEventArgs)e;
+            if (args.CardId == Id)
+                Apply(args);
+            else
+                OnCardEvent?.Invoke(this, e);
+        }
         #endregion
 
         #region Methods
@@ -173,17 +181,22 @@ namespace MTG.Model.Objects
         {
             SelectAbilityResponse retVal = new SelectAbilityResponse();
             IActivatedAbility ability = (IActivatedAbility)_Abilities.FirstOrDefault(o => o.Id == abilityId);
-            List<Guid> castingMana = new List<Guid>();
-            if (Mana_Helper.CanActivate(ability.ActivationCost, ability, pool, ref castingMana))
-            {
-                pool.UseMana(castingMana);
-                AddAbilityHooks(ability);
-                ability.Activate(args);
-                RemoveAbilityHooks(ability);
-                retVal.Success = true;
-            }
+            if (ability.RequiresTap && Tapped)
+                retVal.Message = "Card is already Tapped.";
             else
-                retVal.Message = "Insufficient mana in the pool";
+            {
+                List<Guid> castingMana = new List<Guid>();
+                if (Mana_Helper.CanActivate(ability.ActivationCost, ability, pool, ref castingMana))
+                {
+                    pool.UseMana(castingMana);
+                    AddAbilityHooks(ability);
+                    ability.Activate(args);
+                    RemoveAbilityHooks(ability);
+                    retVal.Success = true;
+                }
+                else
+                    retVal.Message = "Insufficient mana in the pool";
+            }
             return retVal;
         }
         public void Add(IAbility ability)
@@ -228,6 +241,14 @@ namespace MTG.Model.Objects
             ability.OnEffectTrigger += Ability_EffectTrigger;
             ability.OnEffectTriggered += Ability_EffectTriggered;
             ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
+            ability.OnCardEvent += Ability_OnCardEvent;
+        }
+        public void Apply(ICardEventArgs args)
+        {
+            if (args is TapCardEventArgs)
+                Tapped = ((TapCardEventArgs)args).Tapped;
+            else
+                throw new Exception("Cannot apply the event from " + args.ToString());
         }
         public void ApplyDamage(ApplyDamageEventArgs args)
         {
@@ -344,6 +365,7 @@ namespace MTG.Model.Objects
             ability.OnEffectTrigger -= Ability_EffectTrigger;
             ability.OnEffectTriggered -= Ability_EffectTriggered;
             ability.OnPendingActionTriggered -= Ability_PendingActionTriggered;
+            ability.OnCardEvent -= Ability_OnCardEvent;
         }
         public override string ToString()
         {

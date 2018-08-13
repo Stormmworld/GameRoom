@@ -221,7 +221,7 @@ namespace MTG_Test.Game_Tests
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
             Assert.IsTrue(response.Success);
             Assert.AreEqual(land.CardId, response.SpellId);
-            Assert.IsTrue(player1.Battlefield.Find(land.CardId) != null);
+            Assert.IsTrue(player1.Battlefield.FirstOrDefault(land.CardId) != null);
         }
         [TestMethod]
         public void Game_TapLandForMana()
@@ -270,6 +270,52 @@ namespace MTG_Test.Game_Tests
             SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
             Assert.IsTrue(selectResponse.Success);
             Assert.IsTrue(player1.ManaPool.BlueMana.Count == 1);
+            Assert.IsTrue(player1.Battlefield.FilteredCards(o => o.Id == land.CardId)[0].Tapped);
+        }
+        [TestMethod]
+        public void Game_CastCreature()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_CreaturesAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+
+            Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
+            Assert.IsTrue(response.Success);
+            Assert.AreEqual(creatureSpell.CardId, response.SpellId);
+            Assert.IsTrue(game.Stack.FilteredCards(o => o.Card.Id == creatureSpell.CardId).Count == 1);
         }
         [TestMethod]
         public void Game_PlayCreature()
@@ -309,11 +355,13 @@ namespace MTG_Test.Game_Tests
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
             #endregion
-
+            #region Cast Creature
             Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
-            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
-            Assert.IsTrue(response.Success);
-            Assert.AreEqual(creatureSpell.CardId, response.SpellId);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
+            #endregion
+            game.ProcessStack(player1.Id);
+            game.ProcessStack(player2.Id);
+            Assert.IsTrue(player1.Battlefield.Cards.FirstOrDefault(o => o.Id == creatureSpell.CardId) != null);
         }
     }
 }

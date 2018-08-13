@@ -120,7 +120,7 @@ namespace MTG.Model.Zones
         {
             return _Cards.FindAll(predicate);
         }
-        public Card Find(Guid cardId)
+        public Card FirstOrDefault(Guid cardId)
         {
             return _Cards.FirstOrDefault(o=>o.Id == cardId);
         }

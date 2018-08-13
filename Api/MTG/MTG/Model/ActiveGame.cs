@@ -23,15 +23,17 @@ namespace MTG.Model
         #endregion
 
         #region Variables
+        private List<IEffect> _ActiveEffects;
+        private List<Guid> _EndStackPlayers;
+        private List<GameModifier> _Modifiers;
         private List<IPendingAction> _PendingActions;
         private List<Player> _Players;
         private List<GamePhases> _SkipPhases;
-        private List<GameModifier> _Modifiers;
-        private List<IEffect> _ActiveEffects;
         #endregion
 
         #region Collection Properties
         internal IReadOnlyCollection<IEffect> ActiveEffects { get { return _ActiveEffects.AsReadOnly(); } }
+        internal IReadOnlyCollection<Guid> EndStackPlayers { get { return _EndStackPlayers.AsReadOnly(); } }
         internal IReadOnlyCollection<GameModifier> Modifiers { get { return _Modifiers.AsReadOnly(); } }
         internal IReadOnlyCollection<IPendingAction> PendingActions { get { return _PendingActions.AsReadOnly(); } }
         public IReadOnlyCollection<Player> Players { get { return _Players.AsReadOnly(); } }
@@ -49,12 +51,12 @@ namespace MTG.Model
         }
         internal int ActivePlayerIndex { get; set; }
         public GamePhases ActivePhase { get; internal set; }
-        internal Ante Ante { get; set; }
-        internal Exile Exile { get; set; }
+        public Ante Ante { get; set; }
+        public Exile Exile { get; set; }
         internal GameType GameType { get; private set; }
         internal GamePhases OverrideNextPhase { get; set; }
         internal int TurnSpellCount { get; set; }
-        internal Stack Stack { get; set; }
+        public Stack Stack { get; set; }
         #endregion
 
         #region Constructors
@@ -80,25 +82,23 @@ namespace MTG.Model
         private void OnAddCardToZone(object sender, EventArgs e)
         {
             AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
-            if (args.ZoneOwnerId == new Guid())
-                switch (args.TargetZone)
-                {
-                    case TargetZone.Ante:
-                        Ante.Add(args.Card);
-                        break;
-                    case TargetZone.Exile:
-                        Exile.Add(args.Card);
-                        break;
-                    case TargetZone.Stack:
-                        Stack.Add(args.Card);
-                        break;
-                    default:
-                        throw new Exception("Card attempted to add to an unknown zone. " + args.TargetZone.ToString());
-                }
-            else
-                foreach (Player player in _Players)
-                    if(player.Id == args.ZoneOwnerId)
-                        player.Add(args.Card, args.TargetZone);
+            switch (args.TargetZone)
+            {
+                case TargetZone.Ante:
+                    Ante.Add(args.Card);
+                    break;
+                case TargetZone.Exile:
+                    Exile.Add(args.Card);
+                    break;
+                case TargetZone.Stack:
+                    Stack.Add(args.Card);
+                    break;
+                default:
+                    foreach (Player player in _Players)
+                        if (player.Id == args.ZoneOwnerId)
+                            player.Add(args.Card, args.TargetZone);
+                    break;
+            }
         }
         private void OnAddPendingAction(object sender, EventArgs e)
         {
@@ -211,6 +211,15 @@ namespace MTG.Model
             Phases.NextPhase(this);
             if (ActivePhase != GamePhases.None)
                 ProcessPhase();
+        }
+        public void ProcessStack(Guid playerId)
+        {
+            _EndStackPlayers.Add(playerId);
+            foreach (Player player in Players)
+                if (!EndStackPlayers.Contains(player.Id))
+                    return;
+            Stack.Process(this);
+            _EndStackPlayers.Clear();
         }
         public CombatResponse GetActiveCombat()
         {

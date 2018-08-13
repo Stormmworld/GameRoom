@@ -1,9 +1,5 @@
 ﻿using MTG.Interfaces;
-using MTG.ArgumentDefintions;
-using MTG.Enumerations;
 using System;
-using System.Collections.Generic;
-using MTG.Model.Objects;
 
 namespace MTG.Model.Abilities.Static
 {
@@ -39,7 +35,7 @@ namespace MTG.Model.Abilities.Static
                 702.19e Multiple instances of trample on the same creature are redundant.
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

@@ -12,7 +12,7 @@ namespace MTG.Model.Abilities.Static
             702.85b If a creature has multiple instances of annihilator, each triggers separately.
          */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

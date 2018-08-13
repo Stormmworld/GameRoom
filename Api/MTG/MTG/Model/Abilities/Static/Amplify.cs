@@ -15,7 +15,7 @@ namespace MTG.Model.Abilities.Static
             702.37b If a creature has multiple instances of amplify, each one works separately.
          */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

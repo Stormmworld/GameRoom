@@ -87,30 +87,7 @@ namespace MTG.Model
         private void Zone_OnAddCardToZone(object sender, EventArgs e)
         {
             AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
-            if (args.ZoneOwnerId != Id)
                 OnAddCardToZone?.Invoke(sender, e);
-            else
-                switch (args.TargetZone)
-                {
-                    case TargetZone.Battlefield:
-                        Battlefield.Add(args.Card);
-                        break;
-                    case TargetZone.Command:
-                        Command.Add(args.Card);
-                        break;
-                    case TargetZone.Graveyard:
-                        Graveyard.Add(args.Card);
-                        break;
-                    case TargetZone.Hand:
-                        Hand.Add(args.Card);
-                        break;
-                    case TargetZone.Library:
-                        Library.Add(args.Card);
-                        break;
-                    default:
-                        OnAddCardToZone?.Invoke(sender, e);
-                        break;
-                }
         }
         private void Zone_OnPendingActionTriggered(object sender, EventArgs e)
         {
@@ -138,7 +115,7 @@ namespace MTG.Model
 
             if (ability is ManaSource)
             {
-                ManaSourceActivationArgs abilityArgs = new ManaSourceActivationArgs() { ActivatingPlayerId = this.Id, CardTypeCount = Battlefield.FilteredCards(o=>o.HasType(((ManaSource)ability).CardTypeMultiplier)).Count };
+                ManaSourceActivationArgs abilityArgs = new ManaSourceActivationArgs() {ActivatingCardId = card.Id, ActivatingPlayerId = this.Id, CardTypeCount = Battlefield.FilteredCards(o=>o.HasType(((ManaSource)ability).CardTypeMultiplier)).Count };
                 return card.ActivateAbility(abilityId, ManaPool, abilityArgs);
             }
             throw new Exception("Player.ActivateAbility - " + ability.ToString() + " has no handler associated with it");
@@ -211,7 +188,7 @@ namespace MTG.Model
 
             }
             else if (args.Target.Type == TargetType.Card || args.Target.Type == TargetType.Planeswalker)
-                Battlefield.Find(args.Target.Id).ApplyDamage(args);// damage only exists in the battlefield
+                Battlefield.FirstOrDefault(args.Target.Id).ApplyDamage(args);// damage only exists in the battlefield
             else
                 throw new Exception("Player.ApplyDamage - No valid target for damage");
         }
@@ -340,7 +317,7 @@ namespace MTG.Model
         }
         public Card FindCard(Guid cardId)
         {
-            Card retVal = Battlefield.Find(cardId);
+            Card retVal = Battlefield.FirstOrDefault(cardId);
             if(retVal == null)
                 Command.Find(cardId);
             if (retVal == null)
@@ -386,8 +363,8 @@ namespace MTG.Model
         }
         public IZone ZoneWithCard(Guid cardId)
         {
-            if (Battlefield.Find(cardId) != null)
-                Battlefield.Find(cardId);
+            if (Battlefield.FirstOrDefault(cardId) != null)
+                Battlefield.FirstOrDefault(cardId);
             if (Command.Find(cardId) != null)
                 Command.Find(cardId);
             if (Library.Find(cardId) != null)

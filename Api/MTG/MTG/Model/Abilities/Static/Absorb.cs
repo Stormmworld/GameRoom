@@ -15,7 +15,7 @@ namespace MTG.Model.Abilities.Static
             702.63c If an object has multiple instances of absorb, each applies separately.
          */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

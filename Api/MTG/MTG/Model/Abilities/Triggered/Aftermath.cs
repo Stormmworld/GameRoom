@@ -16,7 +16,7 @@ namespace MTG.Model.Abilities.Triggered
                     exile it instead of putting it anywhere else any time it would leave the stack.”
          */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties

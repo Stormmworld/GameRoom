@@ -16,7 +16,7 @@ namespace MTG.Model.Abilities
              
         */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Variables
@@ -59,6 +59,8 @@ namespace MTG.Model.Abilities
                 if (args.ManaMultiplier > 0)
                     mana.Count = mana.Count * args.ManaMultiplier;
                 OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs() { Effect = new AddManaToPoolEffect(mana, args.ActivatingPlayerId) });
+                if (RequiresTap)
+                    OnCardEvent?.Invoke(this, new TapCardEventArgs() { CardId = args.ActivatingCardId, ControllerId = args.ActivatingPlayerId, Tapped = RequiresTap });
             }
             return true;
         }

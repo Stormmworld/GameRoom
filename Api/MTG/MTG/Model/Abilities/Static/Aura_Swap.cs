@@ -17,7 +17,7 @@ namespace MTG.Model.Abilities.Static
                         don’t own. The ability has no effect.
          */
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Properties
