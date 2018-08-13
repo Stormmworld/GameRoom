@@ -1,5 +1,4 @@
-﻿using MTG.Enumerations;
-using MTG.Model.Objects;
+﻿using MTG.Model.Objects;
 
 namespace MTG.Interfaces
 {

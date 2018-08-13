@@ -13,13 +13,14 @@ using MTG.Helpers;
 using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Model.Abilities;
 using MTG.ArgumentDefintions.ActivationArguments;
+using MTG.Model.Counters;
 
 namespace MTG.Model
 {
     public class Player
     {
         #region Events
-        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTrigger;
+        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Properties
@@ -27,7 +28,7 @@ namespace MTG.Model
         public Battlefield Battlefield { get; set; }
         public Command Command { get; set; }
         public bool Conceded { get; set; }
-        public List<Counter> Counters { get; private set; }
+        public List<ICounter> Counters { get; private set; }
         public Deck Deck { get; private set; }
         public bool FailedDraw { get; set; }
         public bool ForceLose { get; set; }
@@ -49,6 +50,31 @@ namespace MTG.Model
         public Player()
         {
             Id = Guid.NewGuid();
+            Battlefield = new Battlefield();
+            Battlefield.OnAddCardToZone += Zone_OnAddCardToZone;
+            Battlefield.OnEffectTrigger += Zone_OnEffectTrigger;
+            Battlefield.OnEffectTriggered += Zone_OnEffectTriggered;
+            Battlefield.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Command = new Command();
+            Command.OnAddCardToZone += Zone_OnAddCardToZone;
+            Command.OnEffectTrigger += Zone_OnEffectTrigger;
+            Command.OnEffectTriggered += Zone_OnEffectTriggered;
+            Command.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Graveyard = new Graveyard();
+            Graveyard.OnAddCardToZone += Zone_OnAddCardToZone;
+            Graveyard.OnEffectTrigger += Zone_OnEffectTrigger;
+            Graveyard.OnEffectTriggered += Zone_OnEffectTriggered;
+            Graveyard.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Hand = new Hand();
+            Hand.OnAddCardToZone += Zone_OnAddCardToZone;
+            Hand.OnEffectTrigger += Zone_OnEffectTrigger;
+            Hand.OnEffectTriggered += Zone_OnEffectTriggered;
+            Hand.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Library = new Library(Id);
+            Library.OnAddCardToZone += Zone_OnAddCardToZone;
+            Library.OnEffectTrigger += Zone_OnEffectTrigger;
+            Library.OnEffectTriggered += Zone_OnEffectTriggered;
+            Library.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
             ResetPlayer();
         }
         public Player(string name):this()
@@ -58,39 +84,6 @@ namespace MTG.Model
         #endregion
 
         #region EventHandlers
-        private void Card_CardDestroyed(object sender, EventArgs e)
-        {
-            Battlefield.Remove(((CardEventArgs)e).Card.Id);
-            OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = ((CardEventArgs)e).Card, TargetZone = TargetZone.Graveyard, ZoneOwnerId = this.Id });
-        }
-        private void Card_EffectTriggered(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Player.Card_EffectTriggered");
-        }
-        private void Card_EffectTrigger(object sender, EventArgs e)
-        {
-            OnEffectTrigger?.Invoke(sender, e);
-        }
-        private void Card_PendingActionTriggered(object sender, EventArgs e)
-        {
-            OnAddPendingAction?.Invoke(sender, e);
-        }
-        private void Card_CardPhasedIn(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Player.Card_CardPhasedIn");
-        }
-        private void Card_CardPhasedOut(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Player.Card_CardPhasedOut");
-        }
-        private void Card_CardTapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Player.Card_CardTapped");
-        }
-        private void Card_CardUntapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Player.Card_CardUntapped");
-        }
         private void Zone_OnAddCardToZone(object sender, EventArgs e)
         {
             AddCardToZoneEventArgs args = (AddCardToZoneEventArgs)e;
@@ -118,6 +111,22 @@ namespace MTG.Model
                         OnAddCardToZone?.Invoke(sender, e);
                         break;
                 }
+        }
+        private void Zone_OnPendingActionTriggered(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("Player.Zone_OnPendingActionTriggered");
+        }
+        private void Zone_OnEffectTriggered(object sender, EventArgs e)
+        {
+            EffectTriggeredEventArgs args = (EffectTriggeredEventArgs)e;
+            if (args.Effect.Target.Type == TargetType.Player && args.Effect.Target.Id == Id)
+                Apply(args.Effect);
+            else
+                OnEffectTrigger?.Invoke(sender, e);
+        }
+        private void Zone_OnEffectTrigger(object sender, EventArgs e)
+        {
+            OnEffectTrigger?.Invoke(sender, e);
         }
         #endregion
 
@@ -206,6 +215,11 @@ namespace MTG.Model
             else
                 throw new Exception("Player.ApplyDamage - No valid target for damage");
         }
+        private void Apply(IEffect effect)
+        {
+            if (effect is AddManaToPoolEffect)
+                ManaPool.Add(((AddManaToPoolEffect)effect).Mana);
+        }
         public CastSpellResponse CastSpell(Guid spellId)
         {
             CastSpellResponse retVal = new CastSpellResponse() { SpellId = spellId };
@@ -214,6 +228,7 @@ namespace MTG.Model
             {
                 if (castingSpell.HasType(CardType.Land))
                 {
+                    Hand.Remove(spellId);
                     OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Battlefield, ZoneOwnerId = this.Id });
                     retVal.Success = true;
                 }
@@ -223,7 +238,7 @@ namespace MTG.Model
                     if (Mana_Helper.CanCast(castingSpell.CastingCost, castingSpell, ManaPool, ref castingMana))
                     {
                         ManaPool.UseMana(castingMana);
-                        Hand.Remove(castingSpell.Id);
+                        Hand.Remove(spellId);
                         OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Stack, ZoneOwnerId = this.Id });
                         retVal.Success = true;
                     }
@@ -272,8 +287,8 @@ namespace MTG.Model
                 LoseMessage = @"No life remaining.";
             else if (Library.Cards.Count == 0 && FailedDraw)//104.3c 
                 LoseMessage = @"Not enough cards in current library to complete the required draw.";
-            else if (Counters.FindAll(o=>o.CounterType == CounterType.Poison).Count >= 10)//104.3d 
-                LoseMessage = @"Poisoned to death (" + Counters.FindAll(o => o.CounterType == CounterType.Poison).Count + " counters)";
+            else if (Counters.FindAll(o=>o is Poison).Count >= 10)//104.3d 
+                LoseMessage = @"Poisoned to death (" + Counters.FindAll(o => o is Poison).Count + " counters)";
             else if (ForceLose)//104.3e 
                 LoseMessage = @"Lost the game";
             return !string.IsNullOrEmpty(LoseMessage);
@@ -297,8 +312,8 @@ namespace MTG.Model
         }
         private void Discard(Card card)
         {
-            Hand.Remove(card.Id);
             OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = card, TargetZone = TargetZone.Graveyard, ZoneOwnerId = this.Id });
+            Hand.Remove(card.Id);
         }
         public void DrawCards(int drawCount, GamePhases currentPhase)
         {
@@ -312,23 +327,11 @@ namespace MTG.Model
             if (cardDrawCount > Library.Cards.Count)
             {
                 FailedDraw = true;
-                cardsDrawn.AddRange(Library.Draw(Library.Cards.Count));
+                cardsDrawn.AddRange(Library.Draw(Library.Cards.Count, Id));
             }
             else
-                cardsDrawn.AddRange(Library.Draw(cardDrawCount));
-
-            foreach (Card card in cardsDrawn)
-            {
-                card.OnEffectTriggered += Card_EffectTriggered;
-                card.OnCardPhasedIn += Card_CardPhasedIn; ;
-                card.OnCardPhasedOut += Card_CardPhasedOut;
-                card.OnCardTapped += Card_CardTapped;
-                card.OnCardUntapped += Card_CardUntapped;
-                card.OnCardDestroyed += Card_CardDestroyed;
-                card.OnPendingActionTriggered += Card_PendingActionTriggered;
-                card.OnEffectTrigger += Card_EffectTrigger;
-            }
-
+                cardsDrawn.AddRange(Library.Draw(cardDrawCount, Id));
+            
             Hand.Add(cardsDrawn);
         }
         public void EmptyManaPool()
@@ -360,17 +363,8 @@ namespace MTG.Model
         }
         public void ResetPlayer()
         {
+
             ActiveEffects = new List<IEffect>();
-            Battlefield = new Battlefield();
-            Battlefield.OnAddCardToZone += Zone_OnAddCardToZone;
-            Command = new Command();
-            Command.OnAddCardToZone += Zone_OnAddCardToZone;
-            Graveyard = new Graveyard();
-            Graveyard.OnAddCardToZone += Zone_OnAddCardToZone;
-            Hand = new Hand();
-            Hand.OnAddCardToZone += Zone_OnAddCardToZone;
-            Library = new Library();
-            Library.OnAddCardToZone += Zone_OnAddCardToZone;
             SkipPhases = new List<GamePhases>();
             Life = 20;
             LoseMessage = @"";

@@ -2,6 +2,7 @@
 using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Enumerations;
 using MTG.Model;
+using MTG.Model.Counters;
 using MTG.Model.Objects;
 using MTG_Test.Mockers;
 using System;
@@ -26,11 +27,11 @@ namespace MTG_Test.Game_Tests
         public void Damage_Deathtouch_AddedToPlaneswalker()
         {
             Card planeswalker = Card_Mocker.MockPlaneswalker(4);
-            int initialLoyalty = planeswalker.GetCountersByType(CounterType.Loyalty).Count;
+            int initialLoyalty = planeswalker.GetCountersByType(typeof(Loyalty)).Count;
             ApplyDamageEventArgs deathtouchDamageArgs = ApplyDamageEventArgs_Mocker.Mock_Deathtoucn();
             deathtouchDamageArgs.Target = new Target() { Id = planeswalker.Id, Type = TargetType.Planeswalker };
             planeswalker.ApplyDamage(deathtouchDamageArgs);
-            Assert.AreEqual(planeswalker.GetCountersByType(CounterType.Loyalty).Count, initialLoyalty - deathtouchDamageArgs.DamageValue);
+            Assert.AreEqual(planeswalker.GetCountersByType(typeof(Loyalty)).Count, initialLoyalty - deathtouchDamageArgs.DamageValue);
         }
         [TestMethod]
         public void Damage_Deathtouch_AddedToCreature()
@@ -58,10 +59,10 @@ namespace MTG_Test.Game_Tests
         public void Damage_Normal_AddedToPlaneswalker()
         {
             Card planeswalker = Card_Mocker.MockPlaneswalker(4);
-            int initialLoyalty = planeswalker.GetCountersByType(CounterType.Loyalty).Count;
+            int initialLoyalty = planeswalker.GetCountersByType(typeof(Loyalty)).Count;
             ApplyDamageEventArgs damageArgs = ApplyDamageEventArgs_Mocker.Mock();
             planeswalker.ApplyDamage(damageArgs);
-            Assert.AreEqual(planeswalker.GetCountersByType(CounterType.Loyalty).Count, initialLoyalty - damageArgs.DamageValue);
+            Assert.AreEqual(planeswalker.GetCountersByType(typeof(Loyalty)).Count, initialLoyalty - damageArgs.DamageValue);
         }
         [TestMethod]
         public void Damage_Normal_AddedToCreature()

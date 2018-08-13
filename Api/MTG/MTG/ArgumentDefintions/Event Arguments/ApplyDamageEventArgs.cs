@@ -23,6 +23,7 @@ namespace MTG.ArgumentDefintions.Event_Arguments
         #region Constructors
         public ApplyDamageEventArgs()
         {
+            _Colors = new List<Colors>();
             Target = new Target();
             _Types = new List<DamageTypes>();
         }

@@ -78,7 +78,7 @@ namespace MTG.Interfaces
     public interface IZone
     {
         #region Events
-        event EventHandler OnEffectTrigger, OnAddCardToZone;
+        event EventHandler OnAddCardToZone, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Collection Properties

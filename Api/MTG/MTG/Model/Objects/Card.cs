@@ -5,6 +5,7 @@ using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
 using MTG.Model.Abilities.Static;
+using MTG.Model.Counters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace MTG.Model.Objects
         private List<IAbility> _Abilities;
         private List<CardType> _CardTypes;
         private List<Colors> _Colors;
-        private List<Counter> _Counters;
+        private List<ICounter> _Counters;
         private List<int> _Damage;
         private List<SubType> _SubTypes;
         private List<SuperType> _SuperTypes;
@@ -33,7 +34,7 @@ namespace MTG.Model.Objects
         public IReadOnlyList<IAbility> Abilities { get { return _Abilities.AsReadOnly(); } }
         public IReadOnlyList<CardType> CardTypes { get { return _CardTypes.AsReadOnly(); } }
         public IReadOnlyList<Colors> Colors { get { return _Colors.AsReadOnly(); } }
-        public IReadOnlyList<Counter> Counters { get { return _Counters.AsReadOnly(); } }
+        public IReadOnlyList<ICounter> Counters { get { return _Counters.AsReadOnly(); } }
         public IReadOnlyList<int> Damage { get { return _Damage.AsReadOnly(); } }
         public IReadOnlyList<SubType> SubTypes { get { return _SubTypes.AsReadOnly(); } }
         public IReadOnlyList<SuperType> SuperTypes { get { return _SuperTypes.AsReadOnly(); } }
@@ -65,9 +66,9 @@ namespace MTG.Model.Objects
             get
             {
                 int retVal = _Power;
-                foreach (Counter counter in _Counters)
-                    if (counter.CounterType == CounterType.PlusXPlusY)
-                        retVal += counter.X;
+                foreach (ICounter counter in _Counters)
+                    if (counter is PlusXPlusY)
+                        retVal += ((PlusXPlusY)counter).X;
                 return retVal < 0 ? 0 : retVal;
             }
         }
@@ -93,9 +94,9 @@ namespace MTG.Model.Objects
             get
             {
                 int retVal = _Toughness;
-                foreach (Counter counter in _Counters)
-                    if (counter.CounterType == CounterType.PlusXPlusY)
-                        retVal += counter.Y;
+                foreach (ICounter counter in _Counters)
+                    if (counter is PlusXPlusY)
+                        retVal += ((PlusXPlusY)counter).Y;
                 return retVal < 0 ? 0: retVal;
             }
         }
@@ -108,7 +109,7 @@ namespace MTG.Model.Objects
             _Abilities = new List<IAbility>();
             _CardTypes = new List<CardType>();
             _Colors = new List<Colors>();
-            _Counters = new List<Counter>();
+            _Counters = new List<ICounter>();
             _Damage = new List<int>();
             _SubTypes = new List<SubType>();
             _SuperTypes = new List<SuperType>();
@@ -176,7 +177,9 @@ namespace MTG.Model.Objects
             if (Mana_Helper.CanActivate(ability.ActivationCost, ability, pool, ref castingMana))
             {
                 pool.UseMana(castingMana);
+                AddAbilityHooks(ability);
                 ability.Activate(args);
+                RemoveAbilityHooks(ability);
                 retVal.Success = true;
             }
             else
@@ -185,12 +188,9 @@ namespace MTG.Model.Objects
         }
         public void Add(IAbility ability)
         {
-            ability.OnEffectTrigger += Ability_EffectTrigger;
-            ability.OnEffectTriggered += Ability_EffectTriggered;
-            ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
             _Abilities.Add(ability);
         }
-        public void Add(Counter counter)
+        public void Add(ICounter counter)
         {
             _Counters.Add(counter);
             OnEffectTrigger?.Invoke(null, new EffectTriggerEventArgs()
@@ -198,7 +198,7 @@ namespace MTG.Model.Objects
                 Args = new CounterTriggerArgs()
                 {
                     ActiveCard = this,
-                    CounterType = counter.CounterType,
+                    Counter = counter,
                 },
                 Trigger = EffectTrigger.Card_RecievesCounter,
             });
@@ -223,12 +223,18 @@ namespace MTG.Model.Objects
         {
             _SuperTypes.Add(superType);
         }
+        public void AddAbilityHooks(IAbility ability)
+        {
+            ability.OnEffectTrigger += Ability_EffectTrigger;
+            ability.OnEffectTriggered += Ability_EffectTriggered;
+            ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
+        }
         public void ApplyDamage(ApplyDamageEventArgs args)
         {
             if (HasType(CardType.Planeswalker))
             {
                 for (int i = 0; i < args.DamageValue; i++)
-                    Remove(CounterType.Loyalty);
+                    Remove(typeof(Loyalty));
             }
             else
             {
@@ -299,9 +305,9 @@ namespace MTG.Model.Objects
                 retVal.Add((IActivatedAbility)ability);
             return retVal;
         }
-        public List<Counter> GetCountersByType(CounterType type)
+        public List<ICounter> GetCountersByType(Type type)
         {
-            return _Counters.FindAll(o=>o.CounterType == type);
+            return _Counters.FindAll(o=>o.GetType() == type);
         }
         public override int GetHashCode()
         {
@@ -311,9 +317,9 @@ namespace MTG.Model.Objects
         {
             return _Abilities.FirstOrDefault(o => o.GetType() == abilityType) != null;
         }
-        public bool HasCounterType(CounterType counterType)
+        public bool HasCounterType(Type type)
         {
-            return _Counters.FirstOrDefault(o => o.CounterType == counterType) != null;
+            return _Counters.FirstOrDefault(o => o.GetType() == type) != null;
         }
         public bool HasSubType(SubType subType)
         {
@@ -323,15 +329,25 @@ namespace MTG.Model.Objects
         {
             return _CardTypes.Contains(cardType);
         }
-        public void Remove(Counter counter)
+        public void Remove(ICounter counter)
         {
             _Counters.Remove(counter);
         }
-        public void Remove(CounterType counterType)
+        public void Remove(Type type)
         {
-            Counter counter = Counters.FirstOrDefault(o => o.CounterType == CounterType.Loyalty);
+            ICounter counter = Counters.FirstOrDefault(o => o.GetType() == type);
             if (counter != null)
                 Remove(counter);
+        }
+        public void RemoveAbilityHooks(IAbility ability)
+        {
+            ability.OnEffectTrigger -= Ability_EffectTrigger;
+            ability.OnEffectTriggered -= Ability_EffectTriggered;
+            ability.OnPendingActionTriggered -= Ability_PendingActionTriggered;
+        }
+        public override string ToString()
+        {
+            return Name + " - " + Id.ToString();
         }
         #endregion
     }

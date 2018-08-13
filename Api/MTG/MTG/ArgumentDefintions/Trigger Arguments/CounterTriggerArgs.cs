@@ -10,7 +10,7 @@ namespace MTG.ArgumentDefintions.Trigger_Arguments
         #region Properties
         public Player ActivePlayer { get; set; }
         public Card ActiveCard { get; set; }
-        public CounterType CounterType { get; set; }
+        public ICounter Counter { get; set; }
         #endregion
     }
 }

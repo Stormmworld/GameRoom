@@ -1,6 +1,8 @@
 ﻿using System;
 using MTG.Enumerations;
 using MTG.Interfaces;
+using MTG.Model.Abilities;
+using MTG.Model.Counters;
 using MTG.Model.Objects;
 
 namespace MTG_Test.Mockers
@@ -113,7 +115,7 @@ namespace MTG_Test.Mockers
                 Name = "Test Planeswalker"
             };
             for (int i = 0; i < loyaltyCount; i++)
-                retVal.Add(new Counter() { CounterType = MTG.Enumerations.CounterType.Loyalty });
+                retVal.Add(new Loyalty() );
             retVal.Add(CardType.Planeswalker);
             return retVal;
         }
@@ -125,6 +127,7 @@ namespace MTG_Test.Mockers
 
             };
             retVal.Add(CardType.Land);
+            retVal.Add(new ManaSource(new Mana() { Color = Colors.Blue, Count = 1 }) { RequiresTap = true });
             return retVal;
         }
         public static Card MockInstant()

@@ -6,6 +6,7 @@ using MTG.DTO.Requests.CompleteActions;
 using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Model;
+using MTG.Model.Abilities;
 using MTG.Model.Pending_Actions;
 using MTG_Test.Helpers;
 using MTG_Test.Mockers;
@@ -220,6 +221,7 @@ namespace MTG_Test.Game_Tests
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
             Assert.IsTrue(response.Success);
             Assert.AreEqual(land.CardId, response.SpellId);
+            Assert.IsTrue(player1.Battlefield.Find(land.CardId) != null);
         }
         [TestMethod]
         public void Game_TapLandForMana()
@@ -258,9 +260,16 @@ namespace MTG_Test.Game_Tests
             List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o=>o.HasType(CardType.Land))[0].Id;
             #endregion
 
-            throw new NotImplementedException();
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            Assert.IsTrue(activateResponse.Abilities.Count > 0);
+            Assert.IsTrue(activateResponse.Abilities[0] is ManaSource);
+
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            Assert.IsTrue(selectResponse.Success);
+            Assert.IsTrue(player1.ManaPool.BlueMana.Count == 1);
         }
         [TestMethod]
         public void Game_PlayCreature()

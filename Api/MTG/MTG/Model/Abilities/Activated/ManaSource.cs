@@ -28,6 +28,7 @@ namespace MTG.Model.Abilities
         public Guid Id { get; private set; }
         public CardType CardTypeMultiplier { get; private set; }
         public IReadOnlyCollection<Mana> ManaProduction { get { return _ManaProduction.AsReadOnly(); } }
+        public bool RequiresTap { get; set; }
         #endregion
 
         #region Constructors

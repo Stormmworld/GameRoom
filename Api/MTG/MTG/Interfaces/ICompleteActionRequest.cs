@@ -1,5 +1,4 @@
-﻿using MTG.Enumerations;
-using System;
+﻿using System;
 
 namespace MTG.Interfaces
 {

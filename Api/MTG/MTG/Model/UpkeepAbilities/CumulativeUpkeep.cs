@@ -7,6 +7,7 @@ using MTG.Model.Objects;
 using MTG.Model.Pending_Actions;
 using MTG.ArgumentDefintions.Upkeep_Ability_Arguments;
 using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
+using MTG.Model.Counters;
 
 namespace MTG.Model.UpkeepAbilities
 { 
@@ -90,8 +91,8 @@ namespace MTG.Model.UpkeepAbilities
         public void Process(IUpkeepAbilityArgs e)
         {
             CumulativeUpkeepAbilityArgs args = (CumulativeUpkeepAbilityArgs)e;
-            args.OriginCard.Add(new Counter() { CounterType = CounterType.Age });
-            CumulativeAge = args.OriginCard.GetCountersByType(CounterType.Age).Count;
+            args.OriginCard.Add(new Age());
+            CumulativeAge = args.OriginCard.GetCountersByType(typeof(Age)).Count;
             if (Action.RequiresInteraction)
             { //create pending action
                 UpkeepPendingAction action = new UpkeepPendingAction()

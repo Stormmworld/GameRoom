@@ -97,7 +97,8 @@ namespace MTG.Model
                 }
             else
                 foreach (Player player in _Players)
-                    player.Add(args.Card, args.TargetZone);
+                    if(player.Id == args.ZoneOwnerId)
+                        player.Add(args.Card, args.TargetZone);
         }
         private void OnAddPendingAction(object sender, EventArgs e)
         {
@@ -135,7 +136,11 @@ namespace MTG.Model
         {
             EffectTriggerEventArgs args = (EffectTriggerEventArgs)e;
 
-           // throw new NotImplementedException("ActiveGame.OnEffectTrigger");
+            // throw new NotImplementedException("ActiveGame.OnEffectTrigger");
+        }
+        private void OnEffectTriggered(object sender, EventArgs e)
+        {
+            throw new NotImplementedException("ActiveGame.OnEffectTrigger");
         }
         #endregion
 
@@ -144,9 +149,9 @@ namespace MTG.Model
         {
             return new ActivateCardResponse()
             {
-                Abilities = FindCard(request.CardId).GetActivatedAbilities()
+                Abilities = FindCard(request.CardId).GetActivatedAbilities(),
+                CardId = request.CardId,
             };
-            throw new NotImplementedException("ActiveGame.ActivateCard");
         }
         public void Add(string socketId, string playerName, Deck deck)
         {
@@ -158,6 +163,7 @@ namespace MTG.Model
             player.OnAddCardToZone += OnAddCardToZone;
             player.OnAddPendingAction += OnAddPendingAction;
             player.OnEffectTrigger += OnEffectTrigger;
+            player.OnEffectTriggered += OnEffectTriggered;
             //add deck
             player.SelectDeck(deck);
 
