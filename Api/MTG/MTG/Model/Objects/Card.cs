@@ -156,15 +156,15 @@ namespace MTG.Model.Objects
         #region Event Handlers
         private void Ability_EffectTrigger(object sender, EventArgs e)
         {
-            OnEffectTrigger?.Invoke(sender, e);
+            OnEffectTrigger?.Invoke(this, e);
         }
         private void Ability_EffectTriggered(object sender, EventArgs e)
         {
-            OnEffectTriggered?.Invoke(sender, e);
+            OnEffectTriggered?.Invoke(this, e);
         }
         private void Ability_PendingActionTriggered(object sender, EventArgs e)
         {
-            OnPendingActionTriggered?.Invoke(sender, e);
+            OnPendingActionTriggered?.Invoke(this, e);
         }
         #endregion
 
