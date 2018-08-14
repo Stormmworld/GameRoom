@@ -75,6 +75,7 @@ namespace MTG.Model
             _SkipPhases = new List<GamePhases>();
             _Modifiers = new List<GameModifier>();
             _ActiveEffects = new List<IEffect>();
+            _EndStackPlayers = new List<Guid>();
         }
         #endregion
 
