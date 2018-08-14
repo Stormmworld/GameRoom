@@ -118,7 +118,7 @@ namespace MTG.Model.Abilities.Triggered
             if (SubTypes.Intersect(args.OriginCard.SubTypes).Count() > 0)
                 PreventDamage(args.TargetCard, args.Damage);
         }
-        private void PreventDamage(Card recievingCard, Damage damage)
+        private void PreventDamage(Card recievingCard, MTG.Model.Objects.Damage damage)
         {
             if (damage.OriginCard.HasType(CardType.Creature))
                 damage.AddPrevention(damage.BaseValue);

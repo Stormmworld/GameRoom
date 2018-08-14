@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model.Abilities;
@@ -59,7 +60,7 @@ namespace MTG_Test.Mockers
         {
             Deck retVal = new Deck()
             {
-                Name = "Test Deck"
+                Name = "Test Deck Creatures and Land"
             };
             for (int i = 0; i < 30; i++)
             {
@@ -68,6 +69,23 @@ namespace MTG_Test.Mockers
             for (int i = 0; i < 30; i++)
             {
                 retVal.Cards.Add(MockCreature(3,3));
+            }
+
+            return retVal;
+        }
+        public static Deck MockDeck_InstantsAndLand()
+        {
+            Deck retVal = new Deck()
+            {
+                Name = "Test Deck Instants and Land"
+            };
+            for (int i = 0; i < 30; i++)
+            {
+                retVal.Cards.Add(MockLand());
+            }
+            for (int i = 0; i < 30; i++)
+            {
+                retVal.Cards.Add(MockInstant());
             }
 
             return retVal;
@@ -138,6 +156,7 @@ namespace MTG_Test.Mockers
                 CastingCost = new CastingCost() { ManaCosts = new System.Collections.Generic.List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } },
             };
             retVal.Add(CardType.Instant);
+            retVal.Add(new MTG.Model.Abilities.Triggered.Damage(3, new List<TargetType>() { TargetType.Player, TargetType.Creature, TargetType.Planeswalker }));
             return retVal;
         }
         public static Card MockSorcery()

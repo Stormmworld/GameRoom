@@ -101,6 +101,7 @@ namespace MTG.Enumerations
         Phases_EndingPhase_CleanupStep,
         Player_Damaged,
         Card_RecievesCounter,
+        Cast,
     }
     public enum GameModifier {
         None,

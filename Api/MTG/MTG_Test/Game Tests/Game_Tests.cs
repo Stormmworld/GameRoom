@@ -7,6 +7,7 @@ using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Model;
 using MTG.Model.Abilities;
+using MTG.Model.Abilities.Triggered;
 using MTG.Model.Pending_Actions;
 using MTG_Test.Helpers;
 using MTG_Test.Mockers;
@@ -362,6 +363,52 @@ namespace MTG_Test.Game_Tests
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);
             Assert.IsTrue(player1.Battlefield.Cards.FirstOrDefault(o => o.Id == creatureSpell.CardId) != null);
+        }
+        [TestMethod]
+        public void Game_CastInstant()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_InstantsAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+            
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Upkeep,ref game);
+            Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
+            game.ProcessStack(player1.Id);
+            game.ProcessStack(player2.Id);
+            Assert.IsTrue(player2.Life < 20);
         }
     }
 }
