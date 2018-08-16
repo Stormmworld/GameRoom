@@ -156,7 +156,7 @@ namespace MTG_Test.Mockers
                 CastingCost = new CastingCost() { ManaCosts = new System.Collections.Generic.List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } },
             };
             retVal.Add(CardType.Instant);
-            retVal.Add(new MTG.Model.Abilities.Triggered.Damage(3, new List<TargetType>() { TargetType.Player, TargetType.Creature, TargetType.Planeswalker }));
+            retVal.Add(new MTG.Model.Abilities.Spell.Damage(3, TargetScope.Single, new List<TargetType>() { TargetType.Player }, true));
             return retVal;
         }
         public static Card MockSorcery()

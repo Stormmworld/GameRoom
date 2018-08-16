@@ -405,7 +405,7 @@ namespace MTG_Test.Game_Tests
             
             Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Upkeep,ref game);
             Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
-
+            GetSpellOptionsResponse optionsResponse = game.GetSpellOptions(new GetSpellOptionsRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
 
 
 
