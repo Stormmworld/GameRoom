@@ -62,21 +62,9 @@ namespace MTG.Model.Zones
         #endregion
 
         #region Event Handlers
-        private void Card_OnCardPhasedIn(object sender, EventArgs e)
+        private void Card_OnCardEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException("Library.Card_OnCardPhasedIn");
-        }
-        private void Card_OnCardPhasedOut(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Library.Card_OnCardPhasedOut");
-        }
-        private void Card_OnCardTapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Library.Card_OnCardTapped");
-        }
-        private void Card_OnCardUntapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Library.Card_OnCardUntapped");
+            throw new NotImplementedException("ZoneTemplate.Card_OnCardEvent");
         }
         private void Card_OnEffectTrigger(object sender, EventArgs e)
         {
@@ -85,10 +73,6 @@ namespace MTG.Model.Zones
         private void Card_OnEffectTriggered(object sender, EventArgs e)
         {
             OnEffectTriggered?.Invoke(sender, e);
-        }
-        private void Card_OnCardDestroyed(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("Library.Card_OnCardDestroyed");
         }
         private void Card_OnPendingActionTriggered(object sender, EventArgs e)
         {
@@ -99,15 +83,10 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            card.OnCardDestroyed += Card_OnCardDestroyed;
-            card.OnCardPhasedIn += Card_OnCardPhasedIn;
-            card.OnCardPhasedOut += Card_OnCardPhasedOut;
-            card.OnCardTapped += Card_OnCardTapped;
-            card.OnCardUntapped += Card_OnCardUntapped;
+            card.OnCardEvent += Card_OnCardEvent;
             card.OnEffectTrigger += Card_OnEffectTrigger;
             card.OnEffectTriggered += Card_OnEffectTriggered;
             card.OnPendingActionTriggered += Card_OnPendingActionTriggered;
-            card.OwnerId = OwnerId;
             _Cards.Add(card);
         }
         public void Add(List<Card> cards)
@@ -171,11 +150,7 @@ namespace MTG.Model.Zones
             Card cardToRemove = _Cards.FirstOrDefault(o => o.Id == cardId);
             if (cardToRemove != null)
             {
-                cardToRemove.OnCardDestroyed -= Card_OnCardDestroyed;
-                cardToRemove.OnCardPhasedIn -= Card_OnCardPhasedIn;
-                cardToRemove.OnCardPhasedOut -= Card_OnCardPhasedOut;
-                cardToRemove.OnCardTapped -= Card_OnCardTapped;
-                cardToRemove.OnCardUntapped -= Card_OnCardUntapped;
+                cardToRemove.OnCardEvent -= Card_OnCardEvent;
                 cardToRemove.OnEffectTrigger -= Card_OnEffectTrigger;
                 cardToRemove.OnEffectTriggered -= Card_OnEffectTriggered;
                 cardToRemove.OnPendingActionTriggered -= Card_OnPendingActionTriggered;

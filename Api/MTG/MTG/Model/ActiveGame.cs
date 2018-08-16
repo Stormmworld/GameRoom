@@ -150,7 +150,7 @@ namespace MTG.Model
         {
             return new ActivateCardResponse()
             {
-                Abilities = FindCard(request.CardId).GetActivatedAbilities(),
+                Abilities = FindCard(request.CardId).FilteredAbilities<IActivatedAbility>(),
                 CardId = request.CardId,
             };
         }
@@ -212,6 +212,11 @@ namespace MTG.Model
             Phases.NextPhase(this);
             if (ActivePhase != GamePhases.None)
                 ProcessPhase();
+        }
+        public GetSpellOptionsResponse GetSpellOptions(GetSpellOptionsRequest request)
+        {
+            Player spellOwner = _Players.First(o=>o.Id == request.PlayerId);
+            return spellOwner.Hand.GetSpellOptions(request.SpellId);         
         }
         public void ProcessStack(Guid playerId)
         {

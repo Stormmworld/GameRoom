@@ -1,5 +1,6 @@
 ﻿using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.ArgumentDefintions.Trigger_Arguments;
+using MTG.DTO.Objects;
 using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Helpers;
@@ -15,7 +16,7 @@ namespace MTG.Model.Objects
     public class Card
     {
         #region Events
-        public event EventHandler OnCardEvent, OnCardPhasedIn, OnCardPhasedOut, OnCardTapped, OnCardUntapped, OnCardDestroyed, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnCardEvent, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
         #endregion
 
         #region Variables
@@ -44,7 +45,6 @@ namespace MTG.Model.Objects
         #region Properties
         public CastingCost CastingCost { get; set; }
         public Guid ControllerId { get; set; }
-        public int FaceUpSide { get; set; }
         public Guid Id { get; private set; }
         public string ImageUrl { get; set; }
         public string Name { get; set; }
@@ -55,10 +55,7 @@ namespace MTG.Model.Objects
             set
             {
                 _PhasedOut = value;
-                if (_PhasedOut)
-                    OnCardPhasedOut?.Invoke(null, new CardEventArgs() { Card = this });
-                else
-                    OnCardPhasedIn?.Invoke(null, new CardEventArgs() { Card = this });
+                OnCardEvent?.Invoke(this, new PhaseCardEventArgs() { CardId = Id, ControllerId= ControllerId, PhaseIn = !value});
             }
         }
         public int Power
@@ -303,13 +300,17 @@ namespace MTG.Model.Objects
                     },
                     Trigger = EffectTrigger.Card_Destroyed,
                 });
-                OnCardDestroyed(this, new CardEventArgs() { Card = this });
+                OnCardEvent?.Invoke(this, new DestroyCardEventArgs() { CardId = Id, ControllerId = ControllerId });
             }
         }
         public override bool Equals(object obj)
         {
             if (!(obj is Card)) return false;  
             return Id == ((Card)obj).Id;
+        }
+        public List<T> FilteredAbilities<T>()
+        {
+            return _Abilities.Where(o => o is T).Cast<T>().ToList();
         }
         public Target GenerateTarget()
         {
@@ -319,12 +320,23 @@ namespace MTG.Model.Objects
                 Id = Id,
             };
         }
-        public List<IActivatedAbility> GetActivatedAbilities()
+        public GetSpellOptionsResponse GetSpellOptions()
         {
-            List<IActivatedAbility> retVal = new List<IActivatedAbility>();
-            foreach (IAbility ability in _Abilities.FindAll(o => o is IActivatedAbility))
-                retVal.Add((IActivatedAbility)ability);
-            return retVal;
+            List<SelectableAbility> selectableAbilities = new List<SelectableAbility>();
+            foreach (ISpellAbility ability in FilteredAbilities<ISpellAbility>())
+                selectableAbilities.Add(new SelectableAbility()
+                {
+                    AbilityId = ability.Id,
+                    CanTarget = ability.TargetTypes,
+                    RequiresTarget = ability.RequiresTarget,
+                    Name = Name,
+                    TargetScope = ability.TargetScope,
+                });
+            return new GetSpellOptionsResponse()
+            {
+                Abilities = selectableAbilities, 
+                SelectNumber  = 1,
+            };
         }
         public List<ICounter> GetCountersByType(Type type)
         {

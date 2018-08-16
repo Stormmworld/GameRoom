@@ -405,6 +405,10 @@ namespace MTG_Test.Game_Tests
             
             Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Upkeep,ref game);
             Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
+
+
+
+
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);

@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability Tests\DamageCardEventArgs.cs" />
     <Compile Include="Ability Tests\Indestructible_Tests.cs" />
     <Compile Include="Ability Tests\First_Strike_Tests.cs" />
     <Compile Include="Ability Tests\Double_StrikeTests.cs" />

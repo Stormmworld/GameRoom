@@ -11,6 +11,7 @@ namespace MTG.Model.Objects
         public IEffect Effect { get; set; }
         public StackEntryType EntryType { get; set; }
         public string ImageUrl { get; set; }
+        public Target Target { get; set; }
         #endregion
 
         #region Constructors

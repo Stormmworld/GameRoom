@@ -38,7 +38,7 @@ namespace MTG_Test.Game_Tests
         {
             List<string> creatureCardEvents = new List<string>();
             Card creature = Card_Mocker.MockCreature(9, 9);
-            creature.OnCardDestroyed += delegate (object sender, EventArgs e) { creatureCardEvents.Add("Destroyed"); };
+            creature.OnCardEvent += delegate (object sender, EventArgs e) { if (e is DestroyCardEventArgs) creatureCardEvents.Add("Destroyed"); };
 
             ApplyDamageEventArgs deathtouchDamageArgs = ApplyDamageEventArgs_Mocker.Mock_Deathtoucn();
             deathtouchDamageArgs.Target = new Target() { Id = creature.Id, Type = TargetType.Card };

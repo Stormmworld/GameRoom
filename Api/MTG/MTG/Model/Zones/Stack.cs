@@ -78,21 +78,9 @@ namespace MTG.Model.Zones
         #endregion
 
         #region Event Handlers
-        private void Card_OnCardPhasedIn(object sender, EventArgs e)
+        private void Card_OnCardEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardPhasedIn");
-        }
-        private void Card_OnCardPhasedOut(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardPhasedOut");
-        }
-        private void Card_OnCardTapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardTapped");
-        }
-        private void Card_OnCardUntapped(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardUntapped");
+            throw new NotImplementedException("ZoneTemplate.Card_OnCardEvent");
         }
         private void Card_OnEffectTrigger(object sender, EventArgs e)
         {
@@ -101,10 +89,6 @@ namespace MTG.Model.Zones
         private void Card_OnEffectTriggered(object sender, EventArgs e)
         {
             OnEffectTriggered?.Invoke(sender, e);
-        }
-        private void Card_OnCardDestroyed(object sender, EventArgs e)
-        {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardDestroyed");
         }
         private void Card_OnPendingActionTriggered(object sender, EventArgs e)
         {
@@ -115,11 +99,7 @@ namespace MTG.Model.Zones
         #region Methods
         public void Add(Card card)
         {
-            card.OnCardDestroyed += Card_OnCardDestroyed;
-            card.OnCardPhasedIn += Card_OnCardPhasedIn;
-            card.OnCardPhasedOut += Card_OnCardPhasedOut;
-            card.OnCardTapped += Card_OnCardTapped;
-            card.OnCardUntapped += Card_OnCardUntapped;
+            card.OnCardEvent += Card_OnCardEvent;
             card.OnEffectTrigger += Card_OnEffectTrigger;
             card.OnEffectTriggered += Card_OnEffectTriggered;
             card.OnPendingActionTriggered += Card_OnPendingActionTriggered;
@@ -173,8 +153,10 @@ namespace MTG.Model.Zones
                         break;
                     case StackEntryType.Spell:
                         if (CardHelper.IsPermanant(entry.Card))
-                        {
                             controllerPlayer.Battlefield.Add(entry.Card);
+                        else
+                        {
+
                         }
                         break;
                 }
@@ -190,11 +172,7 @@ namespace MTG.Model.Zones
             StackEntry entryToRemove = Entries.FirstOrDefault(o => o.Card.Id == cardId);
             if (entryToRemove != null)
             {
-                entryToRemove.Card.OnCardDestroyed -= Card_OnCardDestroyed;
-                entryToRemove.Card.OnCardPhasedIn -= Card_OnCardPhasedIn;
-                entryToRemove.Card.OnCardPhasedOut -= Card_OnCardPhasedOut;
-                entryToRemove.Card.OnCardTapped -= Card_OnCardTapped;
-                entryToRemove.Card.OnCardUntapped -= Card_OnCardUntapped;
+                entryToRemove.Card.OnCardEvent -= Card_OnCardEvent;
                 entryToRemove.Card.OnEffectTrigger -= Card_OnEffectTrigger;
                 entryToRemove.Card.OnEffectTriggered -= Card_OnEffectTriggered;
                 entryToRemove.Card.OnPendingActionTriggered -= Card_OnPendingActionTriggered;
