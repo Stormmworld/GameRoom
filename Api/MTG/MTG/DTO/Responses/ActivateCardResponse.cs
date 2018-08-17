@@ -1,4 +1,4 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Interfaces.Ability_Interfaces;
 using System;
 using System.Collections.Generic;
 

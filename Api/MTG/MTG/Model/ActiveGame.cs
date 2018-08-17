@@ -13,6 +13,7 @@ using MTG.Model.Pending_Actions;
 using MTG.DTO.Requests.CompleteActions;
 using MTG.Model.Effects;
 using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model
 {

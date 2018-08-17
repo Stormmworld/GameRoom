@@ -1,10 +1,10 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model.Objects;
-using MTG.ArgumentDefintions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Zones
 {

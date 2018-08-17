@@ -5,6 +5,7 @@ using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
+using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Abilities.Static;
 using MTG.Model.Counters;
 using System;
@@ -128,6 +129,7 @@ namespace MTG.Model.Objects
             _SuperTypes = card.SuperTypes.ToList();
             _Power = card.Power;
             _Toughness = card.Toughness;
+            CastingCost = card.CastingCost;
             Id = Guid.NewGuid();
             ImageUrl = card.ImageUrl;
             Name = card.Name;
@@ -280,7 +282,7 @@ namespace MTG.Model.Objects
             if (trigger == EffectTrigger.None)
                 return;
             foreach (IAbility ability in _Abilities.FindAll(o => o is ITriggeredAbility &&  ((ITriggeredAbility)o).Trigger == trigger))
-                ((ITriggeredAbility)ability).Process(((ITriggeredAbility)ability).GenerateArgs( args, this));
+                ((ITriggeredAbility)ability).Process(ArgsHelper.GenerateTriggeredAbilityArgs());
         }
         public void ClearDamage()
         {
@@ -323,7 +325,7 @@ namespace MTG.Model.Objects
         public GetSpellOptionsResponse GetSpellOptions()
         {
             List<SelectableAbility> selectableAbilities = new List<SelectableAbility>();
-            foreach (ISpellAbility ability in FilteredAbilities<ISpellAbility>())
+            foreach (ICastingAbility ability in FilteredAbilities<ICastingAbility>())
                 selectableAbilities.Add(new SelectableAbility()
                 {
                     AbilityId = ability.Id,

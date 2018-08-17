@@ -1,6 +1,6 @@
-﻿using MTG.Interfaces;
-using System;
+﻿using System;
 using MTG.Model.Objects;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities.Static
 {

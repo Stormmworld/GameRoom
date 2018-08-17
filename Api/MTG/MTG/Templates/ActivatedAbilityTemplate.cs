@@ -1,4 +1,5 @@
 ﻿using MTG.Interfaces;
+using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Objects;
 using System;
 

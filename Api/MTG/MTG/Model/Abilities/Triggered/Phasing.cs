@@ -3,6 +3,7 @@ using MTG.Enumerations;
 using System;
 using MTG.Model.Objects;
 using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities.Triggered
 { 

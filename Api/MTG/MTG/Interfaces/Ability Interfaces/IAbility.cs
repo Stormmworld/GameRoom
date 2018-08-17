@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MTG.Interfaces
+namespace MTG.Interfaces.Ability_Interfaces
 {
     public interface IAbility
     {

@@ -1,7 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Model.Objects;
 
-namespace MTG.Interfaces
+namespace MTG.Interfaces.Ability_Interfaces
 {
     public interface ITriggeredAbility : IAbility
     {
@@ -11,7 +11,6 @@ namespace MTG.Interfaces
 
         #region Methods
         void Process(ITriggeredAbilityArgs args);
-        ITriggeredAbilityArgs GenerateArgs(ITriggeredAbilityArgs triggeredAbilityArgs, Card originCard);
         #endregion
     }
 }

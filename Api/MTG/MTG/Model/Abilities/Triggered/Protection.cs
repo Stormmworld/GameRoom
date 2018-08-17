@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MTG.Model.Objects;
 using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities.Triggered
 { 
@@ -100,10 +101,6 @@ namespace MTG.Model.Abilities.Triggered
         public void Add(CardType cardType)
         {
             _CardTypes.Add(cardType);
-        }
-        public ITriggeredAbilityArgs GenerateArgs(ITriggeredAbilityArgs triggeredAbilityArgs, Card originCard)
-        {
-            throw new NotImplementedException("Protection.GenerateArgs");
         }
         public void Process(ITriggeredAbilityArgs e)
         {

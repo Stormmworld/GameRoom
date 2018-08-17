@@ -9,6 +9,8 @@ namespace MTG.Interfaces.Ability_Interfaces
         #region Properties
         CastingCost CastingCost { get; }
         bool IsAddOn { get; }
+        bool RequiresTarget { get; }
+        TargetScope TargetScope { get; }
         List<TargetType> TargetTypes { get; }
         #endregion
 

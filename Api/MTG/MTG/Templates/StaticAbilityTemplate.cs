@@ -1,4 +1,4 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Interfaces.Ability_Interfaces;
 using System;
 
 namespace MTG.Templates

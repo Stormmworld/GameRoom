@@ -2,6 +2,7 @@
 using MTG.Enumerations;
 using System;
 using MTG.Model.Objects;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities.Triggered
 { 
@@ -32,10 +33,6 @@ namespace MTG.Model.Abilities.Triggered
         #endregion
 
         #region Methods
-        public ITriggeredAbilityArgs GenerateArgs(ITriggeredAbilityArgs triggeredAbilityArgs, Card originCard)
-        {
-            throw new NotImplementedException("Afflict.GenerateArgs");
-        }
         public void Process(ITriggeredAbilityArgs args)
         {
             throw new NotImplementedException("Aftermath.Process");

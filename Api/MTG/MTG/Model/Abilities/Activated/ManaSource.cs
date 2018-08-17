@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using MTG.Model.Effects;
 using MTG.ArgumentDefintions.ActivationArguments;
 using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities
 {

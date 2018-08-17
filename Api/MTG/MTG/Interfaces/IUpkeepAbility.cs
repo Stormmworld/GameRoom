@@ -1,4 +1,5 @@
 ﻿using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Objects;
 
 namespace MTG.Interfaces

@@ -5,6 +5,7 @@ using MTG.Model.Objects;
 using System.Collections.Generic;
 using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
 using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities.Triggered
 {
@@ -42,10 +43,6 @@ namespace MTG.Model.Abilities.Triggered
         {
             DamageTriggeredAbilityArgs args = (DamageTriggeredAbilityArgs)e;
             OnEffectTriggered?.Invoke(this, new ApplyDamageEventArgs() { DamageValue = Value, Target = args.Target});
-        }
-        public ITriggeredAbilityArgs GenerateArgs(ITriggeredAbilityArgs triggeredAbilityArgs, Card originCard)
-        {
-            throw new NotImplementedException("Damage.GenerateArgs");
         }
         public override string ToString()
         {

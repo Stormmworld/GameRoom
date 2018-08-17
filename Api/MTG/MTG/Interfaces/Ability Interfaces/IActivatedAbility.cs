@@ -1,6 +1,6 @@
 ﻿using MTG.Model.Objects;
 
-namespace MTG.Interfaces
+namespace MTG.Interfaces.Ability_Interfaces
 {
     public interface IActivatedAbility : IAbility
     {

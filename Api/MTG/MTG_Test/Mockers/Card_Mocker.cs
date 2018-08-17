@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MTG.Enumerations;
-using MTG.Interfaces;
+using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Abilities;
 using MTG.Model.Counters;
 using MTG.Model.Objects;
@@ -22,7 +21,7 @@ namespace MTG_Test.Mockers
             Card retVal = new Card(power, toughness)
             {
                 Name = "Test Creature",
-                CastingCost = new CastingCost() { ManaCosts = new System.Collections.Generic.List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } },
+                CastingCost = new CastingCost() { ManaCosts = new List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } },
             };
             retVal.Add(CardType.Creature);
             return retVal;
@@ -153,10 +152,10 @@ namespace MTG_Test.Mockers
             Card retVal = new Card()
             {
                 Name = "Test Instant",                
-                CastingCost = new CastingCost() { ManaCosts = new System.Collections.Generic.List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } },
             };
             retVal.Add(CardType.Instant);
-            retVal.Add(new MTG.Model.Abilities.Spell.Damage(3, TargetScope.Single, new List<TargetType>() { TargetType.Player }, true));
+            CastingCost castingCost = new CastingCost() { ManaCosts = new List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } };
+            retVal.Add(new MTG.Model.Abilities.Spell.Damage(3, TargetScope.Single, new List<TargetType>() { TargetType.Player }, true, castingCost));
             return retVal;
         }
         public static Card MockSorcery()

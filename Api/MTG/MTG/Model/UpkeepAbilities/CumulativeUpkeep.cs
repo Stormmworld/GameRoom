@@ -8,6 +8,7 @@ using MTG.Model.Pending_Actions;
 using MTG.ArgumentDefintions.Upkeep_Ability_Arguments;
 using MTG.ArgumentDefintions.Triggered_Ability_Arguments;
 using MTG.Model.Counters;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.UpkeepAbilities
 { 

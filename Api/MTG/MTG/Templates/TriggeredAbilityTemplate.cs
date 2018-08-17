@@ -1,7 +1,8 @@
-﻿using MTG.Interfaces;
+﻿using MTG.Interfaces.Ability_Interfaces;
 using MTG.Enumerations;
 using System;
 using MTG.Model.Objects;
+using MTG.Interfaces;
 
 namespace MTG.Templates
 {
@@ -30,10 +31,6 @@ namespace MTG.Templates
         public void Process(ITriggeredAbilityArgs args)
         {
             throw new NotImplementedException("TriggeredAbilityTemplate.Process");
-        }
-        public ITriggeredAbilityArgs GenerateArgs(ITriggeredAbilityArgs triggeredAbilityArgs, Card originCard)
-        {
-            throw new NotImplementedException("TriggeredAbilityTemplate.GenerateArgs");
         }
         public override string ToString()
         {

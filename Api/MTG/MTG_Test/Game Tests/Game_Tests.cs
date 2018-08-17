@@ -360,6 +360,8 @@ namespace MTG_Test.Game_Tests
             Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
             #endregion
+            //tap land for mana
+
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);
             Assert.IsTrue(player1.Battlefield.Cards.FirstOrDefault(o => o.Id == creatureSpell.CardId) != null);
@@ -407,6 +409,7 @@ namespace MTG_Test.Game_Tests
             Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
             GetSpellOptionsResponse optionsResponse = game.GetSpellOptions(new GetSpellOptionsRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
 
+            //tap land for mana
 
 
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId, Abilities = new List<SelectableAbility>() { optionsResponse.Abilities[0] } });
