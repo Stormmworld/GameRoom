@@ -1,5 +1,7 @@
-﻿using MTG.Enumerations;
+﻿using MTG.ArgumentDefintions.Event_Arguments;
+using MTG.Enumerations;
 using MTG.Interfaces.Ability_Interfaces;
+using MTG.Model.Effects;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace MTG.Model.Abilities.Spell
         #region Properties
         public CastingCost CastingCost { get; private set; }
         public Guid Id { get; private set; }
+        public Target Target { get; set; }
         public List<TargetType> TargetTypes { get; private set; }
         public TargetScope TargetScope { get; private set; }
         public bool RequiresTarget { get; private set; }
@@ -43,9 +46,9 @@ namespace MTG.Model.Abilities.Spell
         #endregion
 
         #region Methods
-        public bool Process(Target target)
+        public void Process()
         {
-            throw new NotImplementedException("Damage.Cast");
+            OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs() { Effect = new DamageEffect(Value, Target) });
         }
         public override string ToString()
         {

@@ -10,12 +10,13 @@ namespace MTG.Interfaces.Ability_Interfaces
         CastingCost CastingCost { get; }
         bool IsAddOn { get; }
         bool RequiresTarget { get; }
+        Target Target { get; set; }
         TargetScope TargetScope { get; }
         List<TargetType> TargetTypes { get; }
         #endregion
 
         #region Methods
-        bool Process(Target target);
+        void Process();
         #endregion
     }
 }

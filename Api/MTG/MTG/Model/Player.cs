@@ -177,6 +177,10 @@ namespace MTG.Model
                         if (Hand.LandMulligan())
                             OnAddPendingAction?.Invoke(this, new PendingActionEventArgs() { PendingAction = new MulliganPendingAction() { ActionPlayerId = Id } });
                     }
+                    else if (effect is DamageEffect)
+                    {
+                        ApplyDamage(new ApplyDamageEventArgs() { Target = effect.Target, DamageValue = ((DamageEffect)effect).Value });
+                    }
                     else
                         ActiveEffects.Add(effect);
                     break;
@@ -219,6 +223,7 @@ namespace MTG.Model
                     foreach (SelectableAbility ability in selectedAbilities)
                     {
                         ICastingAbility castingAbility = (ICastingAbility)castingSpell.Abilities.FirstOrDefault(o=>o.Id == ability.AbilityId);
+                        castingAbility.Target = ability.Target;
                         selectedCastingAbilities.Add(castingAbility);
                         castingCost.ManaCosts.AddRange(castingAbility.CastingCost.ManaCosts);
                         castingCost.XCost+=castingAbility.CastingCost.XCost;

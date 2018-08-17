@@ -159,15 +159,14 @@ namespace MTG.Model.Zones
                     case StackEntryType.Spell:
                         if (CardHelper.IsPermanant(entry.Card))
                             controllerPlayer.Battlefield.Add(entry.Card);
-                        else
-                        {
-
-                        }
                         break;
                 }
                 foreach (ICastingAbility castingAbility in entry.CastingAbilities)
-                    castingAbility.Process(entry.Target);
-
+                {
+                    entry.Card.AddAbilityHooks(castingAbility);
+                    castingAbility.Process();
+                    entry.Card.RemoveAbilityHooks(castingAbility);
+                }
                 game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
             }
         }

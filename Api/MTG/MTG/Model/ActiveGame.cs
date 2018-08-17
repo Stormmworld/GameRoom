@@ -65,9 +65,21 @@ namespace MTG.Model
         {
             ActivePlayerIndex = -1;
             Ante = new Ante();
+            Ante.OnAddCardToZone += OnAddCardToZone;
+            Ante.OnEffectTrigger += OnEffectTrigger;
+            Ante.OnEffectTriggered += OnEffectTriggered;
+            Ante.OnPendingActionTriggered += OnAddPendingAction;
             ActiveCombat = new Combat();
             Exile = new Exile();
+            Exile.OnAddCardToZone += OnAddCardToZone;
+            Exile.OnEffectTrigger += OnEffectTrigger;
+            Exile.OnEffectTriggered += OnEffectTriggered;
+            Exile.OnPendingActionTriggered += OnAddPendingAction;
             Stack = new Stack();
+            Stack.OnAddCardToZone += OnAddCardToZone;
+            Stack.OnEffectTrigger += OnEffectTrigger;
+            Stack.OnEffectTriggered += OnEffectTriggered;
+            Stack.OnPendingActionTriggered += OnAddPendingAction;
             ActivePhase = GamePhases.None;
             OverrideNextPhase = GamePhases.None;
             
@@ -145,7 +157,11 @@ namespace MTG.Model
         }
         private void OnEffectTriggered(object sender, EventArgs e)
         {
-            throw new NotImplementedException("ActiveGame.OnEffectTrigger");
+            IEffect effect = ((EffectTriggeredEventArgs)e).Effect;
+            if (effect.Target.Type == TargetType.Player)
+                _Players.First(o => o.Id == effect.Target.Id).Add(effect);
+            else
+                _Players.First(o => o.FindCard(effect.Target.Id)!=null).Add(effect);
         }
         #endregion
 

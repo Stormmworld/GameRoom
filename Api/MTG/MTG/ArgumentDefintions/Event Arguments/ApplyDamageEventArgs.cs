@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Interfaces;
 using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 using System;

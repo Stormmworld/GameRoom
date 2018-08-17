@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
 
@@ -11,5 +12,6 @@ namespace MTG.DTO.Objects
         public List<TargetType> CanTarget { get; set; }
         public bool RequiresTarget { get; set; }
         public TargetScope TargetScope { get; set; }
+        public Target Target { get; set; }
     }
 }

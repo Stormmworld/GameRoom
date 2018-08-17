@@ -421,12 +421,11 @@ namespace MTG_Test.Game_Tests
             #endregion
             Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
             GetSpellOptionsResponse optionsResponse = game.GetSpellOptions(new GetSpellOptionsRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
-            
-            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId, Abilities = new List<SelectableAbility>() { optionsResponse.Abilities[0] } });
+            optionsResponse.Abilities[0].Target = new MTG.Model.Objects.Target() { Type = TargetType.Player, Id = player2.Id};
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId, Abilities = new List<SelectableAbility>() { optionsResponse.Abilities[0], } });
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);
             Assert.IsTrue(player2.Life < 20);
         }
     }
 }
-  
