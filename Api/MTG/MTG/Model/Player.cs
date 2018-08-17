@@ -14,6 +14,8 @@ using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Model.Abilities;
 using MTG.ArgumentDefintions.ActivationArguments;
 using MTG.Model.Counters;
+using MTG.DTO.Objects;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model
 {
@@ -197,7 +199,7 @@ namespace MTG.Model
             if (effect is AddManaToPoolEffect)
                 ManaPool.Add(((AddManaToPoolEffect)effect).Mana);
         }
-        public CastSpellResponse CastSpell(Guid spellId)
+        public CastSpellResponse CastSpell(Guid spellId, List<SelectableAbility> selectedAbilities)
         {
             CastSpellResponse retVal = new CastSpellResponse() { SpellId = spellId };
             Card castingSpell = Hand.Find(spellId);
@@ -208,6 +210,26 @@ namespace MTG.Model
                     Hand.Remove(spellId);
                     OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Battlefield, ZoneOwnerId = this.Id });
                     retVal.Success = true;
+                }
+                else if (selectedAbilities != null && selectedAbilities.Count > 0)
+                {
+                    List<Guid> castingMana = new List<Guid>();
+                    CastingCost castingCost = new CastingCost();
+                    foreach (SelectableAbility ability in selectedAbilities)
+                    {
+                        ICastingAbility castingAbility = (ICastingAbility)castingSpell.Abilities.FirstOrDefault(o=>o.Id == ability.AbilityId);
+                        castingCost.ManaCosts.AddRange(castingAbility.CastingCost.ManaCosts);
+                        castingCost.XCost+=castingAbility.CastingCost.XCost;
+                    }
+                    if (Mana_Helper.CanCast(castingCost, castingSpell, ManaPool, ref castingMana))
+                    {
+                        ManaPool.UseMana(castingMana);
+                        Hand.Remove(spellId);
+                        throw new NotImplementedException("Player.CastSpell: with abilities");
+                        retVal.Success = true;
+                    }
+                    else
+                        retVal.Message = "Insufficient mana in the pool";
                 }
                 else
                 {

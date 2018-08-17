@@ -174,7 +174,7 @@ namespace MTG.Model
         {
             Player castingPlayer = _Players.FirstOrDefault(o=>o.Id == request.PlayerId);
             if (castingPlayer != null)
-                return castingPlayer.CastSpell(request.SpellId);
+                return castingPlayer.CastSpell(request.SpellId, request.Abilities);
             return new CastSpellResponse() { Message = "Player not found" };
         }
         public void CompleteAction(ICompleteActionRequest request)
