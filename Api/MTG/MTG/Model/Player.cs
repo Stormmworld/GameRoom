@@ -215,9 +215,11 @@ namespace MTG.Model
                 {
                     List<Guid> castingMana = new List<Guid>();
                     CastingCost castingCost = new CastingCost();
+                    List<ICastingAbility> selectedCastingAbilities = new List<ICastingAbility>();
                     foreach (SelectableAbility ability in selectedAbilities)
                     {
                         ICastingAbility castingAbility = (ICastingAbility)castingSpell.Abilities.FirstOrDefault(o=>o.Id == ability.AbilityId);
+                        selectedCastingAbilities.Add(castingAbility);
                         castingCost.ManaCosts.AddRange(castingAbility.CastingCost.ManaCosts);
                         castingCost.XCost+=castingAbility.CastingCost.XCost;
                     }
@@ -225,7 +227,7 @@ namespace MTG.Model
                     {
                         ManaPool.UseMana(castingMana);
                         Hand.Remove(spellId);
-                        throw new NotImplementedException("Player.CastSpell: with abilities");
+                        OnAddCardToZone?.Invoke(this, new AddCardToZoneEventArgs() { Card = castingSpell, TargetZone = TargetZone.Stack, ZoneOwnerId = this.Id, SelectedCastingAbilities = selectedCastingAbilities });
                         retVal.Success = true;
                     }
                     else

@@ -43,7 +43,7 @@ namespace MTG.Model.Abilities.Spell
         #endregion
 
         #region Methods
-        public bool Cast(Target target)
+        public bool Process(Target target)
         {
             throw new NotImplementedException("Damage.Cast");
         }

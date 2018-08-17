@@ -93,7 +93,10 @@ namespace MTG.Model
                     Exile.Add(args.Card);
                     break;
                 case TargetZone.Stack:
-                    Stack.Add(args.Card);
+                    if(args.SelectedCastingAbilities!= null && args.SelectedCastingAbilities.Count > 0)
+                        Stack.Add(args.Card, args.SelectedCastingAbilities);
+                    else
+                        Stack.Add(args.Card);
                     break;
                 default:
                     foreach (Player player in _Players)

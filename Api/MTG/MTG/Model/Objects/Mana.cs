@@ -40,7 +40,7 @@ namespace MTG.Model.Objects
         public static bool operator !=(Mana x, Mana y)
         {
             if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
-                return ReferenceEquals(y, null) && ReferenceEquals(x, null);
+                return !(ReferenceEquals(y, null) && ReferenceEquals(x, null));
             return !(x == y);
         }
         #endregion
@@ -68,8 +68,8 @@ namespace MTG.Model.Objects
         }
         public override bool Equals(object obj)
         {
-            if (!(obj is Card)) return false;
-            return Id == ((Card)obj).Id;
+            if (!(obj is Mana)) return false;
+            return Id == ((Mana)obj).Id;
         }
         public override int GetHashCode()
         {

@@ -45,8 +45,8 @@ namespace MTG.Model.Objects
         }
         public override bool Equals(object obj)
         {
-            if (!(obj is Card)) return false;
-            return Id == ((Card)obj).Id;
+            if (!(obj is Damage)) return false;
+            return Id == ((Damage)obj).Id;
         }
         public override int GetHashCode()
         {

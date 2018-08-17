@@ -89,6 +89,7 @@ namespace MTG.Model.Objects
         }
         private void Remove(Mana mana)
         {
+            if (mana == null) return;
             switch (mana.Color)
             {
                 case Colors.Black:

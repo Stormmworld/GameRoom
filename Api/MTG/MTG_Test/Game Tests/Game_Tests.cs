@@ -261,9 +261,9 @@ namespace MTG_Test.Game_Tests
             List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
-            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o=>o.HasType(CardType.Land))[0].Id;
             #endregion
 
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o=>o.HasType(CardType.Land))[0].Id;
             ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
             Assert.IsTrue(activateResponse.Abilities.Count > 0);
             Assert.IsTrue(activateResponse.Abilities[0] is ManaSource);
@@ -311,6 +311,11 @@ namespace MTG_Test.Game_Tests
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
             #endregion
+            #region Tap Land For Mana
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o => o.HasType(CardType.Land))[0].Id;
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            #endregion
 
             Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
@@ -356,11 +361,15 @@ namespace MTG_Test.Game_Tests
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
             #endregion
+            #region Tap Land For Mana
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o => o.HasType(CardType.Land))[0].Id;
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            #endregion
             #region Cast Creature
             Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
             #endregion
-            //tap land for mana
 
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);
@@ -403,15 +412,16 @@ namespace MTG_Test.Game_Tests
             List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
             Spell land = spells.FirstOrDefault(o => o.IsLand);
             game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
-            #endregion
-            
+            #endregion            
             Game_Helper.ProcessToPhase(player1.Id, GamePhases.Beginning_Upkeep,ref game);
+            #region Tap Land For Mana
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o => o.HasType(CardType.Land))[0].Id;
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            #endregion
             Spell instant = spells.FirstOrDefault(o=> !o.IsLand);
             GetSpellOptionsResponse optionsResponse = game.GetSpellOptions(new GetSpellOptionsRequest() { PlayerId = player1.Id, SpellId = instant.CardId });
-
-            //tap land for mana
-
-
+            
             CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = instant.CardId, Abilities = new List<SelectableAbility>() { optionsResponse.Abilities[0] } });
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);

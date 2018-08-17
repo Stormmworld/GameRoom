@@ -15,7 +15,7 @@ namespace MTG.Interfaces.Ability_Interfaces
         #endregion
 
         #region Methods
-        bool Cast(Target target);
+        bool Process(Target target);
         #endregion
     }
 }

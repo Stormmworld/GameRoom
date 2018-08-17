@@ -1,7 +1,7 @@
-﻿using MTG.ArgumentDefintions;
-using MTG.Enumerations;
+﻿using MTG.Enumerations;
 using MTG.Helpers;
 using MTG.Interfaces;
+using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Objects;
 using System;
 using System.Collections.Generic;
@@ -105,6 +105,11 @@ namespace MTG.Model.Zones
             card.OnPendingActionTriggered += Card_OnPendingActionTriggered;
             Entries.Add(new StackEntry(Entries.Count + 1, card));
         }
+        public void Add(Card card, List<ICastingAbility> selectedCastingAbilities)
+        {
+            Add(card);
+            Entries[Entries.Count-1].CastingAbilities.AddRange(selectedCastingAbilities);            
+        }
         public void Add(List<Card> cards)
         {
             foreach (Card card in cards)
@@ -160,6 +165,9 @@ namespace MTG.Model.Zones
                         }
                         break;
                 }
+                foreach (ICastingAbility castingAbility in entry.CastingAbilities)
+                    castingAbility.Process(entry.Target);
+
                 game.Stack.Entries.RemoveAt(game.Stack.Entries.Count - 1);
             }
         }
