@@ -3,6 +3,7 @@ using MTG.ArgumentDefintions.Trigger_Arguments;
 using MTG.Enumerations;
 using MTG.Interfaces;
 using MTG.Model.Effects;
+using MTG.Model.Objects;
 using System;
 using System.Linq;
 
@@ -58,6 +59,9 @@ namespace MTG.Model.Game
                 Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
             };
             OnEffectTrigger?.Invoke(null, args);
+            foreach (Card card in game.ActivePlayer.Battlefield.FilteredCards(o => o.SummoningSickness))
+                card.SummoningSickness = false;
+             
         }
         public static void BegginingPhase_UpkeepStep_End(ActiveGame game, EventHandler OnEffectTrigger)
         {
@@ -89,7 +93,7 @@ namespace MTG.Model.Game
             };
             int cardDrawCount = (game.ActiveEffects.FirstOrDefault(o => o is SkipDraw) != null ? 0 : 1);
             foreach (IEffect drawEffect in game.ActiveEffectsByType(typeof(DrawExtraCards)))
-                cardDrawCount += drawEffect.Value;
+                cardDrawCount += ((DrawExtraCards)drawEffect).Value;
             game.ActivePlayer.DrawCards(cardDrawCount, GamePhases.Beginning_Draw);
         }
         public static void PreCombatMainPhase(ActiveGame game, EventHandler OnEffectTrigger)
@@ -419,6 +423,7 @@ namespace MTG.Model.Game
             game.ActiveCombat.CommitDamage();
             //remove effects that end with combat phase
             game.RemoveEffects(GamePhases.Combat_Ending);
+            game.ActiveCombat.Clear();
         }
         public static void PostCombatMainPhase(ActiveGame game, EventHandler OnEffectTrigger)
         {

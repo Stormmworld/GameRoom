@@ -1,4 +1,4 @@
-﻿using MTG.ArgumentDefintions.Event_Arguments;
+﻿using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 using MTG.Enumerations;
 using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Effects;
@@ -20,12 +20,13 @@ namespace MTG.Model.Abilities.Spell
         #region Properties
         public CastingCost CastingCost { get; private set; }
         public Guid Id { get; private set; }
+        public bool IsAddOn { get; private set; }
+        public Card OriginCard { get; set; }
+        public bool RequiresTarget { get; private set; }
         public Target Target { get; set; }
         public List<TargetType> TargetTypes { get; private set; }
         public TargetScope TargetScope { get; private set; }
-        public bool RequiresTarget { get; private set; }
         public int Value { get; private set; }
-        public bool IsAddOn => throw new NotImplementedException();
         #endregion
 
         #region Constructors
@@ -35,20 +36,21 @@ namespace MTG.Model.Abilities.Spell
             TargetTypes = new List<TargetType>();
             CastingCost = new CastingCost();
         }
-        public Damage(int value, TargetScope targetScope, List<TargetType> targetTypes, bool requiresTarget, CastingCost castingCost) : this()
+        public Damage(int value, TargetScope targetScope, List<TargetType> targetTypes, bool requiresTarget, CastingCost castingCost, Card originCard) : this()
         {
             CastingCost = castingCost;
             RequiresTarget = requiresTarget;
             TargetScope = targetScope;
             TargetTypes.AddRange(targetTypes);
             Value = value;
+            OriginCard = originCard;
         }
         #endregion
 
         #region Methods
         public void Process()
         {
-            OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs() { Effect = new DamageEffect(Value, Target) });
+            OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new DamageEffect(new Objects.Damage(OriginCard) { BaseValue = Value }, Target)) );
         }
         public override string ToString()
         {

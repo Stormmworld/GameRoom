@@ -18,18 +18,16 @@ namespace MTG_Test.Ability_Tests
             List<string> applyDamageTypes = new List<string>();
             Card deathtouchCard = Card_Mocker.MockCreature(1,1);
             deathtouchCard.Add(new Deathtouch());
-            Damage damage = new Damage()
+            Damage damage = new Damage(deathtouchCard)
             {
                 BaseValue = deathtouchCard.Power,
-                OriginCard = deathtouchCard,          
-                Target = Target_Mocker.Mock(Card_Mocker.MockCreature()),
             };
             damage.OnApplyDamage += delegate (object sender, EventArgs e) 
                 {
                     foreach(DamageTypes type in ((ApplyDamageEventArgs)e).Types)
                     applyDamageTypes.Add(type.ToString());
                 };
-            damage.Process();
+            damage.Process(Target_Mocker.Mock(Card_Mocker.MockCreature()));
             Assert.IsTrue(applyDamageTypes.Contains(DamageTypes.Deathtouch.ToString()));
         }
     }

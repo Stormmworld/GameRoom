@@ -115,6 +115,20 @@ namespace MTG_Test.Mockers
 
             return retVal;
         }
+        public static Deck MockDeck_NoMulligan()
+        {
+            Deck retVal = new Deck()
+            {
+                Name = "Test Deck"
+            };
+            for (int i = 0; i < 4; i++)
+            {
+                retVal.Cards.Add(MockSorcery());
+                retVal.Cards.Add(MockLand());
+            }
+
+            return retVal;
+        }
         public static Card MockCreatureWithAbility(IAbility ability, int power = 3, int toughness = 3)
         {
             Card retVal = new Card(power, toughness)
@@ -155,7 +169,7 @@ namespace MTG_Test.Mockers
             };
             retVal.Add(CardType.Instant);
             CastingCost castingCost = new CastingCost() { ManaCosts = new List<ManaCost>() { new ManaCost() { Cost = new Mana() { Color = Colors.Blue, Count = 1 } } } };
-            retVal.Add(new MTG.Model.Abilities.Spell.Damage(3, TargetScope.Single, new List<TargetType>() { TargetType.Player }, true, castingCost));
+            retVal.Add(new MTG.Model.Abilities.Spell.Damage(3, TargetScope.Single, new List<TargetType>() { TargetType.Player }, true, castingCost, retVal));
             return retVal;
         }
         public static Card MockSorcery()

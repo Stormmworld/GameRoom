@@ -14,16 +14,16 @@ namespace MTG.Model.Effects
         public GamePhases EndingPhase { get; private set; }
         public Guid EndingPhaseOwnerId { get; set; }
         public Target Target { get; private set; }
-        public int Value { get; private set; }
+        public Damage Damage { get; private set; }
         #endregion
 
         #region Constructors
-        public DamageEffect(int value, Target target)
+        public DamageEffect(Damage damage, Target target)
         {
             EndingPhase = GamePhases.None;
             EndingPhaseOwnerId  = new Guid();
             Target = target;
-            Value = value;
+            Damage = damage;
         }
         #endregion
     }

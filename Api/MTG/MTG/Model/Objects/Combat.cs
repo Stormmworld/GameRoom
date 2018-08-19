@@ -1,6 +1,4 @@
-﻿using MTG.Helpers;
-using MTG.Model.Abilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +6,10 @@ namespace MTG.Model.Objects
 {
     public class Combat
     {
+        #region Events
+        public event EventHandler OnEffectTriggered;
+        #endregion
+
         #region Variables
         private List<AttackingCreature> _Attackers;
         private List<Band> _AttackingBands;
@@ -62,6 +64,11 @@ namespace MTG.Model.Objects
                 attacker.AssignDamage(isFirstStrike);
             foreach (Band band in _AttackingBands)
                 band.AssignDamage(isFirstStrike);
+        }
+        public void Clear()
+        {
+            _Attackers.Clear();
+            _AttackingBands.Clear();
         }
         public void CommitDamage()
         {

@@ -36,7 +36,7 @@ namespace MTG_Test.Game_Tests
 
             string player1SocketId = "p1";
             Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
-            game.Add(player1, Card_Mocker.MockDeck());
+            game.Add(player1, Card_Mocker.MockDeck_NoMulligan());
             Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player1SocketId));
 
             game.StartGame();
@@ -45,7 +45,7 @@ namespace MTG_Test.Game_Tests
 
             string player2SocketId = "p2";
             Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
-            game.Add(player2, Card_Mocker.MockDeck());
+            game.Add(player2, Card_Mocker.MockDeck_NoMulligan());
             Assert.IsNotNull(game.Players.FirstOrDefault(o => o.SocketId == player2SocketId));
 
             game.StartGame();
@@ -426,6 +426,118 @@ namespace MTG_Test.Game_Tests
             game.ProcessStack(player1.Id);
             game.ProcessStack(player2.Id);
             Assert.IsTrue(player2.Life < 20);
+        }
+        [TestMethod]
+        public void Game_SummoningSickness()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_CreaturesAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+            #region Tap Land For Mana
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o => o.HasType(CardType.Land))[0].Id;
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            #endregion
+            #region Cast Creature
+            Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
+            game.ProcessStack(player1.Id);
+            game.ProcessStack(player2.Id);
+            #endregion
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Combat_DeclareAttackers,ref game);
+            game.DeclareAttacker(new DeclareAttackerRequest() { AttackerId = creatureSpell.CardId, Target=new MTG.Model.Objects.AttackableTarget() { AttackableType = AttackableType.Player, Id = player2.Id}  });
+            CombatResponse combat = game.GetActiveCombat();
+            Assert.IsTrue(combat.AttackingCreatures.Count == 0);
+        }
+        [TestMethod]
+        public void Game_AttackPlayer()
+        {
+            #region Begin Game
+            ActiveGame game = new ActiveGame();
+            List<PendingActionEventArgs> pendingActionsReturned = new List<PendingActionEventArgs>();
+            game.OnPendingAction += delegate (object sender, EventArgs e) { pendingActionsReturned.Add((PendingActionEventArgs)e); };
+
+            string player1SocketId = "p1";
+            Player player1 = new Player() { SocketId = player1SocketId, Name = "Player 1" };
+            game.Add(player1, Card_Mocker.MockDeck_CreaturesAndLand());
+
+            string player2SocketId = "p2";
+            Player player2 = new Player() { SocketId = player2SocketId, Name = "Player 2" };
+            game.Add(player2, Card_Mocker.MockDeck());
+
+            game.StartGame();
+            if (pendingActionsReturned.Count > 0)
+            {
+                foreach (PendingActionEventArgs action in pendingActionsReturned)
+                {
+                    MulliganPendingAction actionToComplete = (MulliganPendingAction)action.PendingAction;
+                    MulliganCompleteActionRequest mulliganAction = new MulliganCompleteActionRequest()
+                    {
+                        ActionId = actionToComplete.Id,
+                        ActionPlayerId = actionToComplete.ActionPlayerId,
+                        Reshuffle = false,
+                    };
+                    game.CompleteAction(mulliganAction);
+                }
+            }
+            #endregion
+            #region Play Land
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.PreCombat_Main, ref game);
+            List<Spell> spells = game.GetPlayerHand(player1.Id).Spells;
+            Spell land = spells.FirstOrDefault(o => o.IsLand);
+            game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = land.CardId });
+            #endregion
+            #region Tap Land For Mana
+            Guid landInBattleFieldId = player1.Battlefield.FilteredCards(o => o.HasType(CardType.Land))[0].Id;
+            ActivateCardResponse activateResponse = game.ActivateCard(new ActivateCardRequest() { CardId = landInBattleFieldId });
+            SelectAbilityResponse selectResponse = game.SelectAbility(new SelectAbilityRequest() { AbilityId = activateResponse.Abilities[0].Id, CardId = activateResponse.CardId });
+            #endregion
+            #region Cast Creature
+            Spell creatureSpell = spells.FirstOrDefault(o => !o.IsLand);
+            CastSpellResponse response = game.CastSpell(new CastSpellRequest() { PlayerId = player1.Id, SpellId = creatureSpell.CardId });
+            game.ProcessStack(player1.Id);
+            game.ProcessStack(player2.Id);
+            #endregion
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Ending_End, ref game);
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Combat_DeclareAttackers, ref game);
+            game.DeclareAttacker(new DeclareAttackerRequest() { AttackerId = creatureSpell.CardId, Target = new MTG.Model.Objects.AttackableTarget() { AttackableType = AttackableType.Player, Id = player2.Id } });
+            CombatResponse combat = game.GetActiveCombat();
+            Assert.AreEqual(combat.AttackingCreatures.Count , 1);
+            Assert.AreEqual(combat.AttackingCreatures[0].Card.Id , creatureSpell.CardId);
+            Game_Helper.ProcessToPhase(player1.Id, GamePhases.Combat_Ending, ref game);
+            Assert.AreEqual(player2.Life, 20 - combat.AttackingCreatures[0].Card.Power);
         }
     }
 }

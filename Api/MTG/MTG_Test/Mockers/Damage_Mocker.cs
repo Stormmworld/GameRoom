@@ -7,21 +7,15 @@ namespace MTG_Test.Mockers
     {
         public static Damage Mock()
         {
-            return new Damage()
+            return new Damage(Card_Mocker.Mock())
             {
-                OriginCard = Card_Mocker.Mock(),
-                OriginPlayer = Player_Mocker.Mock(),
-                Target = Target_Mocker.Mock(),
                 BaseValue = 1,
             };
         }
         public static Damage Mock(Card originCard, Player originPlayer, Target target, int damageValue)
         {
-            return new Damage()
+            return new Damage(originCard)
             {
-                OriginCard = originCard,
-                OriginPlayer = originPlayer,
-                Target = target,
                 BaseValue = damageValue,
             };
         }

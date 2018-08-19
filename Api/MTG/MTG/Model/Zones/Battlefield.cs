@@ -74,6 +74,8 @@ namespace MTG.Model.Zones
             card.OnEffectTrigger += Card_OnEffectTrigger;
             card.OnEffectTriggered += Card_OnEffectTriggered;
             card.OnPendingActionTriggered += Card_OnPendingActionTriggered;
+            if (card.HasType(CardType.Creature))
+                card.SummoningSickness = true;
             _Cards.Add(card);
         }
         public void Add(List<Card> cards)

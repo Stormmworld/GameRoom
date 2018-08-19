@@ -87,6 +87,7 @@ namespace MTG.Model.Objects
                 });
             }
         }
+        public bool SummoningSickness { get; set; }
         public int Toughness
         {
             get

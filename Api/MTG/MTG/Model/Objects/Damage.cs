@@ -15,15 +15,15 @@ namespace MTG.Model.Objects
         public int BaseValue { get; set; }
         public int FinalValue { get { return BaseValue - Prevention; } }
         public Guid Id { get; private set; }
-        public Card OriginCard { get; set; }
-        public Player OriginPlayer { get; set; }
+        public Card OriginCard { get; private set; }
+        public Guid OriginPlayerId { get { return OriginCard.ControllerId; } }
         public int Prevention { get; private set; }
-        public Target Target { get; set; }
         #endregion
 
         #region Constructors
-        public Damage()
+        public Damage(Card originCard)
         {
+            OriginCard = originCard;
         }
         #endregion
 
@@ -52,21 +52,21 @@ namespace MTG.Model.Objects
         {
             return 2108858624 + Id.GetHashCode();
         }
-        public void Process()
+        public void Process(Target target)
         {
             if (FinalValue > 0)
             {
-                if (Target.Type == TargetType.Player || Target.Type == TargetType.Planeswalker)
+                if (target.Type == TargetType.Player || target.Type == TargetType.Planeswalker)
                 {
                     ApplyDamageEventArgs args = new ApplyDamageEventArgs()
                     {
                         DamageValue = FinalValue,
-                        Target = Target,
+                        Target = target,
                     };
                     args.addDamageAttributtes(OriginCard);
                     OnApplyDamage?.Invoke(this, args);
                 }
-                else if (Target.Type == TargetType.Card)
+                else if (target.Type == TargetType.Card)
                 {
                     if (OriginCard.HasAbility(typeof(Trample)))
                     {
@@ -78,7 +78,7 @@ namespace MTG.Model.Objects
                         ApplyDamageEventArgs args = new ApplyDamageEventArgs()
                         {
                             DamageValue = FinalValue,
-                            Target = Target,
+                            Target = target,
                         };
                         args.addDamageAttributtes(OriginCard);
                         OnApplyDamage?.Invoke(this, args);

@@ -16,13 +16,14 @@ using MTG.ArgumentDefintions.ActivationArguments;
 using MTG.Model.Counters;
 using MTG.DTO.Objects;
 using MTG.Interfaces.Ability_Interfaces;
+using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 
 namespace MTG.Model
 {
     public class Player
     {
         #region Events
-        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTriggered, OnEffectTrigger, OnApplyDamage;
         #endregion
 
         #region Properties
@@ -179,7 +180,9 @@ namespace MTG.Model
                     }
                     else if (effect is DamageEffect)
                     {
-                        ApplyDamage(new ApplyDamageEventArgs() { Target = effect.Target, DamageValue = ((DamageEffect)effect).Value });
+                        ((DamageEffect)effect).Damage.OnApplyDamage += OnApplyDamage;
+                        ((DamageEffect)effect).Damage.Process(effect.Target);
+                        ((DamageEffect)effect).Damage.OnApplyDamage -= OnApplyDamage;
                     }
                     else
                         ActiveEffects.Add(effect);
@@ -327,7 +330,7 @@ namespace MTG.Model
 
             if (currentPhase == GamePhases.Beginning_Draw)
                 foreach (IEffect drawEffect in ActiveEffects.FindAll(o => o is DrawExtraCards))
-                    cardDrawCount += drawEffect.Value;
+                    cardDrawCount += ((DrawExtraCards)drawEffect).Value;
 
             List<Card> cardsDrawn = new List<Card>();
             if (cardDrawCount > Library.Cards.Count)

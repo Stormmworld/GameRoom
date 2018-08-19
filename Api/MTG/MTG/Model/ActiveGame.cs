@@ -14,6 +14,8 @@ using MTG.DTO.Requests.CompleteActions;
 using MTG.Model.Effects;
 using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Interfaces.Ability_Interfaces;
+using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
+using MTG.Model.Abilities.Static;
 
 namespace MTG.Model
 {
@@ -70,6 +72,7 @@ namespace MTG.Model
             Ante.OnEffectTriggered += OnEffectTriggered;
             Ante.OnPendingActionTriggered += OnAddPendingAction;
             ActiveCombat = new Combat();
+            ActiveCombat.OnEffectTriggered += OnEffectTriggered;
             Exile = new Exile();
             Exile.OnAddCardToZone += OnAddCardToZone;
             Exile.OnEffectTrigger += OnEffectTrigger;
@@ -181,6 +184,7 @@ namespace MTG.Model
         public void Add(Player player, Deck deck)
         {
             //add event handlers
+            player.OnApplyDamage += OnApplyDamage;
             player.OnAddCardToZone += OnAddCardToZone;
             player.OnAddPendingAction += OnAddPendingAction;
             player.OnEffectTrigger += OnEffectTrigger;
@@ -220,7 +224,14 @@ namespace MTG.Model
         public void DeclareAttacker(DeclareAttackerRequest request)
         {
             Card attacker = FindCard(request.AttackerId);
-            ActiveCombat.AddAttacker(new AttackingCreature(attacker) { Defender = request.Target }, request.JoinBandId);
+            if (!attacker.SummoningSickness)
+            {
+                attacker.Tapped = !attacker.HasAbility(typeof(Vigilance));
+                AttackingCreature newAttacker = new AttackingCreature(attacker);
+                newAttacker.Blocker.Defender = request.Target;
+                newAttacker.OnEffectTriggered += OnEffectTriggered;
+                ActiveCombat.AddAttacker(newAttacker, request.JoinBandId);
+            }
         }
         public void DeclareBlocker(DeclareBlockerRequest request)
         {

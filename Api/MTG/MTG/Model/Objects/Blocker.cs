@@ -1,5 +1,6 @@
-﻿using MTG.ArgumentDefintions.Event_Arguments;
+﻿using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 using MTG.Helpers;
+using MTG.Model.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace MTG.Model.Objects
     public class Blocker
     {
         #region Events
-        public event EventHandler OnPendingActionTriggered, OnPendingDamage;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered;
         #endregion
 
         #region Variables
@@ -28,6 +29,7 @@ namespace MTG.Model.Objects
         {
             _Blockers = new List<Card>();
             _BlockingBands = new List<Band>();
+            Defender = new AttackableTarget();
         }
         #endregion
 
@@ -51,19 +53,9 @@ namespace MTG.Model.Objects
             if ((isFirstStrike && CardHelper.HasFirstStrikeDamage(attacker)) || (!isFirstStrike && CardHelper.HasNormalStrikeDamage(attacker)))
                 attackerDamage = attacker.Power;
 
-            if (Blockers.Count == 0 && BlockingBands.Count == 0 && attackerDamage>0)
+            if (Blockers.Count == 0 && BlockingBands.Count == 0 && attackerDamage > 0)
             {//No Blockers
-                PendingDamageEventArgs args = new PendingDamageEventArgs()
-                {
-                    Damage = new Damage()
-                    {
-                        OriginCard = attacker,
-                        BaseValue = attackerDamage,
-                        OriginPlayer = attackingPlayer,
-                        Target = Defender.GenerateTarget(),
-                    }
-                };
-                OnPendingDamage?.Invoke(this, args);
+                OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new DamageEffect(new Damage(attacker) { BaseValue = attackerDamage }, Defender.GenerateTarget())));
                 return;
             }
 
@@ -71,32 +63,9 @@ namespace MTG.Model.Objects
             {//Single Defender
                 Card blocker = _Blockers[0];
                 if ((isFirstStrike && CardHelper.HasFirstStrikeDamage(blocker)) || (!isFirstStrike && CardHelper.HasNormalStrikeDamage(blocker)))
-                {
-                    PendingDamageEventArgs args = new PendingDamageEventArgs()
-                    {
-                        Damage = new Damage()
-                        {
-                            OriginCard = blocker,
-                            BaseValue = blocker.Power,
-                            Target = attacker.GenerateTarget(),
-                        }
-                    };
-                    OnPendingDamage?.Invoke(this, args);
-                }
+                    OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new DamageEffect(new Damage(blocker) {  BaseValue = blocker.Power }, attacker.GenerateTarget())));
                 if (attackerDamage > 0)
-                {
-                    PendingDamageEventArgs args = new PendingDamageEventArgs()
-                    {
-                        Damage = new Damage()
-                        {
-                            OriginCard = attacker,
-                            BaseValue = attackerDamage,
-                            OriginPlayer = attackingPlayer,
-                            Target = blocker.GenerateTarget(),
-                        }
-                    };
-                    OnPendingDamage?.Invoke(this, args);
-                }
+                    OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new DamageEffect(new Damage(attacker) { BaseValue = attackerDamage }, blocker.GenerateTarget())));
                 return;
             }
             
@@ -109,7 +78,6 @@ namespace MTG.Model.Objects
             {//Bands Defending
                 throw new NotImplementedException("Blockers.AssignDamage - banded blockers");
             }
-
         }
         #endregion
     }

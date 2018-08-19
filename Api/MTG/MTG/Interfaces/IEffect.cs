@@ -9,6 +9,5 @@ namespace MTG.Interfaces
         Target Target { get; }
         GamePhases EndingPhase { get; }
         Guid EndingPhaseOwnerId { get; }
-        int Value { get; }
     }
 }

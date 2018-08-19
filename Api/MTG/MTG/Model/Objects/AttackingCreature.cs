@@ -1,12 +1,13 @@
-﻿using MTG.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace MTG.Model.Objects
 {
     public class AttackingCreature
     {
+        #region Events
+        public event EventHandler OnEffectTriggered; 
+        #endregion
+
         #region Variables
         #endregion
 
@@ -14,7 +15,6 @@ namespace MTG.Model.Objects
         public Player AttackingPlayer { get; set; }
         public Blocker Blocker { get; set; }
         public Card Card { get; private set; }
-        public AttackableTarget Defender { get; set; }
         public Guid Id { get; set; }
         #endregion
 
@@ -33,11 +33,12 @@ namespace MTG.Model.Objects
         }
         public void AssignDamage(bool isFirstStrike)
         {
+            Blocker.OnEffectTriggered += OnEffectTriggered;
             Blocker.AssignDamage(isFirstStrike, Card, AttackingPlayer);
+            Blocker.OnEffectTriggered -= OnEffectTriggered;
         }
         public void CommitDamage()
         {
-            throw new NotImplementedException("AttackingCreature.CommitDamage");
         }
         #endregion
     }

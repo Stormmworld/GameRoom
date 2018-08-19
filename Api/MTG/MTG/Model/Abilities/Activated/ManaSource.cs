@@ -7,6 +7,7 @@ using MTG.Model.Effects;
 using MTG.ArgumentDefintions.ActivationArguments;
 using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Interfaces.Ability_Interfaces;
+using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 
 namespace MTG.Model.Abilities
 {
@@ -59,7 +60,7 @@ namespace MTG.Model.Abilities
                     mana.Count = mana.Count * args.CardTypeCount;
                 if (args.ManaMultiplier > 0)
                     mana.Count = mana.Count * args.ManaMultiplier;
-                OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs() { Effect = new AddManaToPoolEffect(mana, args.ActivatingPlayerId) });
+                OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new AddManaToPoolEffect(mana, args.ActivatingPlayerId)));
                 if (RequiresTap)
                     OnCardEvent?.Invoke(this, new TapCardEventArgs() { CardId = args.ActivatingCardId, ControllerId = args.ActivatingPlayerId, Tapped = RequiresTap });
             }
