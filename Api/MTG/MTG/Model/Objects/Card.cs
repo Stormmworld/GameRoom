@@ -48,7 +48,8 @@ namespace MTG.Model.Objects
         public CastingCost CastingCost { get; set; }
         public Guid ControllerId { get; set; }
         public Guid Id { get; private set; }
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get { return "/"+ MultiverseId; } }
+        internal int MultiverseId { get; set; }
         public string Name { get; set; }
         public Guid OwnerId { get; set; }
         public bool PhasedOut

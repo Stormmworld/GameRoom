@@ -53,6 +53,7 @@
     <Compile Include="Ability Tests\First_Strike_Tests.cs" />
     <Compile Include="Ability Tests\Double_StrikeTests.cs" />
     <Compile Include="Ability Tests\Deathtouch_Tests.cs" />
+    <Compile Include="Card Tests\TimeTwister_Tests.cs" />
     <Compile Include="Game Tests\Combat_Tests.cs" />
     <Compile Include="Game Tests\Damage_Tests.cs" />
     <Compile Include="Game Tests\Game_Tests.cs" />

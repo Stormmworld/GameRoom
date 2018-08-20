@@ -372,13 +372,13 @@ namespace MTG.Model
         {
             Card retVal = Battlefield.FirstOrDefault(cardId);
             if(retVal == null)
-                Command.Find(cardId);
+                retVal = Command.Find(cardId);
             if (retVal == null)
-                Library.Find(cardId);
+                retVal = Library.Find(cardId);
             if (retVal == null)
-                Hand.Find(cardId);
+                retVal = Hand.Find(cardId);
             if (retVal == null)
-                Graveyard.Find(cardId);
+                retVal = Graveyard.Find(cardId);
             return retVal;
         }
         public bool HasEffectType(Type effectType)
