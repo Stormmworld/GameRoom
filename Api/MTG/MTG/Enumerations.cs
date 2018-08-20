@@ -66,6 +66,7 @@ namespace MTG.Enumerations
         Deathtouch,
         Discard1,
         Discard2,
+        Blocked,
     }    
     public enum EffectTrigger
     {

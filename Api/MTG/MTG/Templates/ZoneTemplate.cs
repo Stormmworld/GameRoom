@@ -15,7 +15,7 @@ namespace MTG.Templates
          */
 
         #region Events
-        public event EventHandler OnAddCardToZone, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnAddCardToZone, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnApplyDamage, OnCardEvent;
         #endregion
 
         #region Variables
@@ -42,7 +42,7 @@ namespace MTG.Templates
         #region Event Handlers
         private void Card_OnCardEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException("ZoneTemplate.Card_OnCardEvent");
+            OnCardEvent?.Invoke(sender, e);
         }
         private void Card_OnEffectTrigger(object sender, EventArgs e)
         {
@@ -65,6 +65,7 @@ namespace MTG.Templates
             card.OnEffectTrigger += Card_OnEffectTrigger;
             card.OnEffectTriggered += Card_OnEffectTriggered;
             card.OnPendingActionTriggered += Card_OnPendingActionTriggered;
+            card.OnApplyDamage += OnApplyDamage;
             _Cards.Add(card);
         }
         public void Add(List<Card> cards)

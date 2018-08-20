@@ -71,6 +71,8 @@ namespace MTG.Model
             Ante.OnEffectTrigger += OnEffectTrigger;
             Ante.OnEffectTriggered += OnEffectTriggered;
             Ante.OnPendingActionTriggered += OnAddPendingAction;
+            Ante.OnApplyDamage += OnApplyDamage;
+            Ante.OnCardEvent += OnCardEvent;
             ActiveCombat = new Combat();
             ActiveCombat.OnEffectTriggered += OnEffectTriggered;
             Exile = new Exile();
@@ -78,11 +80,15 @@ namespace MTG.Model
             Exile.OnEffectTrigger += OnEffectTrigger;
             Exile.OnEffectTriggered += OnEffectTriggered;
             Exile.OnPendingActionTriggered += OnAddPendingAction;
+            Exile.OnApplyDamage += OnApplyDamage;
+            Exile.OnCardEvent += OnCardEvent;
             Stack = new Stack();
             Stack.OnAddCardToZone += OnAddCardToZone;
             Stack.OnEffectTrigger += OnEffectTrigger;
             Stack.OnEffectTriggered += OnEffectTriggered;
             Stack.OnPendingActionTriggered += OnAddPendingAction;
+            Stack.OnApplyDamage += OnApplyDamage;
+            Stack.OnCardEvent += OnCardEvent;
             ActivePhase = GamePhases.None;
             OverrideNextPhase = GamePhases.None;
             
@@ -140,9 +146,12 @@ namespace MTG.Model
                     return;
                 }
         }
-        private void OnCardDestroyed(object sender, EventArgs e)
+        private void OnCardEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException("OnCardDestroyed");
+            if (e is ICardEventArgs)
+                _Players.First(o=>o.Id == ((ICardEventArgs)e).ControllerId).Add((ICardEventArgs)e);
+            else
+                throw new NotImplementedException("ActiveGame.Player_OnCardEvent: the args passed have not been implemented (" + e.ToString() + ")");
         }
         private void OnCardEnteredBattlefield(object sender, EventArgs e)
         {
@@ -189,6 +198,7 @@ namespace MTG.Model
             player.OnAddPendingAction += OnAddPendingAction;
             player.OnEffectTrigger += OnEffectTrigger;
             player.OnEffectTriggered += OnEffectTriggered;
+            player.OnCardEvent += OnCardEvent;
             //add deck
             player.SelectDeck(deck);
 

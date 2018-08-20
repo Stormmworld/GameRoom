@@ -8,6 +8,7 @@ using MTG.Interfaces;
 using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Abilities.Static;
 using MTG.Model.Counters;
+using MTG.Model.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MTG.Model.Objects
     public class Card
     {
         #region Events
-        public event EventHandler OnCardEvent, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger;
+        public event EventHandler OnCardEvent, OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnApplyDamage;
         #endregion
 
         #region Variables
@@ -226,7 +227,14 @@ namespace MTG.Model.Objects
         }
         public void Add(IEffect effect)
         {
-            throw new NotImplementedException("Card.Add Effect");
+            if (effect is DamageEffect)
+            {
+                ((DamageEffect)effect).Damage.OnApplyDamage += OnApplyDamage;
+                ((DamageEffect)effect).Damage.Process(effect.Target);
+                ((DamageEffect)effect).Damage.OnApplyDamage -= OnApplyDamage;
+            }
+            else
+                throw new NotImplementedException("Card.Add Effect: Undefined for " + effect.ToString());
         }
         public void Add(SubType subType)
         {
@@ -262,7 +270,13 @@ namespace MTG.Model.Objects
                 if (args.Types.Contains(DamageTypes.Trample) && args.DamageValue > Toughness)
                 {
                     _Damage.Add(Toughness);
-                    throw new NotImplementedException("Card.ApplyDmage - Trample");
+                    ApplyDamageEventArgs trampleArgs = new ApplyDamageEventArgs()
+                    {
+                        DamageValue = args.DamageValue - Toughness,
+                        Target = new Target() { Type = TargetType.Player, Id = ControllerId },
+                    };
+                    trampleArgs.addDamageAttributtes(DamageTypes.Blocked);
+                    OnApplyDamage?.Invoke(this, trampleArgs);
                 }
                 else
                     _Damage.Add(args.DamageValue);

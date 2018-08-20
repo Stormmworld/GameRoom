@@ -31,6 +31,10 @@ namespace MTG.ArgumentDefintions.Event_Arguments
         #endregion
 
         #region Methods
+        public void addDamageAttributtes(DamageTypes damageType)
+        {
+            _Types.Add(damageType);
+        }
         public void addDamageAttributtes(Card originCard)
         {
             if (originCard.HasAbility(typeof(Deathtouch)))

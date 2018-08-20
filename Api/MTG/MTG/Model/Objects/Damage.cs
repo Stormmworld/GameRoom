@@ -68,21 +68,13 @@ namespace MTG.Model.Objects
                 }
                 else if (target.Type == TargetType.Card)
                 {
-                    if (OriginCard.HasAbility(typeof(Trample)))
+                    ApplyDamageEventArgs args = new ApplyDamageEventArgs()
                     {
-                        //handle trample damage
-                        throw new NotImplementedException("Damage.Process: Trample damage has not been accounted for");
-                    }
-                    else
-                    {
-                        ApplyDamageEventArgs args = new ApplyDamageEventArgs()
-                        {
-                            DamageValue = FinalValue,
-                            Target = target,
-                        };
-                        args.addDamageAttributtes(OriginCard);
-                        OnApplyDamage?.Invoke(this, args);
-                    }
+                        DamageValue = FinalValue,
+                        Target = target,
+                    };
+                    args.addDamageAttributtes(OriginCard);
+                    OnApplyDamage?.Invoke(this, args);
                 }
                 else
                     throw new NotImplementedException("Damage.Process: Target Type has no damage rules assignerd for it");

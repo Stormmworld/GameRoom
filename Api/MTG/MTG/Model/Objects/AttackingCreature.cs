@@ -15,7 +15,7 @@ namespace MTG.Model.Objects
         public Player AttackingPlayer { get; set; }
         public Blocker Blocker { get; set; }
         public Card Card { get; private set; }
-        public Guid Id { get; set; }
+        public Guid Id { get { return Card.Id; } }
         #endregion
 
         #region Constructors

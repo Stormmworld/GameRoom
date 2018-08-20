@@ -2,6 +2,7 @@
 using MTG.Enumerations;
 using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Abilities;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Counters;
 using MTG.Model.Objects;
 
@@ -61,17 +62,28 @@ namespace MTG_Test.Mockers
             {
                 Name = "Test Deck Creatures and Land"
             };
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 10; i++)
             {
                 retVal.Cards.Add(MockLand());
-            }
-            for (int i = 0; i < 30; i++)
-            {
-                retVal.Cards.Add(MockCreature(3,3));
+                retVal.Cards.Add(MockCreature(3,4));
             }
 
             return retVal;
         }
+        public static Deck MockDeck_TrampleCreaturesAndLand()
+        {
+            Deck retVal = new Deck()
+            {
+                Name = "Test Deck Trample Creatures and Land"
+            };
+            for (int i = 0; i < 10; i++)
+            {
+                retVal.Cards.Add(MockLand());
+                retVal.Cards.Add(MockCreatureWithAbility(new Trample(),8, 4));
+            }
+
+            return retVal;
+        }        
         public static Deck MockDeck_InstantsAndLand()
         {
             Deck retVal = new Deck()
@@ -129,7 +141,7 @@ namespace MTG_Test.Mockers
 
             return retVal;
         }
-        public static Card MockCreatureWithAbility(IAbility ability, int power = 3, int toughness = 3)
+        public static Card MockCreatureWithAbility(IAbility ability, int power = 3, int toughness = 4)
         {
             Card retVal = new Card(power, toughness)
             {

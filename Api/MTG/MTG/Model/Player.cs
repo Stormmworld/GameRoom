@@ -23,7 +23,7 @@ namespace MTG.Model
     public class Player
     {
         #region Events
-        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTriggered, OnEffectTrigger, OnApplyDamage;
+        public event EventHandler OnAddPendingAction, OnAddCardToZone, OnEffectTriggered, OnEffectTrigger, OnApplyDamage, OnCardEvent;
         #endregion
 
         #region Properties
@@ -58,26 +58,36 @@ namespace MTG.Model
             Battlefield.OnEffectTrigger += Zone_OnEffectTrigger;
             Battlefield.OnEffectTriggered += Zone_OnEffectTriggered;
             Battlefield.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Battlefield.OnApplyDamage += OnApplyDamage;
+            Battlefield.OnCardEvent += OnCardEvent;
             Command = new Command();
             Command.OnAddCardToZone += Zone_OnAddCardToZone;
             Command.OnEffectTrigger += Zone_OnEffectTrigger;
             Command.OnEffectTriggered += Zone_OnEffectTriggered;
             Command.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Command.OnApplyDamage += OnApplyDamage;
+            Command.OnCardEvent += OnCardEvent;
             Graveyard = new Graveyard();
             Graveyard.OnAddCardToZone += Zone_OnAddCardToZone;
             Graveyard.OnEffectTrigger += Zone_OnEffectTrigger;
             Graveyard.OnEffectTriggered += Zone_OnEffectTriggered;
             Graveyard.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Graveyard.OnApplyDamage += OnApplyDamage;
+            Graveyard.OnCardEvent += OnCardEvent;
             Hand = new Hand();
             Hand.OnAddCardToZone += Zone_OnAddCardToZone;
             Hand.OnEffectTrigger += Zone_OnEffectTrigger;
             Hand.OnEffectTriggered += Zone_OnEffectTriggered;
             Hand.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Hand.OnApplyDamage += OnApplyDamage;
+            Hand.OnCardEvent += OnCardEvent;
             Library = new Library(Id);
             Library.OnAddCardToZone += Zone_OnAddCardToZone;
             Library.OnEffectTrigger += Zone_OnEffectTrigger;
             Library.OnEffectTriggered += Zone_OnEffectTriggered;
             Library.OnPendingActionTriggered += Zone_OnPendingActionTriggered;
+            Library.OnApplyDamage += OnApplyDamage;
+            Library.OnCardEvent += OnCardEvent;
             ResetPlayer();
         }
         public Player(string name):this()
@@ -137,6 +147,17 @@ namespace MTG.Model
                 Trigger = EffectTrigger.Phases_BegginingPhase_UpkeepStep,
             };
             OnEffectTrigger?.Invoke(null, args);
+        }
+        public void Add(ICardEventArgs e)
+        {
+            if (e is DestroyCardEventArgs)
+            {
+                Card destroyCard = FindCard(e.CardId);
+                Battlefield.Remove(e.CardId);
+                OnAddCardToZone(this, new AddCardToZoneEventArgs() {Card = destroyCard, TargetZone = TargetZone.Graveyard, ZoneOwnerId = destroyCard.OwnerId });
+            }
+            else
+                FindCard(e.CardId).Apply(e);
         }
         public void Add(Card card, TargetZone zone)
         {
@@ -386,6 +407,8 @@ namespace MTG.Model
         public void SelectDeck(Deck deck)
         {
             Deck = deck;
+            foreach (Card card in Deck.Cards)
+                card.OwnerId = Id;
             Library.Add(Deck.CloneCards());
             Library.Shuffle();
         }
@@ -396,11 +419,11 @@ namespace MTG.Model
         public IZone ZoneWithCard(Guid cardId)
         {
             if (Battlefield.FirstOrDefault(cardId) != null)
-                Battlefield.FirstOrDefault(cardId);
+                return Battlefield;
             if (Command.Find(cardId) != null)
-                Command.Find(cardId);
+                return Command;
             if (Library.Find(cardId) != null)
-                Library.Find(cardId);
+                return Library;
             if (Hand.Find(cardId) != null)
                 return Hand;
             if (Graveyard.Find(cardId) != null)
