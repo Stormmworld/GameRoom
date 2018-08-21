@@ -134,7 +134,6 @@ namespace MTG.Model.Objects
             _Toughness = card.Toughness;
             CastingCost = card.CastingCost;
             Id = Guid.NewGuid();
-            ImageUrl = card.ImageUrl;
             Name = card.Name;
             OwnerId = card.OwnerId;
         }

@@ -499,6 +499,7 @@ namespace MTG.Enumerations
         Single,
         Opponents,
         Specified_Number,
+        Self,
     }
     public enum TargetType
     {
