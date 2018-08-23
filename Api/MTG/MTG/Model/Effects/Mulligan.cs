@@ -12,6 +12,7 @@ namespace MTG.Model.Effects
          *      Target player combines all cards into the library and shuffles then draws a new hand
          */
         #region Properties
+        public Guid BoundCardId { get; private set; }
         public GamePhases EndingPhase { get; private set; }
         public Guid EndingPhaseOwnerId { get; set; }
         public Target Target { get; private set; }

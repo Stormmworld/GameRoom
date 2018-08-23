@@ -11,6 +11,7 @@ namespace MTG.Model.Effects
          * AddManaToPool
          */
         #region Properties
+        public Guid BoundCardId { get; private set; }
         public GamePhases EndingPhase { get; private set; }
         public Guid EndingPhaseOwnerId { get; set; }
         public Mana Mana { get; private set; }

@@ -2,12 +2,12 @@
 using MTG.Model.Abilities.Spell;
 using MTG.Model.Objects;
 
-namespace MTG.Model.Cards.Sorcery
-{
+namespace MTG.Model.Cards
+{ 
     public class Timetwister : Card
     {
         /*
-         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=427
+         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=132
          * Each player shuffles their hand and graveyard into their library, then draws seven cards. 
          * (Then put Timetwister into its owner's graveyard.)
          * 
@@ -22,7 +22,7 @@ namespace MTG.Model.Cards.Sorcery
             castingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 2 } });
             ICastingAbility ability = new CombineGraveyardAndHandToLibraryThenDraw(7, Enumerations.TargetScope.All, new System.Collections.Generic.List<Enumerations.TargetType>() { Enumerations.TargetType.Player }, false, castingCost, this);
 
-            MultiverseId = 427;
+            MultiverseId = 132;
             Name = "Timetwister";
             Add(Enumerations.CardType.Sorcery);
             Add(Enumerations.Colors.Blue);

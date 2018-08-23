@@ -22,17 +22,18 @@ namespace MTG.Model.Abilities.Triggered
         public int Value { get; private set; }
         public Guid Id { get; private set; }
         public List<TargetType> TargetTypes { get; private set; }
-        public EffectTrigger Trigger { get { return EffectTrigger.Cast; } }
+        public EffectTrigger Trigger { get; private set; }
         #endregion
 
         #region Constructors
-        public Damage()
+        private Damage()
         {
             Id = Guid.NewGuid();
             TargetTypes = new List<TargetType>();
         }
-        public Damage(int value, List<TargetType> targetTypes):this()
+        public Damage(int value, List<TargetType> targetTypes, EffectTrigger trigger):this()
         {
+            Trigger = trigger;
             Value = value;
             TargetTypes.AddRange(targetTypes);
         }

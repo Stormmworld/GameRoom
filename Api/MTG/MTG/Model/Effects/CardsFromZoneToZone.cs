@@ -11,6 +11,7 @@ namespace MTG.Model.Effects
          * CardsFromZoneToZone
          */
         #region Properties
+        public Guid BoundCardId { get; private set; }
         public IZone DestinationZone { get; private set; }
         public GamePhases EndingPhase { get; private set; }
         public Guid EndingPhaseOwnerId { get; set; }

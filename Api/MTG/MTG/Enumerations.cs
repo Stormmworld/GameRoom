@@ -103,6 +103,7 @@ namespace MTG.Enumerations
         Player_Damaged,
         Card_RecievesCounter,
         Cast,
+        LandEntersBattlefield,
     }
     public enum GameModifier {
         None,
@@ -473,7 +474,8 @@ namespace MTG.Enumerations
         , Will
         , Xenagos
         , Yanggu
-        , Yanling
+        , Yanling,
+        Mountain
     }
     public enum SuperType
     {

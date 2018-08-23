@@ -6,8 +6,9 @@ namespace MTG.Interfaces
 {
     public interface IEffect
     {
-        Target Target { get; }
+        Guid BoundCardId { get;  }
         GamePhases EndingPhase { get; }
         Guid EndingPhaseOwnerId { get; }
+        Target Target { get; }
     }
 }

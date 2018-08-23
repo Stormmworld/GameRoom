@@ -30,7 +30,7 @@ namespace MTG.Model.Objects
         private List<int> _Damage;
         private List<SubType> _SubTypes;
         private List<SuperType> _SuperTypes;
-        private int _Power, _Toughness;
+        internal int _Power, _Toughness;
         #endregion
 
         #region Properties - Collections
