@@ -11,10 +11,10 @@ namespace MTG.Model.Cards
             * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=145
             *  
             *  Flying
-Whenever Cockatrice blocks or becomes blocked by a non-Wall creature, destroy that creature at end of combat.
+                Whenever Cockatrice blocks or becomes blocked by a non-Wall creature, destroy that creature at end of combat.
             *  
             * Rulings
-		2004-10-04: The ability destroys the creature at the end of the combat, which is after all first strike and normal damage dealing is done. This means that a creature may have to regenerate twice to survive the combat, once from damage and once again at end of combat.
+		        2004-10-04: The ability destroys the creature at the end of the combat, which is after all first strike and normal damage dealing is done. This means that a creature may have to regenerate twice to survive the combat, once from damage and once again at end of combat.
 
             *  
             */
@@ -22,11 +22,13 @@ Whenever Cockatrice blocks or becomes blocked by a non-Wall creature, destroy th
         {
             MultiverseId = 145;
             Name = "Cockatrice";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.SubType.Cockatrice);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 4;
+            _Power = 2;
+            _Toughness = 4;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Green, Count = 2 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 3 } });
+            Add(Enumerations.Colors.Green);
+            Add(Enumerations.SubType.Cockatrice);
+            Add(Enumerations.CardType.Creature);
 
             throw new NotImplementedException("Cockatrice");
         }

@@ -104,6 +104,7 @@ namespace MTG.Enumerations
         Card_RecievesCounter,
         Cast,
         LandEntersBattlefield,
+        Card_AbilityCompleted,
     }
     public enum GameModifier {
         None,

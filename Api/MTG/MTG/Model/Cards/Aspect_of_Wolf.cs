@@ -11,11 +11,10 @@ namespace MTG.Model.Cards
             * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=140
             *  
             *  Enchant creature
-Enchanted creature gets +X/+Y, where X is half the number of Forests you control, rounded down, and Y is half the number of Forests you control, rounded up.
+                Enchanted creature gets +X/+Y, where X is half the number of Forests you control, rounded down, and Y is half the number of Forests you control, rounded up.
             *  
             * Rulings
-		2009-10-01: The effect is continuously updated based on the number of Forests you control at any given time.
-
+		        2009-10-01: The effect is continuously updated based on the number of Forests you control at any given time.
             *  
             */
         public Aspect_of_Wolf() : base()

@@ -67,8 +67,8 @@ namespace MTG.Model.Objects
             {
                 int retVal = _Power;
                 foreach (ICounter counter in _Counters)
-                    if (counter is PlusXPlusY)
-                        retVal += ((PlusXPlusY)counter).X;
+                    if (counter is Counters.PlusXPlusY)
+                        retVal += ((Counters.PlusXPlusY)counter).X;
                 return retVal < 0 ? 0 : retVal;
             }
         }
@@ -96,8 +96,8 @@ namespace MTG.Model.Objects
             {
                 int retVal = _Toughness;
                 foreach (ICounter counter in _Counters)
-                    if (counter is PlusXPlusY)
-                        retVal += ((PlusXPlusY)counter).Y;
+                    if (counter is Counters.PlusXPlusY)
+                        retVal += ((Counters.PlusXPlusY)counter).Y;
                 return retVal < 0 ? 0: retVal;
             }
         }

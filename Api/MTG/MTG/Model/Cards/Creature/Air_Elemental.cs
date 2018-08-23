@@ -18,12 +18,14 @@ namespace MTG.Model.Cards
         {
             MultiverseId = 94;
             Name = "Air Elemental";
+            _Power = 4;
+            _Toughness = 4;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Blue, Count = 2 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 3 } });
             Add(Enumerations.Colors.Blue);
             Add(Enumerations.SubType.Elemental);
             Add(Enumerations.CardType.Creature);
             Add(new Flying());
-            _Power = 4;
-            _Toughness = 4;
         }
         public Air_Elemental(int multiversId) : this()
         {

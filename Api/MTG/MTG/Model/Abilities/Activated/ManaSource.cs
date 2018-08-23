@@ -9,7 +9,7 @@ using MTG.ArgumentDefintions.Event_Arguments;
 using MTG.Interfaces.Ability_Interfaces;
 using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 
-namespace MTG.Model.Abilities
+namespace MTG.Model.Abilities.Activated
 {
     public class ManaSource : IActivatedAbility
     {

@@ -11,7 +11,7 @@ namespace MTG.Model.Cards
             * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=238
             *  
             *  Enchant creature
-{W}: Enchanted creature gets +1/+1 until end of turn.
+                {W}: Enchanted creature gets +1/+1 until end of turn.
             *  
             * Rulings
 
@@ -21,9 +21,9 @@ namespace MTG.Model.Cards
         {
             MultiverseId = 238;
             Name = "Blessing";
-	Add(Enumerations.Colors.White);
-	Add(Enumerations.SubType.Aura);
-	Add(Enumerations.CardType.Enchantment);
+            Add(Enumerations.Colors.White);
+            Add(Enumerations.SubType.Aura);
+            Add(Enumerations.CardType.Enchantment);
 
             throw new NotImplementedException("Blessing");
         }

@@ -7,6 +7,7 @@ using MTG.DTO.Responses;
 using MTG.Enumerations;
 using MTG.Model;
 using MTG.Model.Abilities;
+using MTG.Model.Abilities.Activated;
 using MTG.Model.Abilities.Triggered;
 using MTG.Model.Objects;
 using MTG.Model.Pending_Actions;

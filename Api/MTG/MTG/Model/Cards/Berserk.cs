@@ -11,10 +11,11 @@ namespace MTG.Model.Cards
             * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=141
             *  
             *  Cast Berserk only before the combat damage step.
-Target creature gains trample and gets +X/+0 until end of turn, where X is its power. At the beginning of the next end step, destroy that creature if it attacked this turn.
+                Target creature gains trample and gets +X/+0 until end of turn, where X is its power. 
+                At the beginning of the next end step, destroy that creature if it attacked this turn.
             *  
             * Rulings
-		2004-10-04: If the permanent stops being a creature before the end of the turn, it is still destroyed.
+		        2004-10-04: If the permanent stops being a creature before the end of the turn, it is still destroyed.
 
             *  
             */
@@ -22,8 +23,8 @@ Target creature gains trample and gets +X/+0 until end of turn, where X is its p
         {
             MultiverseId = 141;
             Name = "Berserk";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.CardType.Instant);
+            Add(Enumerations.Colors.Green);
+            Add(Enumerations.CardType.Instant);
 
             throw new NotImplementedException("Berserk");
         }

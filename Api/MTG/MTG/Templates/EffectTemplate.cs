@@ -11,6 +11,7 @@ namespace MTG.Model.Zones
          * EffectTemplate
          */
         #region Properties
+        public Guid BoundCardId { get; set; }
         public GamePhases EndingPhase { get; private set; }
         public Guid EndingPhaseOwnerId { get; set; }
         public Target Target { get; private set; }

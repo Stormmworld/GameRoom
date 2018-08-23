@@ -1,4 +1,4 @@
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Activated;
 using MTG.Model.Objects;
 
 namespace MTG.Model.Cards

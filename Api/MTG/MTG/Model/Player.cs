@@ -11,7 +11,7 @@ using MTG.DTO.Responses;
 using MTG.Model.Pending_Actions;
 using MTG.Helpers;
 using MTG.ArgumentDefintions.Event_Arguments;
-using MTG.Model.Abilities;
+using MTG.Model.Abilities.Activated;
 using MTG.ArgumentDefintions.ActivationArguments;
 using MTG.Model.Counters;
 using MTG.DTO.Objects;

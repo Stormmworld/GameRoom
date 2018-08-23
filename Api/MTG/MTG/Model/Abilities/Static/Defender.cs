@@ -17,7 +17,7 @@ namespace MTG.Model.Abilities.Static
         #endregion
 
         #region Constructors
-        private Defender()
+        public Defender()
         {
             Id = Guid.NewGuid();
         }        
