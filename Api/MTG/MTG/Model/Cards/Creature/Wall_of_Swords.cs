@@ -22,13 +22,13 @@ namespace MTG.Model.Cards
             Name = "Wall of Swords";
             _Power = 3;
             _Toughness = 5;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.White, Count = 1 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 3 } });
             Add(Enumerations.Colors.White);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
             Add(new Flying());
-
-            throw new NotImplementedException("Wall of Swords");
         }
         public Wall_of_Swords(int multiversId) : this()
         {

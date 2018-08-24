@@ -21,12 +21,12 @@ namespace MTG.Model.Cards
             Name = "Wall of Stone";
             _Power = 0;
             _Toughness = 8;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Red, Count = 2 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 1 } });
             Add(Enumerations.Colors.Red);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
-
-            throw new NotImplementedException("Wall of Stone");
         }
         public Wall_of_Stone(int multiversId) : this()
         {

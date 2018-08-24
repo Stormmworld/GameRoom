@@ -21,6 +21,8 @@ namespace MTG.Model.Cards
             Name = "Wall of Ice";
             _Power = 0;
             _Toughness = 7;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Green, Count = 1 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 2 } });
             Add(Enumerations.Colors.Green);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);

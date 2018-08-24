@@ -1,7 +1,10 @@
+using MTG.Enumerations;
 using MTG.Interfaces.Ability_Interfaces;
 using MTG.Model.Abilities.Spell;
+using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Cards
 {
@@ -11,12 +14,12 @@ namespace MTG.Model.Cards
             * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=245
             *  
             *  Enchant land
-Enchanted land has indestructible and can't be enchanted by other Auras.
+                Enchanted land has indestructible and can't be enchanted by other Auras.
             *  
             * Rulings
-		2005-04-01: The land can be targeted by land-destroying spells and the spell will resolve, but the land will simply not be destroyed.
-		2006-09-25: If Consecrate Land enters the battlefield attached to a land that's enchanted by other Auras, those Auras are put into their owners' graveyards.
-		2013-07-01: A permanent with indestructible can't be destroyed, but it can still be sacrificed, exiled, put into a graveyard, and so on.
+		        2005-04-01: The land can be targeted by land-destroying spells and the spell will resolve, but the land will simply not be destroyed.
+		        2006-09-25: If Consecrate Land enters the battlefield attached to a land that's enchanted by other Auras, those Auras are put into their owners' graveyards.
+		        2013-07-01: A permanent with indestructible can't be destroyed, but it can still be sacrificed, exiled, put into a graveyard, and so on.
 
             *  
             */
@@ -24,10 +27,10 @@ Enchanted land has indestructible and can't be enchanted by other Auras.
         {
             MultiverseId = 245;
             Name = "Consecrate Land";
-	Add(Enumerations.Colors.White);
-	Add(Enumerations.SubType.Aura);
-	Add(Enumerations.CardType.Enchantment);
-
+            Add(Enumerations.Colors.White);
+            Add(SubType.Aura);
+            Add(CardType.Enchantment);
+            Add(Protection.From(new List<SubType>() { SubType.Aura }));
             throw new NotImplementedException("Consecrate Land");
         }
         public Consecrate_Land(int multiversId) : this()

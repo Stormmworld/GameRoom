@@ -20,15 +20,18 @@ namespace MTG.Model.Cards
         {
             MultiverseId = 179;
             Name = "Wall of Brambles";
+            _Power = 2;
+            _Toughness = 3;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Green, Count = 1 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 2 } });
             Add(Enumerations.Colors.Green);
             Add(Enumerations.SubType.Plant);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
-            _Power = 2;
-            _Toughness = 3;
-
-            throw new NotImplementedException("Wall of Brambles");
+            CastingCost regenerationCost = new CastingCost();
+            regenerationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Green, Count = 1 } });
+            Add(new Abilities.Activated.Regeneration(regenerationCost));
         }
         public Wall_of_Brambles(int multiversId) : this()
         {

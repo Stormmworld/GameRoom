@@ -22,12 +22,15 @@ namespace MTG.Model.Cards
             Name = "Wall of Water";
             _Power = 0;
             _Toughness = 5;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Blue, Count = 2 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 1 } });
             Add(Enumerations.Colors.Blue);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
-
-            throw new NotImplementedException("Wall of Water");
+            CastingCost activationCost = new CastingCost();
+            activationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Blue, Count = 1 } });
+            Add(new Abilities.Activated.PlusXPlusY(activationCost, 1, 0));
         }
         public Wall_of_Water(int multiversId) : this()
         {

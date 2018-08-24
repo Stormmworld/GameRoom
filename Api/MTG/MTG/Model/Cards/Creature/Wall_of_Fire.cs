@@ -1,6 +1,5 @@
 using MTG.Model.Abilities.Static;
 using MTG.Model.Objects;
-using System;
 
 namespace MTG.Model.Cards
 {
@@ -22,12 +21,15 @@ namespace MTG.Model.Cards
             Name = "Wall of Fire";
             _Power = 0;
             _Toughness = 5;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Red, Count = 2 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 1 } });
             Add(Enumerations.Colors.Red);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
-
-            throw new NotImplementedException("Wall of Fire");
+            CastingCost activationCost = new CastingCost();
+            activationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Red, Count = 1 } });
+            Add(new Abilities.Activated.PlusXPlusY(activationCost, 1,0));
         }
         public Wall_of_Fire(int multiversId) : this()
         {

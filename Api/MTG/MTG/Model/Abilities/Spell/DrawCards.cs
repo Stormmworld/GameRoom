@@ -9,7 +9,7 @@ namespace MTG.Model.Abilities.Spell
     public class DrawCards : ICastingAbility
     {
         #region Events
-        public event EventHandler OnPendingActionTriggered,OnEffectTriggered,OnEffectTrigger,OnCardEvent;
+        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
         #endregion
 
         #region Variables
@@ -34,12 +34,16 @@ namespace MTG.Model.Abilities.Spell
             TargetTypes = new List<TargetType>();
             CastingCost = new CastingCost();
         }
-        public DrawCards(int Value, CastingCost castingCost, List<TargetType> targetTypes, TargetScope targetScope, bool requiresTarget):this()
+        public DrawCards(int Value, CastingCost castingCost, List<TargetType> targetTypes, TargetScope targetScope, bool requiresTarget) : this()
         {
             RequiresTarget = requiresTarget;
             TargetScope = targetScope;
             TargetTypes = targetTypes;
             CastingCost = castingCost;
+        }
+        public DrawCards(int Value, CastingCost castingCost, List<TargetType> targetTypes, TargetScope targetScope, bool requiresTarget, bool usesXValue) : this(Value, castingCost, targetTypes, targetScope, requiresTarget)
+        {
+            RequiresTarget = usesXValue;
         }
         #endregion
 
@@ -51,12 +55,14 @@ namespace MTG.Model.Abilities.Spell
         {
             throw new NotImplementedException("Process");
         }
+        public void Process(int x)
+        {
+            throw new NotImplementedException("Process: x");
+        }
         public override string ToString()
         {
             return this.GetType().Name;
         }
         #endregion
-
-
     }
 }

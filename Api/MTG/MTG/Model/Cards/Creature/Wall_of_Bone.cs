@@ -22,13 +22,16 @@ namespace MTG.Model.Cards
             Name = "Wall of Bone";
             _Power = 1;
             _Toughness = 4;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Black, Count = 1 } });
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 2 } });
             Add(Enumerations.Colors.Black);
             Add(Enumerations.SubType.Skeleton);
             Add(Enumerations.SubType.Wall);
             Add(Enumerations.CardType.Creature);
             Add(new Defender());
-
-            throw new NotImplementedException("Wall of Bone");
+            CastingCost regenerationCost = new CastingCost();
+            regenerationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Black, Count = 1 } });
+            Add(new Abilities.Activated.Regeneration(regenerationCost));
         }
         public Wall_of_Bone(int multiversId) : this()
         {

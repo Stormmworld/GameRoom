@@ -1,10 +1,6 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities;
 using MTG.Model.Abilities.Activated;
-using MTG.Model.Abilities.Spell;
 using MTG.Model.Effects;
 using MTG.Model.Objects;
-using System;
 
 namespace MTG.Model.Cards
 {
@@ -25,6 +21,7 @@ namespace MTG.Model.Cards
         public Basalt_Monolith() : base()
         {
             MultiverseId = 2;
+            CastingCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Colorless, Count = 3 } });
             Name = "Basalt Monolith";
             Add(Enumerations.CardType.Artifact);
             Add(new DoesNotUntap());

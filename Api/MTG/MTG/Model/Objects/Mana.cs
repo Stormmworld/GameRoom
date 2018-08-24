@@ -13,6 +13,7 @@ namespace MTG.Model.Objects
         public ManaRestriction ManaRestriction  { get;set; }
         public SubType ManaRestrictionSubType { get; set; }
         public CardType ManaRestrictionSpellType { get; set; }
+        public bool XCount { get; set; }
         #endregion
 
         #region Constructors
@@ -27,6 +28,7 @@ namespace MTG.Model.Objects
             ManaRestriction = mana.ManaRestriction;
             ManaRestrictionSubType = mana.ManaRestrictionSubType;
             ManaRestrictionSpellType = mana.ManaRestrictionSpellType;
+            XCount = mana.XCount;
         }
         #endregion
 
