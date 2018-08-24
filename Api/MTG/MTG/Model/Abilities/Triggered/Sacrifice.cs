@@ -17,6 +17,7 @@ namespace MTG.Model.Abilities.Triggered
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public Guid Id { get; private set; }
         public Target Target { get; set; }
         public TargetScope TargetScope { get; private set; }
@@ -34,6 +35,10 @@ namespace MTG.Model.Abilities.Triggered
             Trigger = trigger;
             TargetScope = targetScope;
             Target = target;
+        }
+        public Sacrifice(EffectTrigger trigger, TargetScope targetScope, Target target, Guid boundCardId) : this(trigger,  targetScope,  target)
+        {
+            BoundCardId = boundCardId;
         }
         #endregion
 

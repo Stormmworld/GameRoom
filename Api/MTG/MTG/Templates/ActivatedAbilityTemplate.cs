@@ -20,6 +20,7 @@ namespace MTG.Templates
 
         #region Properties
         public CastingCost ActivationCost { get; private set; }
+        public Guid BoundCardId { get; set; }
         public Guid Id { get; private set; }
         public bool RequiresTap { get; private set; }
         #endregion

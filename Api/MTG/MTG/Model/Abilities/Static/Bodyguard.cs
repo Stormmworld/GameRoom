@@ -17,6 +17,7 @@ namespace MTG.Model.Abilities.Static
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public Guid Id { get; private set; }
         #endregion
 

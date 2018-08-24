@@ -16,6 +16,7 @@ namespace MTG.Model.Abilities.Spell
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public CastingCost CastingCost { get; private set; }
         public Guid Id { get; private set; }
         public bool IsAddOn { get; private set; }

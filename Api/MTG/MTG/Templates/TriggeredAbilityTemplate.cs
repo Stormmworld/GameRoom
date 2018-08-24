@@ -1,7 +1,6 @@
 ﻿using MTG.Interfaces.Ability_Interfaces;
 using MTG.Enumerations;
 using System;
-using MTG.Model.Objects;
 using MTG.Interfaces;
 
 namespace MTG.Templates
@@ -16,6 +15,7 @@ namespace MTG.Templates
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public Guid Id { get; private set; }
         public EffectTrigger Trigger { get { return EffectTrigger.Card_Blocked; } }
         #endregion

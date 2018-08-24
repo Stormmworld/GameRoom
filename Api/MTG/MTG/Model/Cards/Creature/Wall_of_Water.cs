@@ -30,7 +30,7 @@ namespace MTG.Model.Cards
             Add(new Defender());
             CastingCost activationCost = new CastingCost();
             activationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = Enumerations.Colors.Blue, Count = 1 } });
-            Add(new Abilities.Activated.PlusXPlusY(activationCost, 1, 0));
+            Add(new Abilities.Activated.PlusXPlusY(activationCost, 1, 0, false));
         }
         public Wall_of_Water(int multiversId) : this()
         {

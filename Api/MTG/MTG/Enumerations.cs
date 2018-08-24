@@ -58,6 +58,13 @@ namespace MTG.Enumerations
         Red,
         White
     }
+    public enum Comparator
+    {
+        None, 
+        Equal_To
+        Less_Than,
+        Greater_Than,
+    }
     public enum DamageTypes
     {
         None,

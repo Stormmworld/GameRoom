@@ -44,6 +44,7 @@ namespace MTG.Model.UpkeepAbilities
                 return action;
             }
         }
+        public Guid BoundCardId { get; set; }
         private int CumulativeAge { get; set; }
         public ITriggeredAbility FailedUpkeep { get; private set; }
         public Guid Id { get; private set; }

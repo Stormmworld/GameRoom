@@ -10,6 +10,7 @@ namespace MTG.Interfaces.Ability_Interfaces
 
         #region Properties
         Guid Id { get; }
+        Guid BoundCardId { get; set; }
         #endregion
 
         #region Methods

@@ -19,6 +19,7 @@ namespace MTG.Templates
 
         #region Variables
         private UpkeepAction _Action;
+        public Guid BoundCardId { get; set; }
         private List<AbilityType> _Types;
         #endregion
 

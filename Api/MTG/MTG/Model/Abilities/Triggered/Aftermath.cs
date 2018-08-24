@@ -21,6 +21,7 @@ namespace MTG.Model.Abilities.Triggered
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public Guid Id { get; private set; }
         public EffectTrigger Trigger { get { return EffectTrigger.Card_InGraveyard; } }
         #endregion

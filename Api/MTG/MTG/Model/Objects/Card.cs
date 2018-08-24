@@ -61,7 +61,7 @@ namespace MTG.Model.Objects
                 OnCardEvent?.Invoke(this, new PhaseCardEventArgs() { CardId = Id, ControllerId= ControllerId, PhaseIn = !value});
             }
         }
-        public int Power
+        public virtual int Power
         {
             get
             {
@@ -90,7 +90,7 @@ namespace MTG.Model.Objects
             }
         }
         public bool SummoningSickness { get; set; }
-        public int Toughness
+        public virtual int Toughness
         {
             get
             {
@@ -155,19 +155,19 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Event Handlers
-        private void Ability_EffectTrigger(object sender, EventArgs e)
+        internal virtual void Ability_EffectTrigger(object sender, EventArgs e)
         {
             OnEffectTrigger?.Invoke(this, e);
         }
-        private void Ability_EffectTriggered(object sender, EventArgs e)
+        internal virtual void Ability_EffectTriggered(object sender, EventArgs e)
         {
             OnEffectTriggered?.Invoke(this, e);
         }
-        private void Ability_PendingActionTriggered(object sender, EventArgs e)
+        internal virtual void Ability_PendingActionTriggered(object sender, EventArgs e)
         {
             OnPendingActionTriggered?.Invoke(this, e);
         }
-        private void Ability_OnCardEvent(object sender, EventArgs e)
+        internal virtual void Ability_OnCardEvent(object sender, EventArgs e)
         {
             ICardEventArgs args = (ICardEventArgs)e;
             if (args.CardId == Id)
@@ -178,7 +178,7 @@ namespace MTG.Model.Objects
         #endregion
 
         #region Methods
-        public SelectAbilityResponse ActivateAbility(Guid abilityId, ManaPool pool, IActivationArgs args)
+        public virtual SelectAbilityResponse ActivateAbility(Guid abilityId, ManaPool pool, IActivationArgs args)
         {
             SelectAbilityResponse retVal = new SelectAbilityResponse();
             IActivatedAbility ability = (IActivatedAbility)_Abilities.FirstOrDefault(o => o.Id == abilityId);
@@ -200,11 +200,11 @@ namespace MTG.Model.Objects
             }
             return retVal;
         }
-        public void Add(IAbility ability)
+        public virtual void Add(IAbility ability)
         {
             _Abilities.Add(ability);
         }
-        public void Add(ICounter counter)
+        public virtual void Add(ICounter counter)
         {
             _Counters.Add(counter);
             OnEffectTrigger?.Invoke(null, new EffectTriggerEventArgs()
@@ -217,15 +217,15 @@ namespace MTG.Model.Objects
                 Trigger = EffectTrigger.Card_RecievesCounter,
             });
         }
-        public void Add(CardType cardType)
+        public virtual void Add(CardType cardType)
         {
             _CardTypes.Add(cardType);
         }
-        public void Add(Colors color)
+        public virtual void Add(Colors color)
         {
             _Colors.Add(color);
         }
-        public void Add(IEffect effect)
+        public virtual void Add(IEffect effect)
         {
             if (effect is DamageEffect)
             {
@@ -236,29 +236,29 @@ namespace MTG.Model.Objects
             else
                 throw new NotImplementedException("Card.Add Effect: Undefined for " + effect.ToString());
         }
-        public void Add(SubType subType)
+        public virtual void Add(SubType subType)
         {
             _SubTypes.Add(subType);
         }
-        public void Add(SuperType superType)
+        public virtual void Add(SuperType superType)
         {
             _SuperTypes.Add(superType);
         }
-        public void AddAbilityHooks(IAbility ability)
+        public virtual void AddAbilityHooks(IAbility ability)
         {
             ability.OnEffectTrigger += Ability_EffectTrigger;
             ability.OnEffectTriggered += Ability_EffectTriggered;
             ability.OnPendingActionTriggered += Ability_PendingActionTriggered;
             ability.OnCardEvent += Ability_OnCardEvent;
         }
-        public void Apply(ICardEventArgs args)
+        public virtual void Apply(ICardEventArgs args)
         {
             if (args is TapCardEventArgs)
                 Tapped = ((TapCardEventArgs)args).Tapped;
             else
                 throw new Exception("Cannot apply the event from " + args.ToString());
         }
-        public void ApplyDamage(ApplyDamageEventArgs args)
+        public virtual void ApplyDamage(ApplyDamageEventArgs args)
         {
             if (HasType(CardType.Planeswalker))
             {
@@ -292,18 +292,18 @@ namespace MTG.Model.Objects
                 }
             }
         }
-        public void CheckTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args = null)
+        public virtual void CheckTriggeredAbilities(EffectTrigger trigger, ITriggeredAbilityArgs args = null)
         {
             if (trigger == EffectTrigger.None)
                 return;
             foreach (IAbility ability in _Abilities.FindAll(o => o is ITriggeredAbility &&  ((ITriggeredAbility)o).Trigger == trigger))
                 ((ITriggeredAbility)ability).Process(ArgsHelper.GenerateTriggeredAbilityArgs());
         }
-        public void ClearDamage()
+        public virtual void ClearDamage()
         {
             _Damage.Clear();
         }
-        public void Destroy()
+        public virtual void Destroy()
         {
             if (!HasAbility(typeof(Indestructible)))
             {
@@ -325,11 +325,11 @@ namespace MTG.Model.Objects
             if (!(obj is Card)) return false;  
             return Id == ((Card)obj).Id;
         }
-        public List<T> FilteredAbilities<T>()
+        public virtual List<T> FilteredAbilities<T>()
         {
             return _Abilities.Where(o => o is T).Cast<T>().ToList();
         }
-        public Target GenerateTarget()
+        public virtual Target GenerateTarget()
         {
             return new Target()
             {
@@ -337,7 +337,7 @@ namespace MTG.Model.Objects
                 Id = Id,
             };
         }
-        public GetSpellOptionsResponse GetSpellOptions()
+        public virtual GetSpellOptionsResponse GetSpellOptions()
         {
             List<SelectableAbility> selectableAbilities = new List<SelectableAbility>();
             foreach (ICastingAbility ability in FilteredAbilities<ICastingAbility>())
@@ -355,7 +355,7 @@ namespace MTG.Model.Objects
                 SelectNumber  = 1,
             };
         }
-        public List<ICounter> GetCountersByType(Type type)
+        public virtual List<ICounter> GetCountersByType(Type type)
         {
             return _Counters.FindAll(o=>o.GetType() == type);
         }
@@ -363,33 +363,33 @@ namespace MTG.Model.Objects
         {
             return 2108858624 + Id.GetHashCode();
         }
-        public bool HasAbility(Type abilityType)
+        public virtual bool HasAbility(Type abilityType)
         {
             return _Abilities.FirstOrDefault(o => o.GetType() == abilityType) != null;
         }
-        public bool HasCounterType(Type type)
+        public virtual bool HasCounterType(Type type)
         {
             return _Counters.FirstOrDefault(o => o.GetType() == type) != null;
         }
-        public bool HasSubType(SubType subType)
+        public virtual bool HasSubType(SubType subType)
         {
             return _SubTypes.Contains(subType);
         }
-        public bool HasType(CardType cardType)
+        public virtual bool HasType(CardType cardType)
         {
             return _CardTypes.Contains(cardType);
         }
-        public void Remove(ICounter counter)
+        public virtual void Remove(ICounter counter)
         {
             _Counters.Remove(counter);
         }
-        public void Remove(Type type)
+        public virtual void Remove(Type type)
         {
             ICounter counter = Counters.FirstOrDefault(o => o.GetType() == type);
             if (counter != null)
                 Remove(counter);
         }
-        public void RemoveAbilityHooks(IAbility ability)
+        public virtual void RemoveAbilityHooks(IAbility ability)
         {
             ability.OnEffectTrigger -= Ability_EffectTrigger;
             ability.OnEffectTriggered -= Ability_EffectTriggered;

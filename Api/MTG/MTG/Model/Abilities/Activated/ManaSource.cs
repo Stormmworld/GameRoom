@@ -27,8 +27,9 @@ namespace MTG.Model.Abilities.Activated
 
         #region Properties
         public CastingCost ActivationCost { get; private set; }
-        public Guid Id { get; private set; }
+        public Guid BoundCardId { get; set; }
         public CardType CardTypeMultiplier { get; private set; }
+        public Guid Id { get; private set; }
         public IReadOnlyCollection<Mana> ManaProduction { get { return _ManaProduction.AsReadOnly(); } }
         public bool RequiresTap { get; set; }
         #endregion
@@ -44,9 +45,17 @@ namespace MTG.Model.Abilities.Activated
             _ManaProduction = new List<Mana>();
             _ManaProduction.Add(mana);
         }
+        public ManaSource(Mana mana, Guid boundCardId) : this(mana)
+        {
+            BoundCardId = boundCardId;
+        }
         public ManaSource(Mana mana, CardType cardTypeMultiplier):this(mana)
         {
             CardTypeMultiplier = cardTypeMultiplier;
+        }
+        public ManaSource(Mana mana, CardType cardTypeMultiplier, Guid boundCardId) : this(mana, cardTypeMultiplier)
+        {
+            BoundCardId = boundCardId;
         }
         #endregion
 

@@ -16,6 +16,7 @@ namespace MTG.Model.Abilities.Triggered
         #endregion
 
         #region Properties
+        public Guid BoundCardId { get; set; }
         public IEffect Effect { get; private set; }
         public Guid Id { get; private set; }
         public EffectTrigger Trigger { get; private set; }
@@ -30,6 +31,10 @@ namespace MTG.Model.Abilities.Triggered
         {
             Effect = effect;
             Trigger = trigger;
+        }
+        public EffectGenerator(EffectTrigger trigger, IEffect effect, Guid boundCardId) : this(trigger, effect)
+        {
+            BoundCardId = boundCardId;
         }
         #endregion
 

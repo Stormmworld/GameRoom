@@ -21,6 +21,7 @@ namespace MTG.Model.Abilities.Activated
 
         #region Properties
         public CastingCost ActivationCost { get; private set; }
+        public Guid BoundCardId { get; set; }
         public Colors ConvertedManaColor { get; private set; }
         public Guid Id { get; private set; }
         public bool RequiresTap { get; private set; }
@@ -32,10 +33,14 @@ namespace MTG.Model.Abilities.Activated
             Id = Guid.NewGuid();
             ActivationCost = new CastingCost();
         }
-        public ManaConversion(Colors originManaColor, Colors oonvertedManaColor) : this()
+        public ManaConversion(Colors originManaColor, Colors convertedManaColor) : this()
         {
             ActivationCost.ManaCosts.Add(new ManaCost() { Cost = new Mana() { Color = originManaColor, Count = 1 } });
-            ConvertedManaColor = ConvertedManaColor;
+            ConvertedManaColor = convertedManaColor;
+        }
+        public ManaConversion(Colors originManaColor, Colors convertedManaColor, Guid boundCardId) : this(originManaColor, convertedManaColor)
+        {
+            BoundCardId = boundCardId;
         }
         #endregion
 
