@@ -15,6 +15,10 @@ namespace MTG.Model.Abilities._Base
         {
             Trigger = trigger;
         }
+        internal TriggeredAbility(EffectTrigger trigger, bool removeAtEndOfTurn) :this(trigger)
+        {
+            RemoveAtEndOfTurn = removeAtEndOfTurn;
+        }
         #endregion
 
         #region Methods

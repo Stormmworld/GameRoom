@@ -8,6 +8,7 @@ namespace MTG.Interfaces.Data_Interfaces
         Guid Id { get; }
         Guid OwningCardId { get; }
         Guid ControllingPlayerId { get; }
+        bool RemoveAtEndOfTurn { get; set; }
         #endregion
 
         #region Events

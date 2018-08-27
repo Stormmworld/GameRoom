@@ -11,7 +11,8 @@ namespace MTG.Model.Abilities._Base
 
         #region Properties
         public Guid Id { get; private set; }
-        public Guid BoundCardId { get; private set; }
+        public Guid BoundCardId { get; internal set; }
+        public bool RemoveAtEndOfTurn { get; internal set; }
         #endregion
 
         #region Constructors

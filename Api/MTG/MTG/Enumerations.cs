@@ -8,7 +8,7 @@ namespace MTG.Enumerations
         Static,
         Triggered
     }
-    public enum ActionTypes
+    public enum ActionType
     {
         None,
         Sacrifice_Creature,
@@ -121,6 +121,10 @@ namespace MTG.Enumerations
         Aura_Attached,
         Aura_Detached,
     }
+    public enum GameEvent {
+        None,
+        Creature_Attacked,
+    }
     public enum GameModifier {
         None,
         CreaturesTakeNoDamage,
@@ -152,6 +156,7 @@ namespace MTG.Enumerations
         None,
         Half_ControlledForests_RoundedUp,
         Half_ControlledForests_RoundedDown,
+        CurrentPower,
     }
     public enum InsertLocation
     {

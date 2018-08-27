@@ -11,6 +11,7 @@ namespace MTG.Interfaces.Ability_Interfaces
         #region Properties
         Guid Id { get; }
         Guid BoundCardId { get; }
+        bool RemoveAtEndOfTurn { get; }
         #endregion
 
         #region Methods

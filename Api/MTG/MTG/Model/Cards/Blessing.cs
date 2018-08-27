@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
@@ -12,11 +11,10 @@ namespace MTG.Model.Cards
         /*
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=238
         *  
-        *  Enchant creature
-{W}: Enchanted creature gets +1/+1 until end of turn.
+        *  Enchant creature 
+        *  {W}: Enchanted creature gets +1/+1 until end of turn.
         *  
         * Rulings
-
         *
         */
         public Blessing() :  base(new TargetCardRequirements() { })

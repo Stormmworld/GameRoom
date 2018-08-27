@@ -14,10 +14,14 @@ namespace MTG.Model.Abilities._Base
         #endregion
 
         #region Constructors
-        internal ActivatedAbility(bool requiresTap):base()
+        internal ActivatedAbility(bool requiresTap) : base()
         {
             ActivationCost = new CastingCost();
             RequiresTap = requiresTap;
+        }
+        internal ActivatedAbility(bool requiresTap, bool removeAtEndOfTurn) : this(requiresTap)
+        {
+            RemoveAtEndOfTurn = removeAtEndOfTurn;
         }
         #endregion
 
