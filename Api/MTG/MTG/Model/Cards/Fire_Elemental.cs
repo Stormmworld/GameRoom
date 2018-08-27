@@ -1,30 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Fire_Elemental : Card
-    {
+    public class Fire_Elemental : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=196
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=196
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Fire_Elemental() : base()
         {
             MultiverseId = 196;
             Name = "Fire Elemental";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.SubType.Elemental);
-	Add(Enumerations.CardType.Creature);
-	_Power = 5;
-		_Toughness = 4;
+            Set(5, 4);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(SubType.Elemental);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Fire Elemental");
         }

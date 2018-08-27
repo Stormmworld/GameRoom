@@ -1,31 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Phantasmal_Forces : Card
-    {
+    public class Phantasmal_Forces : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=115
-            *  
-            *  Flying
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=115
+        *  
+        *  Flying
 At the beginning of your upkeep, sacrifice Phantasmal Forces unless you pay {U}.
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Phantasmal_Forces() : base()
         {
             MultiverseId = 115;
             Name = "Phantasmal Forces";
-	Add(Enumerations.Colors.Blue);
-	Add(Enumerations.SubType.Illusion);
-	Add(Enumerations.CardType.Creature);
-	_Power = 4;
-		_Toughness = 1;
+            Set(4, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            Add(Color.Blue);
+            Add(SubType.Illusion);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Phantasmal Forces");
         }

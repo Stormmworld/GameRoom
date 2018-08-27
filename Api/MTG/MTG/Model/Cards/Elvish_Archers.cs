@@ -1,31 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Elvish_Archers : Card
-    {
+    public class Elvish_Archers : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=147
-            *  
-            *  First strike
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=147
+        *  
+        *  First strike
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Elvish_Archers() : base()
         {
             MultiverseId = 147;
             Name = "Elvish Archers";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.SubType.Elf);
-	Add(Enumerations.SubType.Archer);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 1;
+            Set(2, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
+            Add(Color.Green);
+            Add(SubType.Elf);
+            Add(SubType.Archer);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Elvish Archers");
         }

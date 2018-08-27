@@ -1,27 +1,29 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Deathgrip : Card
-    {
+    public class Deathgrip : Permanent
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=56
-            *  
-            *  {B}{B}: Counter target green spell.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=56
+        *  
+        *  {B}{B}: Counter target green spell.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Deathgrip() : base()
         {
             MultiverseId = 56;
             Name = "Deathgrip";
-	Add(Enumerations.Colors.Black);
-	Add(Enumerations.CardType.Enchantment);
+            CastingCost.Add(new ManaCost(new Mana(Color.Black, 1)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Black, 1)));
+            Add(Color.Black);
+            Add(CardType.Enchantment);
 
             throw new NotImplementedException("Deathgrip");
         }

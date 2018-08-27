@@ -1,27 +1,29 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Orcish_Oriflamme : Card
-    {
+    public class Orcish_Oriflamme : Permanent
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=214
-            *  
-            *  Attacking creatures you control get +1/+0.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=214
+        *  
+        *  Attacking creatures you control get +1/+0.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Orcish_Oriflamme() : base()
         {
             MultiverseId = 214;
             Name = "Orcish Oriflamme";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.CardType.Enchantment);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(CardType.Enchantment);
 
             throw new NotImplementedException("Orcish Oriflamme");
         }

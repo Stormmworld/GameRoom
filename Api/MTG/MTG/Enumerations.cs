@@ -47,7 +47,7 @@ namespace MTG.Enumerations
         Scheme,
         Conspiracy
     }
-    public enum Colors
+    public enum Color
     {
         None = 0,
         Black,
@@ -61,9 +61,15 @@ namespace MTG.Enumerations
     public enum Comparator
     {
         None, 
-        Equal_To
+        Equal_To,
         Less_Than,
         Greater_Than,
+    }
+    public enum ConversionModifier
+    {
+        None,
+        Assigned,
+        ConvertedCost,
     }
     public enum DamageTypes
     {
@@ -112,13 +118,15 @@ namespace MTG.Enumerations
         Cast,
         LandEntersBattlefield,
         Card_AbilityCompleted,
+        Aura_Attached,
+        Aura_Detached,
     }
     public enum GameModifier {
         None,
         CreaturesTakeNoDamage,
         CombatDamagePrevented,
     }
-    public enum GamePhases
+    public enum GamePhase
     {
         None = 0,
         Beginning_Untap = 1,
@@ -138,6 +146,12 @@ namespace MTG.Enumerations
     {
         None,
         Melee
+    }
+    public enum Incrementer
+    {
+        None,
+        Half_ControlledForests_RoundedUp,
+        Half_ControlledForests_RoundedDown,
     }
     public enum InsertLocation
     {
@@ -510,6 +524,7 @@ namespace MTG.Enumerations
         Opponents,
         Specified_Number,
         Self,
+        Controller,
     }
     public enum TargetType
     {
@@ -531,7 +546,8 @@ namespace MTG.Enumerations
         Exile,
         Graveyard,
         Hand,
-        Library,
+        PhasedOut,
         Stack,
+        Library,
     }
 }

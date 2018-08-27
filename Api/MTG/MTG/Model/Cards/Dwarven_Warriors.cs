@@ -1,33 +1,34 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Dwarven_Warriors : Card
-    {
+    public class Dwarven_Warriors : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=191
-            *  
-            *  {T}: Target creature with power 2 or less can't be blocked this turn.
-            *  
-            * Rulings
-		2004-10-04: The ability can be activated after a creature is blocked, but it has no effect. Once a creature is blocked, it can't be unblocked.
-		2004-10-04: If you increase the power of the targeted creature after the ability resolves, it still can't be blocked that turn.
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=191
+        *  
+        *  {T}: Target creature with power 2 or less can't be blocked this turn.
+        *  
+        * Rulings
+        * 2004-10-04: The ability can be activated after a creature is blocked, but it has no effect. Once a creature is blocked, it can't be unblocked.
+        * 2004-10-04: If you increase the power of the targeted creature after the ability resolves, it still can't be blocked that turn.
 
-            *  
-            */
+        *
+        */
         public Dwarven_Warriors() : base()
         {
             MultiverseId = 191;
             Name = "Dwarven Warriors";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.SubType.Dwarf);
-	Add(Enumerations.SubType.Warrior);
-	Add(Enumerations.CardType.Creature);
-	_Power = 1;
-		_Toughness = 1;
+            Set(1, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(SubType.Dwarf);
+            Add(SubType.Warrior);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Dwarven Warriors");
         }

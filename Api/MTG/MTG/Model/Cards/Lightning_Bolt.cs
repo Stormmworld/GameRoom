@@ -1,27 +1,29 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Lightning_Bolt : Card
-    {
+    public class Lightning_Bolt : Spell
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=209
-            *  
-            *  Lightning Bolt deals 3 damage to target creature or player.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=209
+        *  
+        *  Lightning Bolt deals 3 damage to target creature or player.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Lightning_Bolt() : base()
         {
             MultiverseId = 209;
             Name = "Lightning Bolt";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.CardType.Instant);
+            CastingCost abilityCost = new CastingCost();
+            abilityCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(CardType.Instant);
 
             throw new NotImplementedException("Lightning Bolt");
         }

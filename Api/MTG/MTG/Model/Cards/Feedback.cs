@@ -1,29 +1,33 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using System.Collections.Generic;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
-    public class Feedback : Card
-    {
+    public class Feedback : Aura
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=105
-            *  
-            *  Enchant enchantment
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=105
+        *  
+        *  Enchant enchantment
 At the beginning of the upkeep of enchanted enchantment's controller, Feedback deals 1 damage to that player.
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
-        public Feedback() : base()
+        *
+        */
+        public Feedback() :  base(new TargetCardRequirements() { })
         {
             MultiverseId = 105;
             Name = "Feedback";
-	Add(Enumerations.Colors.Blue);
-	Add(Enumerations.SubType.Aura);
-	Add(Enumerations.CardType.Enchantment);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            Add(Color.Blue);
+            Add(SubType.Aura);
+            Add(CardType.Enchantment);
 
             throw new NotImplementedException("Feedback");
         }

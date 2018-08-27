@@ -1,30 +1,31 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Hill_Giant : Card
-    {
+    public class Hill_Giant : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=205
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=205
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Hill_Giant() : base()
         {
             MultiverseId = 205;
             Name = "Hill Giant";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.SubType.Giant);
-	Add(Enumerations.CardType.Creature);
-	_Power = 3;
-		_Toughness = 3;
+            Set(3, 3);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(SubType.Giant);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Hill Giant");
         }

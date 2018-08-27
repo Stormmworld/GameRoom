@@ -1,30 +1,31 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class War_Mammoth : Card
-    {
+    public class War_Mammoth : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=183
-            *  
-            *  Trample
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=183
+        *  
+        *  Trample
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public War_Mammoth() : base()
         {
             MultiverseId = 183;
             Name = "War Mammoth";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.SubType.Elephant);
-	Add(Enumerations.CardType.Creature);
-	_Power = 3;
-		_Toughness = 3;
+            Set(3, 3);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
+            Add(Color.Green);
+            Add(SubType.Elephant);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("War Mammoth");
         }

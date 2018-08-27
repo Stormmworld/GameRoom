@@ -1,33 +1,25 @@
-﻿using MTG.Interfaces;
-using System;
+﻿using MTG.Enumerations;
+using MTG.Model.Counters._Base;
 
 namespace MTG.Model.Counters
 {
-    public class PlusXPlusY : ICounter
+    public class PlusXPlusY : Counter
     {
-        #region Events
-        public event EventHandler OnDisposed;
-        #endregion
-
         #region Properties
-        public Guid OwningCardId { get; set; }
-        public Guid ControllingPlayerId { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         #endregion
 
         #region Constructors
-        public PlusXPlusY()
+        public PlusXPlusY(int x, int y):base()
         {
+            X = x;
+            Y = y;
+        }
+        public PlusXPlusY(Incrementer x, Incrementer y):base()
+        {
+
         }
         #endregion
-
-        #region Methods
-        public void Dispose()
-        {
-            OnDisposed?.Invoke(this, new EventArgs());
-        }
-        #endregion
-
     }
 }

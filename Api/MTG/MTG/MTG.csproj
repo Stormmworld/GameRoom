@@ -4,4 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="ArgumentDefintions\" />
+    <Folder Include="DTO\Objects\" />
+    <Folder Include="DTO\Requests\" />
+    <Folder Include="DTO\Responses\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Model\Game\" />
+    <Folder Include="Model\Zones\_Base\" />
+    <Folder Include="Snippets\" />
+    <Folder Include="Templates\" />
+  </ItemGroup>
+
 </Project>

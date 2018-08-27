@@ -1,30 +1,31 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Scathe_Zombies : Card
-    {
+    public class Scathe_Zombies : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=81
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=81
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Scathe_Zombies() : base()
         {
             MultiverseId = 81;
             Name = "Scathe Zombies";
-	Add(Enumerations.Colors.Black);
-	Add(Enumerations.SubType.Zombie);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 2;
+            Set(2, 2);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Black, 1)));
+            Add(Color.Black);
+            Add(SubType.Zombie);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Scathe Zombies");
         }

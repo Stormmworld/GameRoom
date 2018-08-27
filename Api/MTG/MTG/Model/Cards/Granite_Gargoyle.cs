@@ -1,31 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Granite_Gargoyle : Card
-    {
+    public class Granite_Gargoyle : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=203
-            *  
-            *  Flying
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=203
+        *  
+        *  Flying
 {R}: Granite Gargoyle gets +0/+1 until end of turn.
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Granite_Gargoyle() : base()
         {
             MultiverseId = 203;
             Name = "Granite Gargoyle";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.SubType.Gargoyle);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 2;
+            Set(2, 2);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(SubType.Gargoyle);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Granite Gargoyle");
         }

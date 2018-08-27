@@ -1,31 +1,31 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Llanowar_Elves : Card
-    {
+    public class Llanowar_Elves : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=166
-            *  
-            *  {T}: Add {G} to your mana pool.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=166
+        *  
+        *  {T}: Add {G} to your mana pool.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Llanowar_Elves() : base()
         {
             MultiverseId = 166;
             Name = "Llanowar Elves";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.SubType.Elf);
-	Add(Enumerations.SubType.Druid);
-	Add(Enumerations.CardType.Creature);
-	_Power = 1;
-		_Toughness = 1;
+            Set(1, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
+            Add(Color.Green);
+            Add(SubType.Elf);
+            Add(SubType.Druid);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Llanowar Elves");
         }

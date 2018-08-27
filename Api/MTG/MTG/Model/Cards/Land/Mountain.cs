@@ -1,27 +1,30 @@
-using MTG.Model.Abilities.Activated;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
+using System;
 
 namespace MTG.Model.Cards
 {
-    public class Mountain : Card
-    {
+    public class Mountain : Permanent
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=290
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=290
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Mountain() : base()
         {
             MultiverseId = 290;
             Name = "Mountain";
-            Add(Enumerations.SubType.Mountain);
-            Add(Enumerations.CardType.Land);
-            Add(Enumerations.SuperType.Basic);
-            Add(new ManaSource(new Mana() { Color = Enumerations.Colors.Red, Count = 1 }) { RequiresTap = true });
+            Add(SubType.Mountain);
+            Add(CardType.Land);
+            Add(SuperType.Basic);
+
+            throw new NotImplementedException("Mountain");
         }
         public Mountain(int multiversId) : this()
         {

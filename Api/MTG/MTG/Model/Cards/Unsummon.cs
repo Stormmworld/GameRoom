@@ -1,27 +1,29 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Unsummon : Card
-    {
+    public class Unsummon : Spell
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=134
-            *  
-            *  Return target creature to its owner's hand.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=134
+        *  
+        *  Return target creature to its owner's hand.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Unsummon() : base()
         {
             MultiverseId = 134;
             Name = "Unsummon";
-	Add(Enumerations.Colors.Blue);
-	Add(Enumerations.CardType.Instant);
+            CastingCost abilityCost = new CastingCost();
+            abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            Add(Color.Blue);
+            Add(CardType.Instant);
 
             throw new NotImplementedException("Unsummon");
         }

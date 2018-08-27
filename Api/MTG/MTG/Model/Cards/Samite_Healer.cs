@@ -1,31 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Samite_Healer : Card
-    {
+    public class Samite_Healer : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=268
-            *  
-            *  {T}: Prevent the next 1 damage that would be dealt to target creature or player this turn.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=268
+        *  
+        *  {T}: Prevent the next 1 damage that would be dealt to target creature or player this turn.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Samite_Healer() : base()
         {
             MultiverseId = 268;
             Name = "Samite Healer";
-	Add(Enumerations.Colors.White);
-	Add(Enumerations.SubType.Human);
-	Add(Enumerations.SubType.Cleric);
-	Add(Enumerations.CardType.Creature);
-	_Power = 1;
-		_Toughness = 1;
+            Set(1, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
+            CastingCost.Add(new ManaCost(new Mana(Color.White, 1)));
+            Add(Color.White);
+            Add(SubType.Human);
+            Add(SubType.Cleric);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Samite Healer");
         }

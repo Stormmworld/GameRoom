@@ -1,30 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Blue_Elemental_Blast : Card
-    {
+    public class Blue_Elemental_Blast : Spell
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=97
-            *  
-            *  Choose one —
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=97
+        *  
+        *  Choose one —
 • Counter target red spell.
 • Destroy target red permanent.
-            *  
-            * Rulings
-		2004-10-04: The decision to counter a spell or destroy a permanent is a decision made on announcement before the target is selected. If the spell is redirected, this mode can't be changed, so only targets of the selected type are valid.
+        *  
+        * Rulings
+        * 2004-10-04: The decision to counter a spell or destroy a permanent is a decision made on announcement before the target is selected. If the spell is redirected, this mode can't be changed, so only targets of the selected type are valid.
 
-            *  
-            */
+        *
+        */
         public Blue_Elemental_Blast() : base()
         {
             MultiverseId = 97;
             Name = "Blue Elemental Blast";
-	Add(Enumerations.Colors.Blue);
-	Add(Enumerations.CardType.Instant);
+            CastingCost abilityCost = new CastingCost();
+            abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            Add(Color.Blue);
+            Add(CardType.Instant);
 
             throw new NotImplementedException("Blue Elemental Blast");
         }

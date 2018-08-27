@@ -1,27 +1,30 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Terror : Card
-    {
+    public class Terror : Spell
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=86
-            *  
-            *  Destroy target nonartifact, nonblack creature. It can't be regenerated.
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=86
+        *  
+        *  Destroy target nonartifact, nonblack creature. It can't be regenerated.
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Terror() : base()
         {
             MultiverseId = 86;
             Name = "Terror";
-	Add(Enumerations.Colors.Black);
-	Add(Enumerations.CardType.Instant);
+            CastingCost abilityCost = new CastingCost();
+            abilityCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
+            abilityCost.Add(new ManaCost(new Mana(Color.Black, 1)));
+            Add(Color.Black);
+            Add(CardType.Instant);
 
             throw new NotImplementedException("Terror");
         }

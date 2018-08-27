@@ -1,29 +1,33 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using System.Collections.Generic;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
-    public class Creature_Bond : Card
-    {
+    public class Creature_Bond : Aura
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=103
-            *  
-            *  Enchant creature
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=103
+        *  
+        *  Enchant creature
 When enchanted creature dies, Creature Bond deals damage equal to that creature's toughness to the creature's controller.
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
-        public Creature_Bond() : base()
+        *
+        */
+        public Creature_Bond() :  base(new TargetCardRequirements() { })
         {
             MultiverseId = 103;
             Name = "Creature Bond";
-	Add(Enumerations.Colors.Blue);
-	Add(Enumerations.SubType.Aura);
-	Add(Enumerations.CardType.Enchantment);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            Add(Color.Blue);
+            Add(SubType.Aura);
+            Add(CardType.Enchantment);
 
             throw new NotImplementedException("Creature Bond");
         }

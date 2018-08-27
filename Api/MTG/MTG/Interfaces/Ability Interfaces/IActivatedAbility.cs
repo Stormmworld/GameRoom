@@ -1,16 +1,17 @@
-﻿using MTG.Model.Objects;
+﻿using MTG.Interfaces.Argument_Interfaces;
+using MTG.Interfaces.Mana_Interfaces;
 
 namespace MTG.Interfaces.Ability_Interfaces
 {
     public interface IActivatedAbility : IAbility
     {
         #region Properties
-        CastingCost ActivationCost { get; }
+        ICastingCost ActivationCost { get; }
         bool RequiresTap { get; }
         #endregion
 
         #region Methods
-        bool Activate(IActivationArgs args);
+        bool Activate(IActivatedAbilityArguments args);
         #endregion
     }
 }

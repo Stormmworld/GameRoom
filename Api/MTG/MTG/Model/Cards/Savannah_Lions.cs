@@ -1,30 +1,30 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Savannah_Lions : Card
-    {
+    public class Savannah_Lions : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=269
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=269
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Savannah_Lions() : base()
         {
             MultiverseId = 269;
             Name = "Savannah Lions";
-	Add(Enumerations.Colors.White);
-	Add(Enumerations.SubType.Cat);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 1;
+            Set(2, 1);
+            CastingCost.Add(new ManaCost(new Mana(Color.White, 1)));
+            Add(Color.White);
+            Add(SubType.Cat);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Savannah Lions");
         }

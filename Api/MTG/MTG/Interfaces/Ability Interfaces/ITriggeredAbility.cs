@@ -1,5 +1,5 @@
 ﻿using MTG.Enumerations;
-using MTG.Model.Objects;
+using MTG.Interfaces.Argument_Interfaces;
 
 namespace MTG.Interfaces.Ability_Interfaces
 {
@@ -10,7 +10,7 @@ namespace MTG.Interfaces.Ability_Interfaces
         #endregion
 
         #region Methods
-        void Process(ITriggeredAbilityArgs args);
+        void Process(ITriggeredAbilityArguments args);
         #endregion
     }
 }

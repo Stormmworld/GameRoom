@@ -1,21 +1,20 @@
-﻿using MTG.Enumerations;
-using MTG.Model.Objects;
-using System.Collections.Generic;
+﻿using MTG.Interfaces.Data_Interfaces;
+using MTG.Interfaces.Mana_Interfaces;
 
 namespace MTG.Interfaces.Ability_Interfaces
 {
     public interface ICastingAbility : IAbility
     {
         #region Properties
-        CastingCost CastingCost { get; }
+        ICastingCost CastingCost { get; }
         bool IsAddOn { get; }
         bool RequiresTarget { get; }
-        Target Target { get; set; }
-        TargetScope TargetScope { get; }
-        List<TargetType> TargetTypes { get; }
+        ITarget Target { get; }
+        ITargetRequirements TargetRequirements { get; }
         #endregion
 
         #region Methods
+        void Assign(ITarget target);
         void Process();
         #endregion
     }

@@ -1,32 +1,33 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Fungusaur : Card
-    {
+    public class Fungusaur : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=151
-            *  
-            *  Whenever Fungusaur is dealt damage, put a +1/+1 counter on it.
-            *  
-            * Rulings
-		2004-10-04: If more than one creature damages it at one time, it only gets one counter.
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=151
+        *  
+        *  Whenever Fungusaur is dealt damage, put a +1/+1 counter on it.
+        *  
+        * Rulings
+        * 2004-10-04: If more than one creature damages it at one time, it only gets one counter.
 
-            *  
-            */
+        *
+        */
         public Fungusaur() : base()
         {
             MultiverseId = 151;
             Name = "Fungusaur";
-	Add(Enumerations.Colors.Green);
-	Add(Enumerations.SubType.Fungus);
-	Add(Enumerations.SubType.Dinosaur);
-	Add(Enumerations.CardType.Creature);
-	_Power = 2;
-		_Toughness = 2;
+            Set(2, 2);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
+            CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
+            Add(Color.Green);
+            Add(SubType.Fungus);
+            Add(SubType.Dinosaur);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Fungusaur");
         }

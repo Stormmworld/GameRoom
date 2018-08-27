@@ -1,29 +1,32 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using System.Collections.Generic;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
-    public class Burrowing : Card
-    {
+    public class Burrowing : Aura
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=186
-            *  
-            *  Enchant creature
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=186
+        *  
+        *  Enchant creature
 Enchanted creature has mountainwalk. (It can't be blocked as long as defending player controls a Mountain.)
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
-        public Burrowing() : base()
+        *
+        */
+        public Burrowing() :  base(new TargetCardRequirements() { })
         {
             MultiverseId = 186;
             Name = "Burrowing";
-	Add(Enumerations.Colors.Red);
-	Add(Enumerations.SubType.Aura);
-	Add(Enumerations.CardType.Enchantment);
+            CastingCost.Add(new ManaCost(new Mana(Color.Red, 1)));
+            Add(Color.Red);
+            Add(SubType.Aura);
+            Add(CardType.Enchantment);
 
             throw new NotImplementedException("Burrowing");
         }

@@ -1,51 +1,18 @@
-﻿using MTG.Interfaces;
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Objects;
-using System;
+﻿using MTG.Interfaces.Mana_Interfaces;
+using MTG.Model.Abilities._Base;
 
 namespace MTG.Model.Abilities.Activated
 {
-    public class Untap: IActivatedAbility
+    public class Untap: ActivatedAbility
     {
-        /*
-        * Untap
-             
-        */
-        #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
-        #endregion
-
-        #region Variables
-        #endregion
-
-        #region Properties
-        public CastingCost ActivationCost { get; private set; }
-        public Guid BoundCardId { get; set; }
-        public Guid Id { get; private set; }
-        public bool RequiresTap { get; private set; }
-        #endregion
-
         #region Constructors
-        private Untap()
+        public Untap(bool requiresTap) : base(requiresTap)
         {
-            Id = Guid.NewGuid();
-            ActivationCost = new CastingCost();
+
         }
-        public Untap(CastingCost activationCost, bool requiresTap)
+        public Untap(bool requiresTap, ICastingCost activationCost) : this(requiresTap)
         {
             ActivationCost = activationCost;
-            RequiresTap = requiresTap;
-        }
-        #endregion
-
-        #region Methods
-        public bool Activate(IActivationArgs e)
-        {
-            throw new NotImplementedException("Untap.Activate");
-        }
-        public override string ToString()
-        {
-            return this.GetType().Name;
         }
         #endregion
     }

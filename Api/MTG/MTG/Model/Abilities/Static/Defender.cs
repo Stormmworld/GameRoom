@@ -1,34 +1,8 @@
-﻿using MTG.Interfaces.Ability_Interfaces;
-using System;
+﻿using MTG.Model.Abilities._Base;
 
 namespace MTG.Model.Abilities.Static
 {
-    public class Defender : IStaticAbility
+    public class Defender : StaticAbility
     {
-        /*
-        * Defender
-        */
-        #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
-        #endregion
-
-        #region Properties
-        public Guid BoundCardId { get; set; }
-        public Guid Id { get; private set; }
-        #endregion
-
-        #region Constructors
-        public Defender()
-        {
-            Id = Guid.NewGuid();
-        }        
-        #endregion
-
-        #region Methods
-        public override string ToString()
-        {
-            return this.GetType().Name;
-        }
-        #endregion
     }
 }

@@ -1,83 +1,40 @@
-﻿using MTG.Interfaces;
-using MTG.Enumerations;
-using System;
-using MTG.Model.Objects;
+﻿using MTG.Model.Abilities._Base;
+using MTG.Model.Mana_Objects;
 using System.Collections.Generic;
-using MTG.Model.Effects;
-using MTG.ArgumentDefintions.ActivationArguments;
-using MTG.ArgumentDefintions.Event_Arguments;
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.ArgumentDefintions.Effect_Triggered_Arguments;
 
 namespace MTG.Model.Abilities.Activated
 {
-    public class ManaSource : IActivatedAbility
+    public class ManaSource : ActivatedAbility
     {
-        /*
-        * https://mtg.gamepedia.com/ManaSource
-             
-        */
-        #region Events
-        public event EventHandler OnPendingActionTriggered, OnEffectTriggered, OnEffectTrigger, OnCardEvent;
-        #endregion
-
-        #region Variables
+        #region Propreties
         private List<Mana> _ManaProduction;
         #endregion
 
-        #region Properties
-        public CastingCost ActivationCost { get; private set; }
-        public Guid BoundCardId { get; set; }
-        public CardType CardTypeMultiplier { get; private set; }
-        public Guid Id { get; private set; }
+        #region Propreties
         public IReadOnlyCollection<Mana> ManaProduction { get { return _ManaProduction.AsReadOnly(); } }
-        public bool RequiresTap { get; set; }
+        public bool RequiresSacrifice { get; private set; }
         #endregion
 
         #region Constructors
-        private ManaSource()
+        private ManaSource(bool requiresTap) : base(requiresTap)
         {
-            ActivationCost = new CastingCost();
-        }
-        public ManaSource(Mana mana):this()
-        {
-            Id = Guid.NewGuid();
             _ManaProduction = new List<Mana>();
-            _ManaProduction.Add(mana);
         }
-        public ManaSource(Mana mana, Guid boundCardId) : this(mana)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction) : this(requiresTap)
         {
-            BoundCardId = boundCardId;
+            _ManaProduction.AddRange(manaProduction);
         }
-        public ManaSource(Mana mana, CardType cardTypeMultiplier):this(mana)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction, bool requiresSacrifice) : this(requiresTap, manaProduction)
         {
-            CardTypeMultiplier = cardTypeMultiplier;
+            RequiresSacrifice = requiresSacrifice;
         }
-        public ManaSource(Mana mana, CardType cardTypeMultiplier, Guid boundCardId) : this(mana, cardTypeMultiplier)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction, CastingCost activationCost) : this(requiresTap, manaProduction)
         {
-            BoundCardId = boundCardId;
+            ActivationCost = activationCost;
         }
-        #endregion
-
-        #region Methods
-        public bool Activate(IActivationArgs e)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction, CastingCost activationCost, bool requiresSacrifice) : this(requiresTap, manaProduction, activationCost)
         {
-            ManaSourceActivationArgs args = (ManaSourceActivationArgs)e;
-            foreach (Mana mana in ManaProduction)
-            {
-                if (CardTypeMultiplier != CardType.None)
-                    mana.Count = mana.Count * args.CardTypeCount;
-                if (args.ManaMultiplier > 0)
-                    mana.Count = mana.Count * args.ManaMultiplier;
-                OnEffectTriggered?.Invoke(this, new EffectTriggeredEventArgs(new AddManaToPoolEffect(mana, args.ActivatingPlayerId)));
-                if (RequiresTap)
-                    OnCardEvent?.Invoke(this, new TapCardEventArgs() { CardId = args.ActivatingCardId, ControllerId = args.ActivatingPlayerId, Tapped = RequiresTap });
-            }
-            return true;
-        }
-        public override string ToString()
-        {
-            return this.GetType().Name;
+            RequiresSacrifice = requiresSacrifice;
         }
         #endregion
     }

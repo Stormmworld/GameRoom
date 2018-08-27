@@ -1,31 +1,31 @@
-using MTG.Interfaces.Ability_Interfaces;
-using MTG.Model.Abilities.Spell;
-using MTG.Model.Objects;
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using System;
 
 namespace MTG.Model.Cards
 {
-    public class Living_Wall : Card
-    {
+    public class Living_Wall : Creature
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=29
-            *  
-            *  Defender (This creature can't attack.)
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=29
+        *  
+        *  Defender (This creature can't attack.)
 {1}: Regenerate Living Wall.
-            *  
-            * Rulings
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Living_Wall() : base()
         {
             MultiverseId = 29;
             Name = "Living Wall";
-	Add(Enumerations.SubType.Wall);
-	Add(Enumerations.CardType.Artifact);
-	Add(Enumerations.CardType.Creature);
-	_Power = 0;
-		_Toughness = 6;
+            Set(0, 6);
+            CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 4)));
+            Add(SubType.Wall);
+            Add(CardType.Artifact);
+            Add(CardType.Creature);
 
             throw new NotImplementedException("Living Wall");
         }

@@ -1,27 +1,30 @@
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
+using System.Collections.Generic;
 using MTG.Model.Abilities.Activated;
-using MTG.Model.Objects;
 
 namespace MTG.Model.Cards
 {
-    public class Plains : Card
-    {
+    public class Plains : Permanent
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=294
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=294
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Plains() : base()
         {
             MultiverseId = 294;
             Name = "Plains";
-            Add(Enumerations.SubType.Plains);
-            Add(Enumerations.CardType.Land);
-            Add(Enumerations.SuperType.Basic);
-            Add(new ManaSource(new Mana() { Color = Enumerations.Colors.White, Count = 1 }) { RequiresTap = true });
+            Add(SubType.Plains);
+            Add(CardType.Land);
+            Add(SuperType.Basic);
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.White, 1) }));
         }
         public Plains(int multiversId) : this()
         {

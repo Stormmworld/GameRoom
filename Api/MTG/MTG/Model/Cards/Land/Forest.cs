@@ -1,27 +1,30 @@
+using MTG.Enumerations;
+using MTG.Model.Mana_Objects;
+using MTG.Model.Cards._Base;
 using MTG.Model.Abilities.Activated;
-using MTG.Model.Objects;
+using System.Collections.Generic;
 
 namespace MTG.Model.Cards
 {
-    public class Forest : Card
-    {
+    public class Forest : Permanent
+        {
         /*
-            * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=288
-            *  
-            *  
-            *  
-            * Rulings
+        * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=288
+        *  
+        *  
+        *  
+        * Rulings
 
-            *  
-            */
+        *
+        */
         public Forest() : base()
         {
             MultiverseId = 288;
             Name = "Forest";
-            Add(Enumerations.SubType.Forest);
-            Add(Enumerations.CardType.Land);
-            Add(Enumerations.SuperType.Basic);
-            Add(new ManaSource(new Mana() { Color = Enumerations.Colors.Green, Count = 1 }) { RequiresTap = true });
+            Add(SubType.Forest);
+            Add(CardType.Land);
+            Add(SuperType.Basic);
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Green, 1) }));
         }
         public Forest(int multiversId) : this()
         {
