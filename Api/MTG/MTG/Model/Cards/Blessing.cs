@@ -3,6 +3,10 @@ using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
 using System;
 using MTG.Model.Data_Objects;
+using MTG.Model.Abilities.Activated;
+using System.Collections.Generic;
+using MTG.Interfaces.Mana_Interfaces;
+using MTG.Model.Counters;
 
 namespace MTG.Model.Cards
 {
@@ -26,7 +30,7 @@ namespace MTG.Model.Cards
             Add(Color.White);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-
+            Add(new CounterGenerator(false, new PlusXPlusY(1, 1) { },new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.White, 1)) })));
             throw new NotImplementedException("Blessing");
         }
         public Blessing(int multiversId) : this()
