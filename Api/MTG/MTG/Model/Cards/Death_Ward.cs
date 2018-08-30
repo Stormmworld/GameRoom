@@ -13,7 +13,6 @@ namespace MTG.Model.Cards
         *  Regenerate target creature.
         *  
         * Rulings
-
         *
         */
         public Death_Ward() : base()
@@ -24,8 +23,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Instant);
-
-            throw new NotImplementedException("Death Ward");
+            throw new NotImplementedException("Death_Ward");
         }
         public Death_Ward(int multiversId) : this()
         {

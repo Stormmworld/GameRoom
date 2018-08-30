@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             Add(Color.Blue);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new ConvertToCreature(EffectTrigger.Aura_Attached, ConversionModifier.ConvertedCost, ConversionModifier.ConvertedCost));
+            Add(new ConvertToCreature(EffectTrigger.Aura_Attached, Modifier.ConvertedCost, Modifier.ConvertedCost));
         }
         public Animate_Artifact(int multiversId) : this()
         {

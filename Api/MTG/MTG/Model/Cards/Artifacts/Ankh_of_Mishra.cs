@@ -17,7 +17,6 @@ namespace MTG.Model.Cards
         * Rulings
         * 2004-10-04: This triggers on any land entering the battlefield. This includes playing a land or putting a land onto the battlefield using a spell or ability.
         * 2004-10-04: It determines the land's controller at the time the ability resolves. If the land leaves the battlefield before the ability resolves, the land's last controller before it left is used.
-
         *
         */
         public Ankh_of_Mishra() : base()
@@ -26,7 +25,7 @@ namespace MTG.Model.Cards
             Name = "Ankh of Mishra";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
             Add(CardType.Artifact);
-            Add(new Damage(2, EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Controller, new List<TargetType>(){ TargetType.Player })));
+            Add(new TriggeredDamage(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Controller, new List<TargetType>() { TargetType.Player }), new Damage(this, 2)));
         }
         public Ankh_of_Mishra(int multiversId) : this()
         {

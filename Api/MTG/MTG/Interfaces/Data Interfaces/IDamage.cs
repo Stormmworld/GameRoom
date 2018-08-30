@@ -8,9 +8,11 @@ namespace MTG.Interfaces.Data_Interfaces
     public interface IDamage
     {
         #region Properties
-        Guid Id { get; set; }
+        Guid Id { get; }
         int Modifier { get; }
         int Value { get; }
+        bool UseXValue { get; }
+        Modifier XModifier { get; }
         #endregion
 
         #region Collection Properties

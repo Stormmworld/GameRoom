@@ -24,7 +24,7 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.Black, 1)));
             Add(Color.Black);
             Add(CardType.Enchantment);
-
+           
             throw new NotImplementedException("Deathgrip");
         }
         public Deathgrip(int multiversId) : this()

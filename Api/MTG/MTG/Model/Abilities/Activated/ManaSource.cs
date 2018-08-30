@@ -6,7 +6,7 @@ namespace MTG.Model.Abilities.Activated
 {
     public class ManaSource : ActivatedAbility
     {
-        #region Propreties
+        #region Variables
         private List<Mana> _ManaProduction;
         #endregion
 

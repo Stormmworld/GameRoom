@@ -73,12 +73,6 @@ namespace MTG.Enumerations
         Less_Than,
         Greater_Than,
     }
-    public enum ConversionModifier
-    {
-        None,
-        Assigned,
-        ConvertedCost,
-    }
     public enum DamageTypes
     {
         None,
@@ -184,6 +178,14 @@ namespace MTG.Enumerations
         Cumulative_Upkeep,
         Flashback_GraveYard,
 
+    }
+    public enum Modifier
+    {
+        None,
+        Assigned,
+        ConvertedCost,
+        Power,
+        Toughness,
     }
     public enum SacrificeType
     {
