@@ -7,7 +7,7 @@ namespace MTG.Model.Abilities.Activated
     public class CounterGenerator: ActivatedAbility
     {
         #region Properties
-        public ICounter Counter { get; set; }
+        public ICounter Counter { get; internal set; }
         #endregion
 
         #region Constructors
