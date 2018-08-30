@@ -14,7 +14,7 @@ namespace MTG.Interfaces.Card_Interfaces
         #endregion
 
         #region Properties
-        Guid ControllerId { get; set; }
+        Guid ControllerId { get; }
         bool Tapped { get; }
         #endregion
 

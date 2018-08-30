@@ -48,24 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ability Tests\DamageCardEventArgs.cs" />
-    <Compile Include="Ability Tests\Indestructible_Tests.cs" />
-    <Compile Include="Ability Tests\First_Strike_Tests.cs" />
-    <Compile Include="Ability Tests\Double_StrikeTests.cs" />
-    <Compile Include="Ability Tests\Deathtouch_Tests.cs" />
-    <Compile Include="Card Tests\TimeTwister_Tests.cs" />
-    <Compile Include="Game Tests\Combat_Tests.cs" />
-    <Compile Include="Game Tests\Damage_Tests.cs" />
-    <Compile Include="Game Tests\Game_Tests.cs" />
-    <Compile Include="Helpers\Game_Helper.cs" />
-    <Compile Include="Mockers\ApplyDamageEventArgs_Mocker.cs" />
-    <Compile Include="Mockers\Card_Mocker.cs" />
-    <Compile Include="Mockers\Combat_Mocker.cs" />
-    <Compile Include="Mockers\Damage_Mocker.cs" />
-    <Compile Include="Mockers\Player_Mocker.cs" />
-    <Compile Include="Mockers\Target_Mocker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Upkeep Tests\CumulativeUpkeepTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -77,7 +60,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Ability Tests\" />
+    <Folder Include="Card Tests\" />
+    <Folder Include="Game Tests\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Mockers\" />
     <Folder Include="Player Tests\" />
+    <Folder Include="Upkeep Tests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

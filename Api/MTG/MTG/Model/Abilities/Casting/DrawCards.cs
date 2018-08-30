@@ -8,6 +8,7 @@ namespace MTG.Model.Abilities.Casting
     {
         #region Properties
         public int DrawCount { get; private set; }
+        public bool UseXValue { get; private set; }
         #endregion
 
         #region Constructors
@@ -18,6 +19,10 @@ namespace MTG.Model.Abilities.Casting
         public DrawCards(int drawCount, ICastingCost castingCost, ITargetRequirements targetRequirements, bool isAddOn) : base(castingCost, targetRequirements, isAddOn)
         {
             DrawCount = drawCount;
+        }
+        public DrawCards(bool useXValue, ICastingCost castingCost, ITargetRequirements targetRequirements, bool isAddOn) : base(castingCost, targetRequirements, isAddOn)
+        {
+            UseXValue = useXValue;
         }
         #endregion
     }

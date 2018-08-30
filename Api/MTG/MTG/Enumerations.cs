@@ -30,6 +30,14 @@ namespace MTG.Enumerations
         Attacking,
         Defending,
     }
+    public enum CardAction
+    {
+        None,
+        Tapped,
+        Untapped,
+        Attacker,
+        Blocker,
+    }
     public enum CardType
     {
         None,
@@ -120,6 +128,8 @@ namespace MTG.Enumerations
         Card_AbilityCompleted,
         Aura_Attached,
         Aura_Detached,
+        Card_Untapped,
+        Card_Tapped,
     }
     public enum GameEvent {
         None,
@@ -530,6 +540,7 @@ namespace MTG.Enumerations
         Specified_Number,
         Self,
         Controller,
+        ActivePlayer,
     }
     public enum TargetType
     {

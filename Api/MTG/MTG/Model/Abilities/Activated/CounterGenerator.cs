@@ -1,17 +1,25 @@
-﻿using MTG.Model.Abilities._Base;
+﻿using MTG.Interfaces.Data_Interfaces;
+using MTG.Model.Abilities._Base;
+using MTG.Model.Mana_Objects;
 
 namespace MTG.Model.Abilities.Activated
 {
     public class CounterGenerator: ActivatedAbility
     {
+        #region Properties
+        public ICounter Counter { get; set; }
+        #endregion
+
         #region Constructors
-        public CounterGenerator(bool requiresTap) : base(requiresTap)
+        public CounterGenerator(bool requiresTap, CastingCost activationCost, ICounter counter) : base(requiresTap)
         {
-
+            ActivationCost = activationCost;
+            Counter = counter;
         }
-        public CounterGenerator(bool requiresTap, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
+        public CounterGenerator(bool requiresTap, CastingCost activationCost, ICounter counter, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
         {
-
+            ActivationCost = activationCost;
+            Counter = counter;
         }
         #endregion
     }

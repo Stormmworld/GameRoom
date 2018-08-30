@@ -28,8 +28,8 @@ namespace MTG.Model.Cards
             Add(Color.White);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new AddAbility(EffectTrigger.Aura_Attached, Protection.From(new List<Color>() {Color.Black })));
-            Add(new RemoveAbility(EffectTrigger.Aura_Detached, Protection.From(new List<Color>() { Color.Black })));
+            Add(new AddAbility(EffectTrigger.Aura_Attached, Protection.From(new List<Color>() {Color.Black })) { BoundCardId = Id });
+            Add(new RemoveAbility(EffectTrigger.Aura_Detached, Protection.From(new List<Color>() { Color.Black })) { BoundCardId = Id });
         }
         public Black_Ward(int multiversId) : this()
         {

@@ -7,8 +7,9 @@ namespace MTG.Model.Counters._Base
     {
         #region Properties
         public Guid Id { get; private set; }
-        public Guid OwningCardId { get; private set; }
+        public Guid OwningCardId { get; internal set; }
         public Guid ControllingPlayerId { get; private set; }
+        public bool RemoveAtEndOfTurn { get; internal set; }
         #endregion
 
         #region Constructors

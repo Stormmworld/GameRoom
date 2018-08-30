@@ -21,7 +21,7 @@ namespace MTG.Model.Cards._Base
         #endregion
 
         #region Properties
-        public Guid ControllerId { get; set; }
+        public Guid ControllerId { get; internal set; }
         public bool Tapped { get; private set; }
         #endregion
 
