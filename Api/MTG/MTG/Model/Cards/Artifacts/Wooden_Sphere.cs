@@ -22,7 +22,7 @@ namespace MTG.Model.Cards
             Name = "Wooden Sphere";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColors = Color.Green }, 1));
+            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColor = Color.Green }, 1));
         }
         public Wooden_Sphere(int multiversId) : this()
         {

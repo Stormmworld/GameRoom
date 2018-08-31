@@ -27,7 +27,7 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.Black, 1)));
             Add(Color.Black);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField,new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() {HasColors= Color.Black }), new PlusXPlusY(1,1) ));
+            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField,new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() {HasColor= Color.Black }), new PlusXPlusY(1,1) ));
         }
         public Bad_Moon(int multiversId) : this()
         {

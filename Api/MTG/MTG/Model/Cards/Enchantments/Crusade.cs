@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { HasColors = Color.White }), new PlusXPlusY(1, 1)));
+            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { HasColor = Color.White }), new PlusXPlusY(1, 1)));
         }
         public Crusade(int multiversId) : this()
         {

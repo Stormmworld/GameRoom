@@ -1,20 +1,16 @@
-﻿using MTG.Enumerations;
-using MTG.Interfaces.Data_Interfaces;
-using System;
+﻿using MTG.Interfaces.Data_Interfaces;
 
 namespace MTG.Interfaces.Effect_Interfaces
 {
     public interface IEffect
     {
         #region Properties
-        Guid BoundCardId { get; }
-        GamePhase EndingPhase { get; }
-        Guid EndingPhaseOwnerId { get; }
         ITarget Target { get; }
+        int XValue { get; }
         #endregion
 
         #region Methods
-        void Bind(Guid boundCardId);
+        void AssignXValue(int xValue);
         #endregion
     }
 }

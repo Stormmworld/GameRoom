@@ -1,7 +1,6 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
 using MTG.Model.Data_Objects;
 using System.Collections.Generic;
 using MTG.Model.Effects;
@@ -31,8 +30,8 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
             Add(Color.Blue);
             Add(CardType.Instant);
-            Add(new Abilities.Casting.CounterSpell(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { HasColors = Color.Red, InZone = TargetZone.Stack }),false));
-            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card } ,new TargetCardRequirements() { HasColors = Color.Red, InZone = TargetZone.Battlefield }), typeof(DestroyEffect), false));
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
+            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card } ,new TargetCardRequirements() { HasColor = Color.Red, InZone = TargetZone.Battlefield }), typeof(DestroyEffect), false));
         }
         public Blue_Elemental_Blast(int multiversId) : this()
         {

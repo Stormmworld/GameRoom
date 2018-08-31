@@ -22,7 +22,7 @@ namespace MTG.Model.Cards
             Name = "Ivory Cup";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColors = Color.White }, 1));
+            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColor = Color.White }, 1));
         }
         public Ivory_Cup(int multiversId) : this()
         {

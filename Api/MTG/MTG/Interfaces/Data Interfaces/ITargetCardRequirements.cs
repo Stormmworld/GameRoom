@@ -4,7 +4,7 @@ namespace MTG.Interfaces.Data_Interfaces
 {
     public interface ITargetCardRequirements
     {
-        Color HasColors { get; }
+        Color HasColor { get; }
         CardType HasType { get; }
         SubType HasSubType { get; }
         SuperType HasSuperType { get; }

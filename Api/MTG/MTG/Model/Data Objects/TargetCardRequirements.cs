@@ -6,7 +6,7 @@ namespace MTG.Model.Data_Objects
     public class TargetCardRequirements : ITargetCardRequirements
     {
         #region Properties
-        public Color HasColors { get; internal set; }
+        public Color HasColor { get; internal set; }
         public CardType HasType { get; internal set; }
         public SubType HasSubType { get; internal set; }
         public SuperType HasSuperType { get; internal set; }
@@ -23,7 +23,7 @@ namespace MTG.Model.Data_Objects
         #region Methods
         public void Assign(Color color)
         {
-            HasColors = color;
+            HasColor = color;
         }
         public void Assign(CardType type)
         {

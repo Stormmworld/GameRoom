@@ -22,7 +22,7 @@ namespace MTG.Model.Cards
             Name = "Crystal Rod";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new GainLife( EffectTrigger.Card_Cast,new TargetCardRequirements() { HasColors = Color.Blue} , 1));
+            Add(new GainLife( EffectTrigger.Card_Cast,new TargetCardRequirements() { HasColor = Color.Blue} , 1));
         }
         public Crystal_Rod(int multiversId) : this()
         {

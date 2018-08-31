@@ -22,7 +22,7 @@ namespace MTG.Model.Cards
             Name = "Iron Star";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColors = Color.Red }, 1));
+            Add(new GainLife(EffectTrigger.Card_Cast, new TargetCardRequirements() { HasColor = Color.Red }, 1));
         }
         public Iron_Star(int multiversId) : this()
         {

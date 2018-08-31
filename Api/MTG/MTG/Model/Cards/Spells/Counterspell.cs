@@ -4,6 +4,7 @@ using MTG.Model.Cards._Base;
 using MTG.Model.Abilities.Casting;
 using MTG.Model.Data_Objects;
 using System.Collections.Generic;
+using MTG.Model.Effects;
 
 namespace MTG.Model.Cards
 {
@@ -26,7 +27,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
             Add(Color.Blue);
             Add(CardType.Instant);
-            Add(new CounterSpell(abilityCost, new TargetRequirements( TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() {InZone= TargetZone.Stack }), false));
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
         }
         public Counterspell(int multiversId) : this()
         {
