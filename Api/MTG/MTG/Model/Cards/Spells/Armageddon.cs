@@ -4,6 +4,8 @@ using MTG.Model.Cards._Base;
 using MTG.Model.Abilities.Casting;
 using MTG.Model.Data_Objects;
 using System.Collections.Generic;
+using MTG.Model.Abilities.Activated;
+using MTG.Model.Effects;
 
 namespace MTG.Model.Cards
 {
@@ -27,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Sorcery);
-            Add(new Destroy(abilityCost, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Land }), false));
+            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Land }), typeof(DestroyEffect), false));
         }
         public Armageddon(int multiversId) : this()
         {

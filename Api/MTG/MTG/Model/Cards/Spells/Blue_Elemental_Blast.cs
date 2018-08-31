@@ -4,6 +4,8 @@ using MTG.Model.Cards._Base;
 using System;
 using MTG.Model.Data_Objects;
 using System.Collections.Generic;
+using MTG.Model.Effects;
+using MTG.Model.Abilities.Casting;
 
 namespace MTG.Model.Cards
 {
@@ -30,7 +32,7 @@ namespace MTG.Model.Cards
             Add(Color.Blue);
             Add(CardType.Instant);
             Add(new Abilities.Casting.CounterSpell(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { HasColors = Color.Red, InZone = TargetZone.Stack }),false));
-            Add(new Abilities.Casting.Destroy(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { HasColors = Color.Red, InZone = TargetZone.Battlefield }), false));
+            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card } ,new TargetCardRequirements() { HasColors = Color.Red, InZone = TargetZone.Battlefield }), typeof(DestroyEffect), false));
         }
         public Blue_Elemental_Blast(int multiversId) : this()
         {

@@ -4,6 +4,9 @@ using MTG.Model.Cards._Base;
 using MTG.Model.Abilities.Static;
 using MTG.Interfaces.Mana_Interfaces;
 using System.Collections.Generic;
+using MTG.Model.Abilities.Activated;
+using MTG.Model.Data_Objects;
+using MTG.Model.Effects;
 
 namespace MTG.Model.Cards
 {
@@ -31,7 +34,7 @@ namespace MTG.Model.Cards
             Add(SubType.Wall);
             Add(CardType.Creature);
             Add(new Defender());
-            Add(new Abilities.Activated.RegenerationAbility(new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1))}),false));
+            Add(new EffectGenerator(false,new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1))}), typeof(RegenerationEffect),new TargetRequirements(TargetScope.Self, new List<TargetType>()),false));
         }
         public Wall_of_Bone(int multiversId) : this()
         {
