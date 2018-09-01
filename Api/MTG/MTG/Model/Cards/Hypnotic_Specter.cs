@@ -11,11 +11,10 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=68
         *  
         *  Flying
-Whenever Hypnotic Specter deals damage to an opponent, that player discards a card at random.
+        *  Whenever Hypnotic Specter deals damage to an opponent, that player discards a card at random.
         *  
         * Rulings
         * 2008-08-01: The ability triggers even if the Specter's damage is being redirected to an opponent. It does not trigger if damage that would have been dealt to the opponent is redirected to a nonopponent player or a creature, or if the damage is prevented.
-
         *
         */
         public Hypnotic_Specter() : base()

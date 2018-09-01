@@ -28,7 +28,7 @@ namespace MTG.Model.Cards
             Add(Color.Black);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new UpkeepDamage(new TargetRequirements(TargetScope.Controller,new List<TargetType>() { TargetType.Player}), new Damage(this,1)));
+            Add(new UpkeepDamage(new TargetRequirements(TargetScope.Controller,TargetType.Player), new Damage(this,1)));
         }
         public Cursed_Land(int multiversId) : this()
         {

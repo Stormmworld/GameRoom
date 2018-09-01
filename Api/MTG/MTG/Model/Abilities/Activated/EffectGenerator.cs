@@ -1,9 +1,10 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces.Data_Interfaces;
 using MTG.Interfaces.Effect_Interfaces;
+using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
-using MTG.Model.Mana_Objects;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities.Activated
 {
@@ -12,6 +13,8 @@ namespace MTG.Model.Abilities.Activated
         #region Properties
         public Type EffectType { get; private set; }
         public ITargetRequirements TargetRequirements { get; private set; }
+        public int EffectValue { get; internal set; }
+        public GamePhase RestrictedPhase { get; internal set; }
         #endregion
 
         #region Constructors 
@@ -20,10 +23,11 @@ namespace MTG.Model.Abilities.Activated
             EffectType = effectType;
             TargetRequirements = targetRequirements;
         }
-        public EffectGenerator(bool requiresTap, CastingCost activationCost, Type effectType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : this( requiresTap,    effectType,  targetRequirements,  removeAtEndOfTurn)
+        public EffectGenerator(bool requiresTap, List<IManaCost> activationCost, Type effectType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : this( requiresTap,    effectType,  targetRequirements,  removeAtEndOfTurn)
         {
             EffectType = effectType;
             TargetRequirements = targetRequirements;
+            Add(activationCost);
         }
         #endregion
 

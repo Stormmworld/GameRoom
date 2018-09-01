@@ -31,8 +31,8 @@ namespace MTG.Model.Cards
             Add(Color.Green);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Creature }), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp)));
-            Add(new CounterGenerator(EffectTrigger.Aura_Attached, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Creature }), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp)));
+            Add(new CounterGenerator(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Single, TargetType.Creature), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp)));
+            Add(new CounterGenerator(EffectTrigger.Aura_Attached, new TargetRequirements(TargetScope.Single,  TargetType.Creature), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp)));
         }
         public Aspect_of_Wolf(int multiversId) : this()
         {

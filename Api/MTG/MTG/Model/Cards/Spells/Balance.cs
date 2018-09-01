@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Sorcery);
-            Add(new BalanceAbility(abilityCost, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Player}), false));
+            Add(new BalanceAbility(abilityCost, new TargetRequirements(TargetScope.All, TargetType.Player), false));
         }
         public Balance(int multiversId) : this()
         {

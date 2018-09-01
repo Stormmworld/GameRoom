@@ -30,8 +30,8 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
             Add(Color.Blue);
             Add(CardType.Instant);
-            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
-            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card } ,new TargetCardRequirements() { HasColor = Color.Red, InZone = TargetZone.Battlefield }), typeof(DestroyEffect), false));
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Card , new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
+            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.Single,  TargetType.Card  ,new TargetCardRequirements() { HasColor = Color.Red, InZone = TargetZone.Battlefield }), typeof(DestroyEffect), false));
         }
         public Blue_Elemental_Blast(int multiversId) : this()
         {

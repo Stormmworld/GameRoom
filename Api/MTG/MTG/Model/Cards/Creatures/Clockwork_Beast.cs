@@ -38,7 +38,7 @@ namespace MTG.Model.Cards
             Add(SubType.Beast);
             Add(CardType.Artifact);
             Add(CardType.Creature);
-            Add(new CounterGenerator(false, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, true))}), new PlusXPlusY(1, 0) { OwningCardId = Id }));
+            Add(new CounterGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, true))}, new PlusXPlusY(1, 0) { OwningCardId = Id }));
             Add(new Abilities.Triggered.CounterRemoval(EffectTrigger.Phases_CombatPhase_EndStep, new PlusXPlusY(1, 0) { OwningCardId = Id }, new List<CardAction>() { CardAction.Attacker, CardAction.Blocker }));
         }
         public Clockwork_Beast(int multiversId) : this()

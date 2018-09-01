@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Black, 1)));
             Add(Color.Black);
             Add(CardType.Instant);
-            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }), Color.Black, true, false));
+            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single,TargetType.Card), Color.Black, true, false));
         }
         public Deathlace(int multiversId) : this()
         {

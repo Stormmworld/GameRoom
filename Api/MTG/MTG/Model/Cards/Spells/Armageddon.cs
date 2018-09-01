@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Sorcery);
-            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Land }), typeof(DestroyEffect), false));
+            Add(new CreateEffect(abilityCost,new TargetRequirements(TargetScope.All,  TargetType.Land ), typeof(DestroyEffect), false));
         }
         public Armageddon(int multiversId) : this()
         {

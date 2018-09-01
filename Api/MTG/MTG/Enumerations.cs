@@ -18,6 +18,13 @@ namespace MTG.Enumerations
         Discard_Random,
         Remove_From_Game,
     }
+    public enum AmountType
+    {
+        None,
+        All,
+        AllBut1,
+        Defined
+    }
     public enum AttackableType
     {
         None,
@@ -65,6 +72,12 @@ namespace MTG.Enumerations
         Multi,
         Red,
         White
+    }
+    public enum CombatState
+    {
+        None, 
+        Blocked,
+        UnBlocked
     }
     public enum Comparator
     {
@@ -124,6 +137,7 @@ namespace MTG.Enumerations
         Aura_Detached,
         Card_Untapped,
         Card_Tapped,
+        Land_EntersGraveYard,
     }
     public enum GameEvent {
         None,
@@ -554,6 +568,7 @@ namespace MTG.Enumerations
         Permanent,
         Player,
         Planeswalker,
+        EnchantedController,
     }
     public enum TargetZone
     {

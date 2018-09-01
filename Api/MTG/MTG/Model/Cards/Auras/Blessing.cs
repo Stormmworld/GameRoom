@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             Add(Color.White);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(false,new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.White, 1)) }), new PlusXPlusY(1, 1)));
+            Add(new CounterGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.White, 1)) }, new PlusXPlusY(1, 1)));
         }
         public Blessing(int multiversId) : this()
         {

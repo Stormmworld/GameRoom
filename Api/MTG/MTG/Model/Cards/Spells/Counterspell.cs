@@ -27,7 +27,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
             Add(Color.Blue);
             Add(CardType.Instant);
-            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single,  TargetType.Card , new TargetCardRequirements() { InZone = TargetZone.Stack }), typeof(CounterspellEffect), false));
         }
         public Counterspell(int multiversId) : this()
         {

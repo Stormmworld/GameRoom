@@ -34,7 +34,7 @@ namespace MTG.Model.Cards
             Add(SubType.Wall);
             Add(CardType.Creature);
             Add(new Defender());
-            Add(new EffectGenerator(false, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Green, 1)) }), typeof(RegenerationEffect), new TargetRequirements(TargetScope.Self, new List<TargetType>()), false));
+            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana(Color.Green, 1)) }, typeof(RegenerationEffect), new TargetRequirements(TargetScope.Self, TargetType.None), false));
         }
         public Wall_of_Brambles(int multiversId) : this()
         {

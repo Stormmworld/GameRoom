@@ -1,12 +1,11 @@
 ﻿using MTG.Enumerations;
-using System.Collections.Generic;
 
 namespace MTG.Interfaces.Data_Interfaces
 {
     public interface ITargetRequirements
     {
         #region Collection Properties
-        IReadOnlyList<TargetType> TargetTypes { get; }
+        TargetType TargetType { get; }
         #endregion
 
         #region Properties

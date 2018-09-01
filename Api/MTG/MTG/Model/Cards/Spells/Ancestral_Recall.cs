@@ -25,7 +25,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
             Add(Color.Blue);
             Add(CardType.Instant);
-            Add(new DrawCards(3, abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Player}), false));
+            Add(new DrawCards(3, abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Player), false));
         }
         public Ancestral_Recall(int multiversId) : this()
         {

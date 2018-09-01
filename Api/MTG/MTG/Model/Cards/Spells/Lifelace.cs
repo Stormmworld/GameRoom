@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Green, 1)));
             Add(Color.Green);
             Add(CardType.Instant);
-            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }), Color.Green, true, false));
+            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single,  TargetType.Card), Color.Green, true, false));
         }
         public Lifelace(int multiversId) : this()
         {

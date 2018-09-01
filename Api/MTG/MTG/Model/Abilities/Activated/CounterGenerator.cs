@@ -1,6 +1,7 @@
 ﻿using MTG.Interfaces.Data_Interfaces;
+using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
-using MTG.Model.Mana_Objects;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities.Activated
 {
@@ -11,14 +12,14 @@ namespace MTG.Model.Abilities.Activated
         #endregion
 
         #region Constructors
-        public CounterGenerator(bool requiresTap, CastingCost activationCost, ICounter counter) : base(requiresTap)
+        public CounterGenerator(bool requiresTap, List<IManaCost> activationCost, ICounter counter) : base(requiresTap)
         {
-            ActivationCost = activationCost;
+            Add(activationCost);
             Counter = counter;
         }
-        public CounterGenerator(bool requiresTap, CastingCost activationCost, ICounter counter, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
+        public CounterGenerator(bool requiresTap, List<IManaCost> activationCost, ICounter counter, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
         {
-            ActivationCost = activationCost;
+            Add(activationCost);
             Counter = counter;
         }
         #endregion

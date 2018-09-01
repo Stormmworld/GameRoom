@@ -11,7 +11,7 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=15
         *  
         *  Red creatures get +1/+1.
-Whenever a Mountain is tapped for mana, its controller adds {R} to his or her mana pool (in addition to the mana the land produces).
+        *   Whenever a Mountain is tapped for mana, its controller adds {R} to his or her mana pool (in addition to the mana the land produces).
         *  
         * Rulings
         * 2004-10-04: Dual lands which have Mountain as one of their types produce an extra red mana when tapped for either color.

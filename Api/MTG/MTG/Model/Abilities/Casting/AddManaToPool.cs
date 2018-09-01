@@ -1,7 +1,6 @@
 ﻿using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
 using MTG.Model.Data_Objects;
-using MTG.Model.Mana_Objects;
 using System.Collections.Generic;
 
 namespace MTG.Model.Abilities.Casting
@@ -17,7 +16,7 @@ namespace MTG.Model.Abilities.Casting
         #endregion
 
         #region Constructors
-        public AddManaToPool(ICastingCost castingCost, List<IMana> manaToAdd, bool isAddOn) : base(castingCost, new TargetRequirements( Enumerations.TargetScope.Self, new List<Enumerations.TargetType>() { Enumerations.TargetType.Player}), isAddOn)
+        public AddManaToPool(ICastingCost castingCost, List<IMana> manaToAdd, bool isAddOn) : base(castingCost, new TargetRequirements( Enumerations.TargetScope.Self,  Enumerations.TargetType.Player), isAddOn)
         {
             _ManaToAdd.AddRange(manaToAdd);
         }

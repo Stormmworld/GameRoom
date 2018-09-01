@@ -27,9 +27,9 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(EffectTrigger.Card_Untapped, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature}, new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone= TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id}));
-            Add(new CounterGenerator(EffectTrigger.Card_Tapped, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone = TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id }));
-            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField, new TargetRequirements(TargetScope.All, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone = TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id }));
+            Add(new CounterGenerator(EffectTrigger.Card_Untapped, new TargetRequirements(TargetScope.All,  TargetType.Creature, new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone= TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id}));
+            Add(new CounterGenerator(EffectTrigger.Card_Tapped, new TargetRequirements(TargetScope.All,  TargetType.Creature , new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone = TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id }));
+            Add(new CounterGenerator(EffectTrigger.Card_EntersBattleField, new TargetRequirements(TargetScope.All, TargetType.Creature , new TargetCardRequirements() { Tapped = true, HasType = CardType.Creature, InZone = TargetZone.Battlefield }), new PlusXPlusY(2, 0) { OwningCardId = Id }));
         }
         public Castle(int multiversId) : this()
         {

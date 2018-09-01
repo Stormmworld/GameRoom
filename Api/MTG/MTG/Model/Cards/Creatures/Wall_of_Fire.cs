@@ -33,7 +33,7 @@ namespace MTG.Model.Cards
             Add(SubType.Wall);
             Add(CardType.Creature);
             Add(new Defender());
-            Add(new CounterGenerator(false, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Red, 1)) }), new PlusXPlusY(1, 0) { RemoveAtEndOfTurn = true }));
+            Add(new CounterGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Red, 1)) }, new PlusXPlusY(1, 0) { RemoveAtEndOfTurn = true }));
         }
         public Wall_of_Fire(int multiversId) : this()
         {

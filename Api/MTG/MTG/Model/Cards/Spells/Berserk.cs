@@ -30,9 +30,9 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
             Add(Color.Green);
             Add(CardType.Instant);
-            Add(new CreateCounter(new CastingCost(), new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new PlusXPlusY(Incrementer.CurrentPower, Incrementer.None)) { RemoveAtEndOfTurn = true });
-            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new Trample(true)));
-            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Creature }, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new DestroyOnEvent(EffectTrigger.Phases_CombatPhase_EndStep, GameEvent.Creature_Attacked, Id, true)));
+            Add(new CreateCounter(new CastingCost(), new TargetRequirements(TargetScope.Single, TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new PlusXPlusY(Incrementer.CurrentPower, Incrementer.None)) { RemoveAtEndOfTurn = true });
+            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new Trample(true)));
+            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new DestroyOnEvent(EffectTrigger.Phases_CombatPhase_EndStep, GameEvent.Creature_Attacked, Id, true)));
          }
         public Berserk(int multiversId) : this()
         {

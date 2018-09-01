@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Colorless,true))); ;
             Add(Color.Blue);
             Add(CardType.Sorcery);
-            Add(new DrawCards(true, abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Player }),false));
+            Add(new DrawCards(true, abilityCost, new TargetRequirements(TargetScope.Single,TargetType.Player),false));
         }
         public Braingeyser(int multiversId) : this()
         {

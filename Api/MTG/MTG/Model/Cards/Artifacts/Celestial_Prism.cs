@@ -23,11 +23,11 @@ namespace MTG.Model.Cards
             Name = "Celestial Prism";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
             Add(CardType.Artifact);
-            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Black, 1) }, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) })));
-            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Blue, 1) }, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) })));
-            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Green, 1) }, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) })));
-            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Red, 1) }, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) })));
-            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.White, 1) }, new CastingCost(new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) })));
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Black, 1) }, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }));
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Blue, 1) }, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }));
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Green, 1) }, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }));
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Red, 1) }, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }));
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.White, 1) }, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }));
         }
         public Celestial_Prism(int multiversId) : this()
         {

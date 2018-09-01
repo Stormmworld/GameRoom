@@ -24,7 +24,7 @@ namespace MTG.Model.Cards
             Name = "Copper Tablet";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
             Add(CardType.Artifact);
-            Add(new UpkeepDamage(new TargetRequirements(TargetScope.ActivePlayer, new List<TargetType>() { TargetType.Player }), new Damage(this, 1)));
+            Add(new UpkeepDamage(new TargetRequirements(TargetScope.ActivePlayer, TargetType.Player), new Damage(this, 1)));
         }
         public Copper_Tablet(int multiversId) : this()
         {

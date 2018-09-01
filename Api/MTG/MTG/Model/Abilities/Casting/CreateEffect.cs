@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces.Data_Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces.Data_Interfaces;
 using MTG.Interfaces.Effect_Interfaces;
 using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
@@ -13,6 +14,9 @@ namespace MTG.Model.Abilities.Casting
         #region Properties
         public Type EffectType { get; private set; }
         public IDamage Damage { get; internal set; }
+        public AmountType AmountType { get; internal set; }
+        public GamePhase EndingPhase { get; internal set; }
+        public int Value { get; internal set; }
         #endregion
 
         #region Constructors
@@ -33,6 +37,8 @@ namespace MTG.Model.Abilities.Casting
             parameters.Add(target);
             if (Damage != null)
                 parameters.Add(Damage);
+            if (AmountType !=  AmountType.None)
+                parameters.Add(AmountType);
             return (IEffect)Activator.CreateInstance(EffectType, parameters);
         }
         public virtual IEffect Process(ITarget target, int xValue)

@@ -25,7 +25,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Red, 1)));
             Add(Color.Red);
             Add(CardType.Instant);
-            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }), Color.Red, true, false));
+            Add(new ColorModification(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Card ), Color.Red, true, false));
         }
         public Chaoslace(int multiversId) : this()
         {

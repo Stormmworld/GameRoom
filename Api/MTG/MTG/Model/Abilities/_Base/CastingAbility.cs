@@ -20,13 +20,13 @@ namespace MTG.Model.Abilities._Base
         #region Constructors
         private CastingAbility(ICastingCost castingCost, bool isAddOn) : base()
         {
-            TargetRequirements = new TargetRequirements(TargetScope.None, new List<TargetType>());
+            TargetRequirements = new TargetRequirements(TargetScope.None, TargetType.None);
             CastingCost = castingCost;
             IsAddOn = isAddOn;
         }
         internal CastingAbility(ICastingCost castingCost, ITarget target, bool isAddOn) :this(castingCost, isAddOn)
         {
-            TargetRequirements = new TargetRequirements(TargetScope.Single, new List<TargetType>() { target.Type });
+            TargetRequirements = new TargetRequirements(TargetScope.Single, target.Type );
             RequiresTarget = false;
             Target = target;
         }

@@ -11,10 +11,9 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=150
         *  
         *  Trample (This creature can deal excess combat damage to defending player or planeswalker while attacking.)
-At the beginning of your upkeep, Force of Nature deals 8 damage to you unless you pay {G}{G}{G}{G}.
+        *  At the beginning of your upkeep, Force of Nature deals 8 damage to you unless you pay {G}{G}{G}{G}.
         *  
         * Rulings
-
         *
         */
         public Force_of_Nature() : base()

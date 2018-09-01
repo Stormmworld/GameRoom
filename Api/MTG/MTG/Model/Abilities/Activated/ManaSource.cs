@@ -1,4 +1,5 @@
-﻿using MTG.Model.Abilities._Base;
+﻿using MTG.Interfaces.Mana_Interfaces;
+using MTG.Model.Abilities._Base;
 using MTG.Model.Mana_Objects;
 using System.Collections.Generic;
 
@@ -28,11 +29,11 @@ namespace MTG.Model.Abilities.Activated
         {
             RequiresSacrifice = requiresSacrifice;
         }
-        public ManaSource(bool requiresTap, List<Mana> manaProduction, CastingCost activationCost) : this(requiresTap, manaProduction)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction, List<IManaCost> activationCost) : this(requiresTap, manaProduction)
         {
-            ActivationCost = activationCost;
+            Add(activationCost);
         }
-        public ManaSource(bool requiresTap, List<Mana> manaProduction, CastingCost activationCost, bool requiresSacrifice) : this(requiresTap, manaProduction, activationCost)
+        public ManaSource(bool requiresTap, List<Mana> manaProduction, List<IManaCost> activationCost, bool requiresSacrifice) : this(requiresTap, manaProduction, activationCost)
         {
             RequiresSacrifice = requiresSacrifice;
         }

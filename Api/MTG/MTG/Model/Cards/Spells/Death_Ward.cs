@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Instant);
-            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, new List<TargetType>() { TargetType.Card }, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield}),typeof(RegenerationEffect),false));
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Card , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield}),typeof(RegenerationEffect),false));
         }
 
         public Death_Ward(int multiversId) : this()

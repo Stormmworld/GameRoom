@@ -13,7 +13,7 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=63
         *  
         *  Enchant land
-Enchanted land is a Swamp.
+        *   Enchanted land is a Swamp.
         *  
         * Rulings
         * 2009-10-01: The enchanted land loses its existing land types and any abilities printed on it. It now has the land type Swamp and has the ability "{T}: Add {B} to your mana pool." Evil Presence doesn't change the enchanted land's name or whether it's legendary, basic, or snow.

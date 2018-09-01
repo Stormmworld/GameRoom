@@ -25,7 +25,7 @@ namespace MTG.Model.Cards
             Name = "Ankh of Mishra";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 2)));
             Add(CardType.Artifact);
-            Add(new TriggeredDamage(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Controller, new List<TargetType>() { TargetType.Player }), new Damage(this, 2)));
+            Add(new TriggeredDamage(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Controller, TargetType.Player ), new Damage(this, 2)));
         }
         public Ankh_of_Mishra(int multiversId) : this()
         {

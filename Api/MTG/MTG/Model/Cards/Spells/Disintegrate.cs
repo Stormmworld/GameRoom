@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Red, 1)));
             Add(Color.Red);
             Add(CardType.Sorcery);
-            TargetRequirements targetRequirements = new TargetRequirements(TargetScope.Single, new System.Collections.Generic.List<TargetType>() { TargetType.Card}, new TargetCardRequirements() { HasType = CardType.Creature, InZone= TargetZone.Battlefield});
+            TargetRequirements targetRequirements = new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone= TargetZone.Battlefield});
             Add(new CreateEffect(abilityCost, targetRequirements, typeof(DamageEffect), true) { Damage = new Damage(this, Modifier.Assigned) });
             Add(new CreateEffect(targetRequirements, typeof(PreventRegenerationEffect), true));
             Add(new CreateAbility(targetRequirements, true, new ExileOnEvent(EffectTrigger.Card_Destroyed, true)));

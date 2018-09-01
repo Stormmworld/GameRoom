@@ -12,6 +12,8 @@ namespace MTG.Model.Data_Objects
         public SuperType HasSuperType { get; internal set; }
         public TargetZone InZone { get; internal set; }
         public bool Tapped { get; internal set; }
+        public CombatState CombatState { get; internal set; }
+        public CardAction CardAction { get; internal set; }
         #endregion
 
         #region Constructors
