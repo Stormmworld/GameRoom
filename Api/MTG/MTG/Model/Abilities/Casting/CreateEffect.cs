@@ -17,6 +17,8 @@ namespace MTG.Model.Abilities.Casting
         public AmountType AmountType { get; internal set; }
         public GamePhase EndingPhase { get; internal set; }
         public int Value { get; internal set; }
+        public bool BoolValue { get; internal set; }
+        public CardType CardType { get; internal set; }
         #endregion
 
         #region Constructors
@@ -39,6 +41,10 @@ namespace MTG.Model.Abilities.Casting
                 parameters.Add(Damage);
             if (AmountType !=  AmountType.None)
                 parameters.Add(AmountType);
+            if (CardType != CardType.None)
+                parameters.Add(CardType);
+            if (BoolValue)
+                parameters.Add(BoolValue);
             return (IEffect)Activator.CreateInstance(EffectType, parameters);
         }
         public virtual IEffect Process(ITarget target, int xValue)

@@ -1,6 +1,6 @@
 ﻿using MTG.Interfaces.Ability_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
-using System;
+using MTG.Model.Game;
 using System.Collections.Generic;
 
 namespace MTG.Interfaces.Card_Interfaces
@@ -14,7 +14,7 @@ namespace MTG.Interfaces.Card_Interfaces
         #endregion
 
         #region Properties
-        Guid ControllerId { get; }
+        Player Controller { get; }
         bool Tapped { get; }
         #endregion
 

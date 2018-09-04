@@ -2,6 +2,7 @@ using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
 using System;
+using MTG.Model.Abilities.Static;
 
 namespace MTG.Model.Cards
 {
@@ -29,7 +30,7 @@ namespace MTG.Model.Cards
             Add(Color.Green);
             Add(SubType.Elemental);
             Add(CardType.Creature);
-
+            Add(new Trample());
             throw new NotImplementedException("Force of Nature");
         }
         public Force_of_Nature(int multiversId) : this()

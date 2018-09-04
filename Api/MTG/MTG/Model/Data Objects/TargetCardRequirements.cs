@@ -14,6 +14,8 @@ namespace MTG.Model.Data_Objects
         public bool Tapped { get; internal set; }
         public CombatState CombatState { get; internal set; }
         public CardAction CardAction { get; internal set; }
+        public Comparator PowerComparison { get; internal set; }
+        public int PowerValue { get; internal set; }
         #endregion
 
         #region Constructors

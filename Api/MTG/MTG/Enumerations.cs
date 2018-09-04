@@ -200,6 +200,7 @@ namespace MTG.Enumerations
         ConvertedCost,
         Power,
         Toughness,
+        SubTypeControlled,
     }
     public enum SacrificeType
     {

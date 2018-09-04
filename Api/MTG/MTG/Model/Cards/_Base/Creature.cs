@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MTG.Enumerations;
 using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
 using MTG.Model.Counters;
@@ -18,6 +19,7 @@ namespace MTG.Model.Cards._Base
         #endregion
 
         #region Properties
+        public virtual SubType SubtypeModifier { get; internal set; }
         public virtual int Power
         {
             get
@@ -28,6 +30,7 @@ namespace MTG.Model.Cards._Base
                 return retVal;
             }
         }
+        public virtual Modifier PowerModifier { get; internal set; }
         public virtual int Toughness
         {
             get
@@ -35,9 +38,18 @@ namespace MTG.Model.Cards._Base
                 int retVal = _BaseToughness;
                 foreach (PlusXPlusY counter in Counters.Where(o => o is PlusXPlusY))
                     retVal += counter.Y;
+                switch (ToughnessModifier)
+                {
+                    case Modifier.SubTypeControlled:
+                        retVal+= Controller
+                        break;
+                    default:
+                        break;
+                }
                 return retVal;
             }
         }
+        public virtual Modifier ToughnessModifier { get; internal set; }
         #endregion
 
         #region Constructors

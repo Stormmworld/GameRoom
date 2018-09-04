@@ -2,6 +2,7 @@ using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
 using System;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
@@ -40,6 +41,8 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Red, 1)));
             Add(Color.Red);
             Add(CardType.Instant);
+            TargetRequirements targetRequirements1 = new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Instant, InZone = TargetZone.Stack });
+            TargetRequirements targetRequirements2 = new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Sorcery, InZone = TargetZone.Stack });
 
             throw new NotImplementedException("Fork");
         }

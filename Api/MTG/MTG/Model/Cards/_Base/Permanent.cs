@@ -1,6 +1,7 @@
 ﻿using MTG.Interfaces.Ability_Interfaces;
 using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
+using MTG.Model.Game;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +22,7 @@ namespace MTG.Model.Cards._Base
         #endregion
 
         #region Properties
-        public Guid ControllerId { get; internal set; }
+        public Player Controller { get; internal set; }
         public bool Tapped { get; private set; }
         #endregion
 
@@ -46,6 +47,10 @@ namespace MTG.Model.Cards._Base
         public virtual void Add(ICounter counter)
         {
             throw new NotImplementedException();
+        }
+        public virtual void Assign(ref Player controller)
+        {
+            Controller = controller;
         }
         public virtual void Has(IAbility ability)
         {
