@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
 using MTG.Interfaces.Effect_Interfaces;
 using MTG.Interfaces.Mana_Interfaces;
@@ -15,6 +16,7 @@ namespace MTG.Model.Abilities.Activated
         public ITargetRequirements TargetRequirements { get; private set; }
         public int EffectValue { get; internal set; }
         public GamePhase RestrictedPhase { get; internal set; }
+        public ICard Card { get; internal set; }
         #endregion
 
         #region Constructors 

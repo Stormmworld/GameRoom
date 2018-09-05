@@ -13,8 +13,8 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=158
         *  
         *  Enchant creature
-Enchanted creature can attack as though it had haste.
-{0}: Untap enchanted creature. Activate this ability only during your turn and only once each turn.
+        *  Enchanted creature can attack as though it had haste.
+        *  {0}: Untap enchanted creature. Activate this ability only during your turn and only once each turn.
         *  
         * Rulings
         * 2004-10-04: If attached to an opponent's creature, you can untap their creature during your turn.
@@ -23,7 +23,7 @@ Enchanted creature can attack as though it had haste.
 
         *
         */
-        public Instill_Energy() :  base(new TargetCardRequirements() { })
+        public Instill_Energy() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 158;
             Name = "Instill Energy";

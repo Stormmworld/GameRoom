@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MTG.Enumerations;
 using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
+using MTG.Interfaces.Effect_Interfaces;
 
 namespace MTG.Model.Data_Objects
 {
@@ -25,6 +26,8 @@ namespace MTG.Model.Data_Objects
         #region Properties
         public Guid Id { get; private set; }
         public int Modifier { get; private set; }
+        public IEffect OnDamagePlayerEffect { get; internal set; }
+        public bool OnDamageOpponent { get; internal set; }
         public bool UseXValue { get; private set; }
         public int Value { get; private set; }
         public Modifier XModifier { get; private set; }

@@ -21,7 +21,7 @@ namespace MTG.Model.Cards
         * 2013-07-01: A permanent with indestructible can't be destroyed, but it can still be sacrificed, exiled, put into a graveyard, and so on.
         *
         */
-        public Consecrate_Land() :  base(new TargetCardRequirements() { })
+        public Consecrate_Land() :  base(new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 245;
             Name = "Consecrate Land";

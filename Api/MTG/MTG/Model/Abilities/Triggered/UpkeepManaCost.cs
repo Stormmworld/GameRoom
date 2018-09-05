@@ -1,6 +1,7 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
+using MTG.Model.Data_Objects;
 using System.Collections.Generic;
 
 namespace MTG.Model.Abilities.Triggered
@@ -13,6 +14,7 @@ namespace MTG.Model.Abilities.Triggered
 
         #region Collection Properties
         public IReadOnlyList<IManaCost> ManaCosts { get { return _ManaCosts.AsReadOnly(); } }
+        public FailedUpkeepResult FailedUpkeepResult { get; private set; }
         #endregion
 
         #region Constructors
@@ -20,6 +22,10 @@ namespace MTG.Model.Abilities.Triggered
         {
             _ManaCosts = new List<IManaCost>();
             _ManaCosts.AddRange(manaCosts);
+        }
+        public UpkeepManaCost(List<IManaCost> manaCosts, FailedUpkeepResult failedUpkeepResult) : this(manaCosts)
+        {
+            FailedUpkeepResult = failedUpkeepResult;
         }
         #endregion
     }

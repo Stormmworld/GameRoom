@@ -19,7 +19,7 @@ namespace MTG.Model.Cards
         * 2009-10-01: The enchanted land loses its existing land types and any abilities printed on it. It now has the land type Swamp and has the ability "{T}: Add {B} to your mana pool." Evil Presence doesn't change the enchanted land's name or whether it's legendary, basic, or snow.
         *
         */
-        public Evil_Presence() :  base(new TargetCardRequirements() { })
+        public Evil_Presence() :  base(new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 63;
             Name = "Evil Presence";

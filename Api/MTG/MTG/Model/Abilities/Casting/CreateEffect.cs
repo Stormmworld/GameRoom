@@ -12,13 +12,14 @@ namespace MTG.Model.Abilities.Casting
     public class CreateEffect:CastingAbility
     {
         #region Properties
-        public Type EffectType { get; private set; }
-        public IDamage Damage { get; internal set; }
         public AmountType AmountType { get; internal set; }
-        public GamePhase EndingPhase { get; internal set; }
-        public int Value { get; internal set; }
         public bool BoolValue { get; internal set; }
         public CardType CardType { get; internal set; }
+        public IDamage Damage { get; internal set; }
+        public Type EffectType { get; private set; }
+        public GamePhase EndingPhase { get; internal set; }
+        public int Value { get; internal set; }
+        public bool UseXValue { get; internal set; }
         #endregion
 
         #region Constructors

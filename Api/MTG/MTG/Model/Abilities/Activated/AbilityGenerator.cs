@@ -1,6 +1,8 @@
 ﻿using MTG.Interfaces.Data_Interfaces;
+using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
 using System;
+using System.Collections.Generic;
 
 namespace MTG.Model.Abilities.Activated
 {
@@ -16,6 +18,10 @@ namespace MTG.Model.Abilities.Activated
         {
             AbilityType = abilityType;
             TargetRequirements = targetRequirements;
+        }
+        public AbilityGenerator(bool requiresTap, List<IManaCost> activationCost, Type abilityType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : this(requiresTap, abilityType, targetRequirements, removeAtEndOfTurn)
+        {
+            Add(activationCost);
         }
         #endregion
 

@@ -21,7 +21,7 @@ Enchanted creature has protection from green. This effect doesn't remove Green W
 
         *
         */
-        public Green_Ward() :  base(new TargetCardRequirements() { })
+        public Green_Ward() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 251;
             Name = "Green Ward";

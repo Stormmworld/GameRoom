@@ -20,7 +20,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Blessing() :  base(new TargetCardRequirements() { })
+        public Blessing() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 238;
             Name = "Blessing";

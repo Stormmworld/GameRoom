@@ -17,7 +17,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Feedback() :  base(new TargetCardRequirements() { })
+        public Feedback() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 105;
             Name = "Feedback";

@@ -1,11 +1,9 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
 using MTG.Model.Data_Objects;
 using MTG.Model.Abilities.Triggered;
 using MTG.Model.Counters;
-using System.Collections.Generic;
 
 namespace MTG.Model.Cards
 {

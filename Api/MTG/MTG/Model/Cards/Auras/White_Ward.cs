@@ -20,7 +20,7 @@ namespace MTG.Model.Cards
 
         *
         */
-        public White_Ward() :  base(new TargetCardRequirements() { })
+        public White_Ward() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 275;
             Name = "White Ward";

@@ -18,7 +18,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Flight() :  base(new TargetCardRequirements() { })
+        public Flight() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 106;
             Name = "Flight";

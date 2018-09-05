@@ -18,7 +18,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Creature_Bond() :  base(new TargetCardRequirements() { })
+        public Creature_Bond() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 103;
             Name = "Creature Bond";

@@ -21,7 +21,7 @@ namespace MTG.Model.Cards
 
         *
         */
-        public Red_Ward() :  base(new TargetCardRequirements() { })
+        public Red_Ward() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 264;
             Name = "Red Ward";

@@ -1,15 +1,18 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces.Data_Interfaces;
+using System;
 
 namespace MTG.Model.Data_Objects
 {
     public class TargetCardRequirements : ITargetCardRequirements
     {
         #region Properties
+        public Type HasAbility { get; internal set; }
         public Color HasColor { get; internal set; }
         public CardType HasType { get; internal set; }
         public SubType HasSubType { get; internal set; }
         public SuperType HasSuperType { get; internal set; }
+        public bool IncludeSelf { get; internal set; }
         public TargetZone InZone { get; internal set; }
         public bool Tapped { get; internal set; }
         public CombatState CombatState { get; internal set; }

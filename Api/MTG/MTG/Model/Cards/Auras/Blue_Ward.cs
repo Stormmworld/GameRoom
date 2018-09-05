@@ -20,7 +20,7 @@ Enchanted creature has protection from blue. This effect doesn't remove Blue War
 
         *
         */
-        public Blue_Ward() :  base(new TargetCardRequirements() { })
+        public Blue_Ward() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 239;
             Name = "Blue Ward";

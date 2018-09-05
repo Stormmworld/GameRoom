@@ -6,6 +6,7 @@ namespace MTG.Model.Counters
     public class PlusXPlusY : Counter
     {
         #region Properties
+        public bool UseXValue { get; internal set; }
         public int X { get; private set; }
         public int Y { get; private set; }
         #endregion

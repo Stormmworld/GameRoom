@@ -1,4 +1,5 @@
 ﻿using MTG.Interfaces.Data_Interfaces;
+using MTG.Interfaces.Effect_Interfaces;
 using MTG.Model.Effects._Base;
 
 namespace MTG.Model.Effects

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MTG.Model.Zones;
+using System;
 
 namespace MTG.Model.Game
 {
@@ -6,11 +7,13 @@ namespace MTG.Model.Game
     {
         #region Properties
         public Guid Id { get; private set; }
+        public BattleField BattleField { get; private set; }
         #endregion
 
         #region Constructors
         public Player()
         {
+            BattleField = new BattleField();
             Id = Guid.NewGuid();
         }
         #endregion

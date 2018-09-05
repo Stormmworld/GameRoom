@@ -20,7 +20,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Farmstead() :  base(new TargetCardRequirements() { HasType = CardType.Land })
+        public Farmstead() :  base(new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 250;
             Name = "Farmstead";

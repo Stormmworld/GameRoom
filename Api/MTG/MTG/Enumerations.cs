@@ -71,7 +71,8 @@ namespace MTG.Enumerations
         Green,
         Multi,
         Red,
-        White
+        White,
+        Same
     }
     public enum CombatState
     {
@@ -175,6 +176,7 @@ namespace MTG.Enumerations
         Half_ControlledForests_RoundedUp,
         Half_ControlledForests_RoundedDown,
         CurrentPower,
+        X,
     }
     public enum InsertLocation
     {
@@ -200,7 +202,8 @@ namespace MTG.Enumerations
         ConvertedCost,
         Power,
         Toughness,
-        SubTypeControlled,
+        SubTypeDefenderControls,
+        SubTypeControllerControls,
     }
     public enum SacrificeType
     {
@@ -364,7 +367,6 @@ namespace MTG.Enumerations
         , Monk
         , Monkey
         , Moonfolk
-        , Mountian
         , Mutant
         , Myr
         , Mystic
@@ -570,6 +572,7 @@ namespace MTG.Enumerations
         Player,
         Planeswalker,
         EnchantedController,
+        EnchantedCard,
     }
     public enum TargetZone
     {

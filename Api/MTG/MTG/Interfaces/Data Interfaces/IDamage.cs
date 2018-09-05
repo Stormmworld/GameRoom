@@ -1,5 +1,6 @@
 ﻿using MTG.Enumerations;
 using MTG.Interfaces.Card_Interfaces;
+using MTG.Interfaces.Effect_Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +11,8 @@ namespace MTG.Interfaces.Data_Interfaces
         #region Properties
         Guid Id { get; }
         int Modifier { get; }
+        IEffect OnDamagePlayerEffect { get; }
+        bool OnDamageOpponent { get; }
         int Value { get; }
         bool UseXValue { get; }
         Modifier XModifier { get; }

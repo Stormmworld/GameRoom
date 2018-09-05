@@ -19,7 +19,7 @@ namespace MTG.Model.Cards
 
         *
         */
-        public Fear() :  base(new TargetCardRequirements() { })
+        public Fear() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 64;
             Name = "Fear";

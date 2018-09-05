@@ -3,7 +3,7 @@ using MTG.Model.Abilities._Base;
 
 namespace MTG.Model.Abilities.Static
 {
-    public class Landwalk:StaticAbility
+    public class Landwalk : StaticAbility
     {
         #region Properties
         public SubType LandType { get; private set; }

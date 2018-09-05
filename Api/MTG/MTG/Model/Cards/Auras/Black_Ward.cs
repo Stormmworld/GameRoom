@@ -20,7 +20,7 @@ namespace MTG.Model.Cards
 
         *
         */
-        public Black_Ward() :  base(new TargetCardRequirements() { })
+        public Black_Ward() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 236;
             Name = "Black Ward";

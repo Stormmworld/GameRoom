@@ -18,7 +18,7 @@ namespace MTG.Model.Cards
         * Rulings
         *
         */
-        public Burrowing() :  base(new TargetCardRequirements() { })
+        public Burrowing() :  base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield })
         {
             MultiverseId = 186;
             Name = "Burrowing";

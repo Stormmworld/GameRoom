@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MTG.Enumerations;
 using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Data_Interfaces;
 using MTG.Model.Counters;
+using MTG.Model.Game;
 
 namespace MTG.Model.Cards._Base
 {
@@ -27,10 +29,22 @@ namespace MTG.Model.Cards._Base
                 int retVal = _BasePower;
                 foreach(PlusXPlusY counter in Counters.Where(o => o is PlusXPlusY))
                     retVal += counter.X;
+                switch (ToughnessModifier)
+                {
+                    case Modifier.SubTypeControllerControls:
+                        retVal += Controller.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        break;
+                    case Modifier.SubTypeDefenderControls:
+                        retVal += DefendingPlayer.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        break;
+                    default:
+                        break;
+                }
                 return retVal;
             }
         }
         public virtual Modifier PowerModifier { get; internal set; }
+        public Player DefendingPlayer { get; internal set; }
         public virtual int Toughness
         {
             get
@@ -40,8 +54,11 @@ namespace MTG.Model.Cards._Base
                     retVal += counter.Y;
                 switch (ToughnessModifier)
                 {
-                    case Modifier.SubTypeControlled:
-                        retVal+= Controller
+                    case Modifier.SubTypeControllerControls:
+                        retVal += Controller.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        break;
+                    case Modifier.SubTypeDefenderControls:
+                        retVal += DefendingPlayer.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
                         break;
                     default:
                         break;
@@ -64,6 +81,18 @@ namespace MTG.Model.Cards._Base
         public virtual void Add(IDamage damage)
         {
             _Damage.Add(damage);
+        }
+        public virtual void Attack(ref Player defendingPlayer)
+        {
+            DefendingPlayer = defendingPlayer;
+        }
+        public virtual IDamage CreateCombatDamage()
+        {
+            throw new NotImplementedException("Creature.CreateCombatDamage");
+        }
+        public virtual void EndCombat()
+        {
+            throw new NotImplementedException("Creature.EndCombat");
         }
         public virtual void Remove(IDamage damage)
         {

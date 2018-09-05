@@ -10,7 +10,6 @@
     <Folder Include="DTO\Requests\" />
     <Folder Include="DTO\Responses\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Model\Zones\_Base\" />
     <Folder Include="Snippets\" />
     <Folder Include="Templates\" />
   </ItemGroup>
