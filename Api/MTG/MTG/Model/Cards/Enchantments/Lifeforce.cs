@@ -28,7 +28,7 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
             Add(Color.Green);
             Add(CardType.Enchantment);
-            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Green, 2)) }, typeof(CounterspellEffect), new TargetRequirements(TargetScope.Single,  TargetType.Card, new TargetCardRequirements() { HasColor = Color.Black, InZone = TargetZone.Stack }), false));
+            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Green, 2)) }, typeof(CounterspellEffect), new TargetRequirements(TargetScope.Single,  TargetType.Card, new TargetCardRequirements() { HasColor = Color.Black, InZone = TargetZone.Stack }), GamePhase.None));
         }
         public Lifeforce(int multiversId) : this()
         {

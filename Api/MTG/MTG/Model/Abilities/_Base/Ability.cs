@@ -1,4 +1,5 @@
 ﻿using System;
+using MTG.Enumerations;
 using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities._Base
@@ -12,7 +13,7 @@ namespace MTG.Model.Abilities._Base
         #region Properties
         public Guid Id { get; private set; }
         public Guid BoundCardId { get; internal set; }
-        public bool RemoveAtEndOfTurn { get; internal set; }
+        public GamePhase RemoveAtPhase { get; internal set; }
         #endregion
 
         #region Constructors

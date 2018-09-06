@@ -31,7 +31,7 @@ namespace MTG.Model.Cards
             Add(CardType.Artifact);
             Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Colorless, 1) }));
             Add(new DoesNotUntap());
-            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 3)) }, typeof(UntapEffect), new TargetRequirements(TargetScope.Self,TargetType.Player), false));
+            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 3)) }, typeof(UntapEffect), new TargetRequirements(TargetScope.Self,TargetType.Player), GamePhase.None));
         }
         public Basalt_Monolith(int multiversId) : this()
         {

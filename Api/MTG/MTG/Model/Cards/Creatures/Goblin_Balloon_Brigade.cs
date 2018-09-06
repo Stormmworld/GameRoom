@@ -31,7 +31,7 @@ namespace MTG.Model.Cards
             Add(SubType.Goblin);
             Add(SubType.Warrior);
             Add(CardType.Creature);
-            Add(new AbilityGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Red, 1)) },typeof(Flying), new TargetRequirements(TargetScope.Self, TargetType.Card),true));
+            Add(new AbilityGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Red, 1)) },typeof(Flying), new TargetRequirements(TargetScope.Self, TargetType.Card), GamePhase.Ending_Cleanup));
         }
         public Goblin_Balloon_Brigade(int multiversId) : this()
         {

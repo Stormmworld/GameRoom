@@ -30,7 +30,7 @@ namespace MTG.Model.Cards
             Add(SubType.Dwarf);
             Add(SubType.Warrior);
             Add(CardType.Creature);
-            Add(new AbilityGenerator(true, typeof(Unblockable), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature,PowerValue = 3, PowerComparison = Comparator.Less_Than  }),true));
+            Add(new AbilityGenerator(true, typeof(Unblockable), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature,PowerValue = 3, PowerComparison = Comparator.Less_Than  }), GamePhase.None));
         }
         public Dwarven_Warriors(int multiversId) : this()
         {

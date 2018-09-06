@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             Name = "Forcefield";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
             Add(CardType.Artifact);
-            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana( Color.Colorless, 1))}, typeof(PreventDamageEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType= CardType.Creature, CombatState = CombatState.UnBlocked, CardAction = CardAction.Attacker }),false));
+            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana( Color.Colorless, 1))}, typeof(PreventDamageEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType= CardType.Creature, CombatState = CombatState.UnBlocked, CardAction = CardAction.Attacker }), GamePhase.None));
         }
         public Forcefield(int multiversId) : this()
         {

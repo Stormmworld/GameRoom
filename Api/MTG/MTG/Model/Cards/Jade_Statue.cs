@@ -1,7 +1,9 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Activated;
+using MTG.Interfaces.Mana_Interfaces;
+using System.Collections.Generic;
 
 namespace MTG.Model.Cards
 {
@@ -18,7 +20,6 @@ namespace MTG.Model.Cards
         * 2005-08-01: If Jade Statue's ability has been activated, abilities that trigger "at end of combat" will see Jade Statue as an artifact creature.
         * 2008-08-01: A noncreature permanent that turns into a creature can attack, and its {T} abilities can be activated, only if its controller has continuously controlled that permanent since the beginning of his or her most recent turn. It doesn't matter how long the permanent has been a creature.
         * 2013-09-20: If Jade Statue is animated by some other effect, you get an artifact creature with whatever power, toughness, and creature types (if any) are specified by that effect. If you subsequently use Jade Statue's ability during combat, it will become 3/6 and gain the creature type Golem in addition to those creature types until end of combat.
-
         *
         */
         public Jade_Statue() : base()
@@ -27,8 +28,7 @@ namespace MTG.Model.Cards
             Name = "Jade Statue";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 4)));
             Add(CardType.Artifact);
-
-            throw new NotImplementedException("Jade Statue");
+            Add(new ConvertToCreatureActivated(false, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 2)) }, 3, 6, GamePhase.Combat_Ending) { PhaseRestriction = new List<GamePhase>() { GamePhase.Combat_Beginning, GamePhase.Combat_Damage, GamePhase.Combat_DeclareAttackers, GamePhase.Combat_DeclareDefenders} });
         }
         public Jade_Statue(int multiversId) : this()
         {

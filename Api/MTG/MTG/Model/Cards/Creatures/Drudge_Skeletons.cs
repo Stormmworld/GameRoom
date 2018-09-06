@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             Add(Color.Black);
             Add(SubType.Skeleton);
             Add(CardType.Creature);
-            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1)) }, typeof(RegenerationEffect), new TargetRequirements(TargetScope.Self, TargetType.None), false));
+            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1)) }, typeof(RegenerationEffect), new TargetRequirements(TargetScope.Self, TargetType.None), GamePhase.None));
         }
         public Drudge_Skeletons(int multiversId) : this()
         {

@@ -6,7 +6,7 @@ namespace MTG.Model.Abilities.Triggered
     public class ExileOnEvent: TriggeredAbility
     {
         #region Constructors
-        public ExileOnEvent(EffectTrigger trigger, bool removeAtEndOfTurn) : base(trigger, removeAtEndOfTurn)
+        public ExileOnEvent(EffectTrigger trigger, GamePhase removeAtPhase) : base(trigger, removeAtPhase)
         {
 
         }

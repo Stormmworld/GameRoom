@@ -34,7 +34,7 @@ namespace MTG.Model.Cards
             Add(SubType.Wall);
             Add(CardType.Creature);
             Add(new Defender());
-            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1))}, typeof(RegenerationEffect),new TargetRequirements(TargetScope.Self, TargetType.None),false));
+            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.Black, 1))}, typeof(RegenerationEffect),new TargetRequirements(TargetScope.Self, TargetType.None), GamePhase.None));
         }
         public Wall_of_Bone(int multiversId) : this()
         {

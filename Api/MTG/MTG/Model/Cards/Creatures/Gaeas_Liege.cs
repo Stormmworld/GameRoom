@@ -36,7 +36,7 @@ namespace MTG.Model.Cards
             Add(CardType.Creature);
             PowerModifier = Modifier.SubTypeControllerControls;
             ToughnessModifier = Modifier.SubTypeControllerControls;
-            Add(new EffectGenerator(true, typeof(CardSubTypeModificationEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield }), false) { BoundCardId = Id, Card = new Forest() });
+            Add(new EffectGenerator(true, typeof(CardSubTypeModificationEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield }), GamePhase.None) { BoundCardId = Id, Card = new Forest() });
         }
         public Gaeas_Liege(int multiversId) : this()
         {

@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             Name = "Helm of Chatzuk";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new AbilityGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1))  }, typeof(Banding),new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield}), true));
+            Add(new AbilityGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1))  }, typeof(Banding),new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield}), GamePhase.Ending_Cleanup));
         }
         public Helm_of_Chatzuk(int multiversId) : this()
         {

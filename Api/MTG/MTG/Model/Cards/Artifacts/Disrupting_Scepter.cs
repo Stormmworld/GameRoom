@@ -27,7 +27,7 @@ namespace MTG.Model.Cards
             Name = "Disrupting Scepter";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 3)));
             Add(CardType.Artifact);
-            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 3)) }, typeof(DiscardEffect), new TargetRequirements(TargetScope.Single,  TargetType.Player ), false) { EffectValue = 1});
+            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 3)) }, typeof(DiscardEffect), new TargetRequirements(TargetScope.Single,  TargetType.Player ), GamePhase.None) { EffectValue = 1});
         }
         public Disrupting_Scepter(int multiversId) : this()
         {

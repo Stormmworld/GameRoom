@@ -27,7 +27,7 @@ namespace MTG.Model.Cards
             Add(Color.Red);
             Add(SubType.Dwarf);
             Add(CardType.Creature);
-            Add(new EffectGenerator(true, typeof(DestroyEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasSubType= SubType.Wall }),false));
+            Add(new EffectGenerator(true, typeof(DestroyEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasSubType= SubType.Wall }), GamePhase.None));
         }
         public Dwarven_Demolition_Team(int multiversId) : this()
         {

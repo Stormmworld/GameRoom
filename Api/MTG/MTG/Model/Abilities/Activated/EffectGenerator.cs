@@ -20,12 +20,12 @@ namespace MTG.Model.Abilities.Activated
         #endregion
 
         #region Constructors 
-        public EffectGenerator(bool requiresTap, Type effectType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
+        public EffectGenerator(bool requiresTap, Type effectType, ITargetRequirements targetRequirements, GamePhase removeAtPhase) : base(requiresTap, removeAtPhase)
         {
             EffectType = effectType;
             TargetRequirements = targetRequirements;
         }
-        public EffectGenerator(bool requiresTap, List<IManaCost> activationCost, Type effectType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : this( requiresTap,    effectType,  targetRequirements,  removeAtEndOfTurn)
+        public EffectGenerator(bool requiresTap, List<IManaCost> activationCost, Type effectType, ITargetRequirements targetRequirements, GamePhase removeAtPhase) : this( requiresTap,    effectType,  targetRequirements, removeAtPhase)
         {
             EffectType = effectType;
             TargetRequirements = targetRequirements;

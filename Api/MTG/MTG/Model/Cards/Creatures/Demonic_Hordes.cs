@@ -34,7 +34,7 @@ namespace MTG.Model.Cards
             Add(SubType.Demon);
             Add(CardType.Creature);
             Add(new UpkeepManaCost(new List<IManaCost> { new ManaCost(new Mana( Color.Black, 3))}));
-            Add(new EffectGenerator(true, typeof(DestroyEffect),new TargetRequirements(TargetScope.Single,TargetType.Card, new TargetCardRequirements() { HasType= CardType.Land, InZone= TargetZone.Battlefield}), false));
+            Add(new EffectGenerator(true, typeof(DestroyEffect),new TargetRequirements(TargetScope.Single,TargetType.Card, new TargetCardRequirements() { HasType= CardType.Land, InZone= TargetZone.Battlefield}), GamePhase.None));
         }
         public Demonic_Hordes(int multiversId) : this()
         {

@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces.Data_Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces.Data_Interfaces;
 using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
 using System;
@@ -14,12 +15,12 @@ namespace MTG.Model.Abilities.Activated
         #endregion
 
         #region Constructors
-        public AbilityGenerator(bool requiresTap, Type abilityType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
+        public AbilityGenerator(bool requiresTap, Type abilityType, ITargetRequirements targetRequirements, GamePhase removeAtPhase) : base(requiresTap, removeAtPhase)
         {
             AbilityType = abilityType;
             TargetRequirements = targetRequirements;
         }
-        public AbilityGenerator(bool requiresTap, List<IManaCost> activationCost, Type abilityType, ITargetRequirements targetRequirements, bool removeAtEndOfTurn) : this(requiresTap, abilityType, targetRequirements, removeAtEndOfTurn)
+        public AbilityGenerator(bool requiresTap, List<IManaCost> activationCost, Type abilityType, ITargetRequirements targetRequirements, GamePhase removeAtPhase) : this(requiresTap, abilityType, targetRequirements, removeAtPhase)
         {
             Add(activationCost);
         }

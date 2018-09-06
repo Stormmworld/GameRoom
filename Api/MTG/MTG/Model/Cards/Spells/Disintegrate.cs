@@ -32,7 +32,7 @@ namespace MTG.Model.Cards
             TargetRequirements targetRequirements = new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone= TargetZone.Battlefield});
             Add(new CreateEffect(abilityCost, targetRequirements, typeof(DamageEffect), true) { Damage = new Damage(this, Modifier.Assigned) });
             Add(new CreateEffect(targetRequirements, typeof(PreventRegenerationEffect), true));
-            Add(new CreateAbility(targetRequirements, true, new ExileOnEvent(EffectTrigger.Card_Destroyed, true)));
+            Add(new CreateAbility(targetRequirements, true, new ExileOnEvent(EffectTrigger.Card_Destroyed, GamePhase.Ending_Cleanup)));
         }
         public Disintegrate(int multiversId) : this()
         {

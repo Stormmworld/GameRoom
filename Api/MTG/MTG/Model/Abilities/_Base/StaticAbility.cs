@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces.Ability_Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces.Ability_Interfaces;
 
 namespace MTG.Model.Abilities._Base
 {
@@ -8,9 +9,9 @@ namespace MTG.Model.Abilities._Base
         internal StaticAbility()
         {
         }
-        internal StaticAbility(bool removeAtEndOfTurn)
+        internal StaticAbility(GamePhase removeAtPhase)
         {
-            RemoveAtEndOfTurn = removeAtEndOfTurn;
+            RemoveAtPhase = removeAtPhase;
         }
         #endregion
 

@@ -31,9 +31,9 @@ namespace MTG.Model.Cards
             Name = "Icy Manipulator";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 4)));
             Add(CardType.Artifact);
-            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield }), false));
-            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Artifact, InZone = TargetZone.Battlefield }), false));
-            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), false));
+            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Land, InZone = TargetZone.Battlefield }), GamePhase.None));
+            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Artifact, InZone = TargetZone.Battlefield }), GamePhase.None));
+            Add(new EffectGenerator(true, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(TapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), GamePhase.None));
         }
         public Icy_Manipulator(int multiversId) : this()
         {

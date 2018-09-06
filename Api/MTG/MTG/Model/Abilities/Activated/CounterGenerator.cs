@@ -1,4 +1,5 @@
-﻿using MTG.Interfaces.Data_Interfaces;
+﻿using MTG.Enumerations;
+using MTG.Interfaces.Data_Interfaces;
 using MTG.Interfaces.Mana_Interfaces;
 using MTG.Model.Abilities._Base;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace MTG.Model.Abilities.Activated
             Add(activationCost);
             Counter = counter;
         }
-        public CounterGenerator(bool requiresTap, List<IManaCost> activationCost, ICounter counter, bool removeAtEndOfTurn) : base(requiresTap, removeAtEndOfTurn)
+        public CounterGenerator(bool requiresTap, List<IManaCost> activationCost, ICounter counter, GamePhase removeAtPhase) : base(requiresTap, removeAtPhase)
         {
             Add(activationCost);
             Counter = counter;

@@ -30,7 +30,7 @@ namespace MTG.Model.Cards
             Add(Color.White);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.White, 2)) }, typeof(GainLifeEffect), new TargetRequirements(TargetScope.Controller, TargetType.Player), false) { RestrictedPhase = GamePhase.Beginning_Upkeep});
+            Add(new EffectGenerator(false,new List<IManaCost>() { new ManaCost(new Mana(Color.White, 2)) }, typeof(GainLifeEffect), new TargetRequirements(TargetScope.Controller, TargetType.Player), GamePhase.None) { RestrictedPhase = GamePhase.Beginning_Upkeep});
         }
         public Farmstead(int multiversId) : this()
         {

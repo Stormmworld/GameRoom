@@ -1,4 +1,5 @@
-﻿using MTG.Model.Abilities._Base;
+﻿using MTG.Enumerations;
+using MTG.Model.Abilities._Base;
 
 namespace MTG.Model.Abilities.Static
 {
@@ -8,9 +9,8 @@ namespace MTG.Model.Abilities.Static
         internal Trample():base()
         {
         }
-        internal Trample(bool removeAtEndOfTurn):base(removeAtEndOfTurn)
+        internal Trample(GamePhase removeAtPhase) :base(removeAtPhase)
         {
-            RemoveAtEndOfTurn = removeAtEndOfTurn;
         }
         #endregion
     }

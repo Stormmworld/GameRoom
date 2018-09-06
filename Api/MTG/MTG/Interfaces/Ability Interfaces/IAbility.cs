@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MTG.Enumerations;
+using System;
 
 namespace MTG.Interfaces.Ability_Interfaces
 {
@@ -11,7 +12,7 @@ namespace MTG.Interfaces.Ability_Interfaces
         #region Properties
         Guid Id { get; }
         Guid BoundCardId { get; }
-        bool RemoveAtEndOfTurn { get; }
+        GamePhase RemoveAtPhase { get; }
         #endregion
 
         #region Methods

@@ -24,7 +24,7 @@ namespace MTG.Model.Cards
             Name = "Glasses of Urza";
             CastingCost.Add(new ManaCost(new Mana(Color.Colorless, 1)));
             Add(CardType.Artifact);
-            Add(new EffectGenerator(true, typeof(ViewHandEffect), new TargetRequirements( TargetScope.Single, TargetType.Player), true));
+            Add(new EffectGenerator(true, typeof(ViewHandEffect), new TargetRequirements( TargetScope.Single, TargetType.Player), GamePhase.Ending_Cleanup));
         }
         public Glasses_of_Urza(int multiversId) : this()
         {

@@ -17,7 +17,7 @@ namespace MTG.Model.Abilities.Triggered
             EventCardId = eventCardId;
             GameEvent = gameEvent;
         }
-        public DestroyOnEvent(EffectTrigger trigger, GameEvent gameEvent, Guid eventCardId, bool removeAtEndOfTurn) : base(trigger, removeAtEndOfTurn)
+        public DestroyOnEvent(EffectTrigger trigger, GameEvent gameEvent, Guid eventCardId, GamePhase removeAtPhase) : base(trigger, removeAtPhase)
         {
             EventCardId = eventCardId;
             GameEvent = gameEvent;

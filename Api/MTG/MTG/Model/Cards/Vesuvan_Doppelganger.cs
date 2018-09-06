@@ -25,7 +25,6 @@ namespace MTG.Model.Cards
         * 2007-09-16: Vesuvan Doppelganger's triggered ability may cause it to become a copy of itself. A Vesuvan Doppelganger that becomes a copy of a Vesuvan Doppelganger (either itself or a different one) will gain another instance of its triggered ability. Each instance of that ability will trigger during its controller's upkeep. They'll all be put on the stack and resolve one at a time. The last one to resolve determines the Doppelganger's characteristics for the rest of the turn.
         * 2007-09-16: Vesuvan Doppelganger copies a face-down creature, it becomes a face-up 2/2 blue creature with no name and no abilities other than the one it gives itself.
         * 2007-09-16: Although Vesuvan Doppelganger's triggered ability is targeted, its "as enters the battlefield" ability is not.
-
         *
         */
         public Vesuvan_Doppelganger() : base()
