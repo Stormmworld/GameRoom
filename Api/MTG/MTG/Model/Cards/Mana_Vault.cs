@@ -11,12 +11,11 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=30
         *  
         *  Mana Vault doesn't untap during your untap step.
-At the beginning of your upkeep, you may pay {4}. If you do, untap Mana Vault.
-At the beginning of your draw step, if Mana Vault is tapped, it deals 1 damage to you.
-{T}: Add {C}{C}{C} to your mana pool.
+        *  At the beginning of your upkeep, you may pay {4}. If you do, untap Mana Vault.
+        *  At the beginning of your draw step, if Mana Vault is tapped, it deals 1 damage to you.
+        *  {T}: Add {C}{C}{C} to your mana pool.
         *  
         * Rulings
-
         *
         */
         public Mana_Vault() : base()

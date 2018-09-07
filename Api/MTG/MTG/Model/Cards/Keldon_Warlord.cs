@@ -14,7 +14,6 @@ namespace MTG.Model.Cards
         *  
         * Rulings
         * 2008-08-01: This is a Characteristic-Defining Ability. It checks the number of non-Wall creatures you control continuously, and applies in all zones. It is never "locked in".
-
         *
         */
         public Keldon_Warlord() : base()
