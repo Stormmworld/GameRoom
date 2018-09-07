@@ -21,7 +21,6 @@ namespace MTG.Model.Cards._Base
         #endregion
 
         #region Properties
-        public virtual SubType SubtypeModifier { get; internal set; }
         public virtual int Power
         {
             get
@@ -32,10 +31,10 @@ namespace MTG.Model.Cards._Base
                 switch (ToughnessModifier)
                 {
                     case Modifier.SubTypeControllerControls:
-                        retVal += Controller.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        retVal += Controller.BattleField.Find(o => o.SubTypes.Contains(SubtypeModifier)).Count;
                         break;
                     case Modifier.SubTypeDefenderControls:
-                        retVal += DefendingPlayer.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        retVal += DefendingPlayer.BattleField.Find(o => o.SubTypes.Contains(SubtypeModifier)).Count;
                         break;
                     default:
                         break;
@@ -45,6 +44,8 @@ namespace MTG.Model.Cards._Base
         }
         public virtual Modifier PowerModifier { get; internal set; }
         public Player DefendingPlayer { get; internal set; }
+        public virtual SubType SubtypeModifier { get; internal set; }
+        public virtual CardType TypeModifier { get; internal set; }
         public virtual int Toughness
         {
             get
@@ -55,10 +56,10 @@ namespace MTG.Model.Cards._Base
                 switch (ToughnessModifier)
                 {
                     case Modifier.SubTypeControllerControls:
-                        retVal += Controller.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        retVal += Controller.BattleField.Find(o => o.SubTypes.Contains(SubtypeModifier)).Count;
                         break;
                     case Modifier.SubTypeDefenderControls:
-                        retVal += DefendingPlayer.BattleField.FilteredCards(o => o.SubTypes.Contains(SubtypeModifier)).Count;
+                        retVal += DefendingPlayer.BattleField.Find(o => o.SubTypes.Contains(SubtypeModifier)).Count;
                         break;
                     default:
                         break;

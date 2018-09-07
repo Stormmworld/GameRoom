@@ -26,7 +26,7 @@ namespace MTG.Model.Cards
             Add(Color.Black);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-            Add(new CounterGenerator(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Single, TargetType.Creature), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp){ OwningCardId = Id}));
+            Add(new CounterGenerator(EffectTrigger.LandEntersBattlefield, new TargetRequirements(TargetScope.Single, TargetType.Card), new PlusXPlusY(Incrementer.Half_ControlledForests_RoundedDown, Incrementer.Half_ControlledForests_RoundedUp){ OwningCardId = Id}));
         }
         public Weakness(int multiversId) : this()
         {

@@ -7,6 +7,7 @@ namespace MTG.Model.Effects._Base
     public class Effect : IEffect
     {
         #region Properties
+        public Guid BoundCardId { get; internal set; }
         public Guid Id { get; private set; }
         public ITarget Target { get; private set; }
         public int XValue { get; private set; }

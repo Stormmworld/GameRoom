@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Card Tests\Card_Test_Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ability Tests\" />
-    <Folder Include="Card Tests\" />
     <Folder Include="Game Tests\" />
     <Folder Include="Helpers\" />
     <Folder Include="Mockers\" />

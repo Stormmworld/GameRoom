@@ -30,9 +30,9 @@ namespace MTG.Model.Cards
             CastingCost.Add(new ManaCost(new Mana(Color.Green, 1)));
             Add(Color.Green);
             Add(CardType.Instant);
-            Add(new CreateCounter(new CastingCost(), new TargetRequirements(TargetScope.Single, TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new PlusXPlusY(Incrementer.CurrentPower, Incrementer.None)) { RemoveAtPhase = GamePhase.Ending_Cleanup });
-            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new Trample(GamePhase.Ending_Cleanup)));
-            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new DestroyOnEvent(EffectTrigger.Phases_CombatPhase_EndStep, GameEvent.Creature_Attacked, Id, GamePhase.Ending_Cleanup)));
+            Add(new CreateCounter(new CastingCost(), new TargetRequirements(TargetScope.Single, TargetType.Card , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new PlusXPlusY(Incrementer.CurrentPower, Incrementer.None)) { RemoveAtPhase = GamePhase.Ending_Cleanup });
+            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new Trample(GamePhase.Ending_Cleanup)));
+            Add(new CreateAbility(new CastingCost(), new TargetRequirements(TargetScope.Single,  TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), true, new DestroyOnEvent(EffectTrigger.Phases_CombatPhase_EndStep, GameEvent.Creature_Attacked, Id, GamePhase.Ending_Cleanup)));
          }
         public Berserk(int multiversId) : this()
         {

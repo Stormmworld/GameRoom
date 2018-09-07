@@ -8,6 +8,8 @@ namespace MTG.Model.Abilities.Triggered
         #region Properties
         public TargetZone OriginZone { get; private set; }
         public TargetZone TargetZone { get; private set; }
+        public bool Optional { get; private set; }
+        public InsertLocation InsertLocation { get; internal set; }
         #endregion
 
         #region Constructors
@@ -18,6 +20,10 @@ namespace MTG.Model.Abilities.Triggered
         public MoveToZone(EffectTrigger trigger, TargetZone targetZone, TargetZone originZone) : this(trigger, targetZone)
         {
             OriginZone = originZone;
+        }
+        public MoveToZone(EffectTrigger trigger, TargetZone targetZone, TargetZone originZone, bool optional) : this(trigger, targetZone, originZone)
+        {
+            Optional = optional;
         }
         #endregion
 

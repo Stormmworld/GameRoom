@@ -139,6 +139,8 @@ namespace MTG.Enumerations
         Card_Untapped,
         Card_Tapped,
         Land_EntersGraveYard,
+        Player_Discard,
+        EnchantedCard_Destroyed,
     }
     public enum GameEvent {
         None,
@@ -182,6 +184,7 @@ namespace MTG.Enumerations
     {
         None,
         Bottom,
+        Random,
         Top,
     }
     public enum ManaRestriction
@@ -204,6 +207,8 @@ namespace MTG.Enumerations
         Toughness,
         SubTypeDefenderControls,
         SubTypeControllerControls,
+        Controlled_Swamp,
+        TypeControllerControls,
     }
     public enum SacrificeType
     {
@@ -560,17 +565,13 @@ namespace MTG.Enumerations
         Self,
         Controller,
         ActivePlayer,
+        Owner,
     }
     public enum TargetType
     {
         None,
-        Artifact,
         Card,
-        Creature,
-        Land,
-        Permanent,
         Player,
-        Planeswalker,
         EnchantedController,
         EnchantedCard,
     }

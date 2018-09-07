@@ -89,10 +89,10 @@ namespace MTG.Interfaces.Game_Interfaces
         #region Methods
         void Add(ICard card);
         void Add(List<ICard> cards);
-        List<ICard> FilteredCards(Predicate<ICard> predicate);
-        List<ICard> FilteredCards(Predicate<ICreature> predicate);
-        List<ICard> FilteredCards(Predicate<ISpell> predicate);
-        List<ICard> FilteredCards(Predicate<IPermanent> predicate);
+        List<ICard> Find(Predicate<ICard> predicate);
+        List<ICard> Find(Predicate<ICreature> predicate);
+        List<ICard> Find(Predicate<ISpell> predicate);
+        List<ICard> Find(Predicate<IPermanent> predicate);
         void Remove(Guid cardId);
         #endregion
     }

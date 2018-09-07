@@ -14,7 +14,6 @@ namespace MTG.Model.Cards
         *  
         * Rulings
         * 2004-10-04: The land is untapped as a normal ability that goes on the stack. It is not a mana ability, so it can't be used at times that only mana abilities can be used.
-
         *
         */
         public Ley_Druid() : base()

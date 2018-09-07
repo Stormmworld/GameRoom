@@ -38,19 +38,19 @@ namespace MTG.Model.Zones._Base
         {
             throw new NotImplementedException();
         }
-        public List<ICard> FilteredCards(Predicate<ICard> predicate)
+        public List<ICard> Find(Predicate<ICard> predicate)
         {
             throw new NotImplementedException();
         }
-        public List<ICard> FilteredCards(Predicate<ICreature> predicate)
+        public List<ICard> Find(Predicate<ICreature> predicate)
         {
             throw new NotImplementedException();
         }
-        public List<ICard> FilteredCards(Predicate<ISpell> predicate)
+        public List<ICard> Find(Predicate<ISpell> predicate)
         {
             throw new NotImplementedException();
         }
-        public List<ICard> FilteredCards(Predicate<IPermanent> predicate)
+        public List<ICard> Find(Predicate<IPermanent> predicate)
         {
             throw new NotImplementedException();
         }

@@ -29,7 +29,7 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.White, 1)));
             Add(Color.White);
             Add(CardType.Instant);
-            Add(new CreateAbility(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Creature , new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), false, new BlocksMultipleAttackers(int.MaxValue)));
+            Add(new CreateAbility(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield }), false, new BlocksMultipleAttackers(int.MaxValue)));
         }
         public Blaze_of_Glory(int multiversId) : this()
         {

@@ -1,4 +1,5 @@
 ﻿using MTG.Enumerations;
+using MTG.Interfaces.Data_Interfaces;
 using MTG.Model.Abilities._Base;
 using System;
 
@@ -9,6 +10,7 @@ namespace MTG.Model.Abilities.Triggered
         #region Properties
         public Guid EventCardId { get; private set; }
         public GameEvent GameEvent { get; private set;}
+        public ITargetRequirements TargetRequirements { get; private set; }
         #endregion
 
         #region Constructors
@@ -21,6 +23,10 @@ namespace MTG.Model.Abilities.Triggered
         {
             EventCardId = eventCardId;
             GameEvent = gameEvent;
+        }
+        public DestroyOnEvent(EffectTrigger trigger, ITargetRequirements targetRequirements) : base(trigger)
+        {
+            TargetRequirements = targetRequirements;
         }
         #endregion
     }

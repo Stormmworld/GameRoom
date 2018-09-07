@@ -10,6 +10,7 @@ namespace MTG.Model.Abilities.Triggered
         #region Properties
         public ITargetRequirements TargetRequirements { get; private set; }
         public IDamage Damage { get; private set; }
+        public TargetScope UpkeepScope { get; private set; }
         #endregion
 
         #region Constructors
@@ -17,6 +18,11 @@ namespace MTG.Model.Abilities.Triggered
         {
             Damage = damage;
             TargetRequirements = targetRequirements;
+            UpkeepScope = TargetScope.Controller;
+        }
+        public UpkeepDamage(ITargetRequirements targetRequirements, IDamage damage, TargetScope upkeepScope) : this(targetRequirements, damage)
+        {
+            UpkeepScope = upkeepScope;
         }
         #endregion
 
