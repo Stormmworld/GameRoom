@@ -1,7 +1,9 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Casting;
+using MTG.Model.Data_Objects;
+using MTG.Model.Effects;
 
 namespace MTG.Model.Cards
 {
@@ -24,9 +26,9 @@ namespace MTG.Model.Cards
             abilityCost.Add(new ManaCost(new Mana(Color.Red, 1)));
             Add(Color.Red);
             Add(CardType.Instant);
-
-            throw new NotImplementedException("Lightning Bolt");
-        }
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Player), typeof(DamageEffect), false) { Damage = new Damage(this, 3) });
+            Add(new CreateEffect(abilityCost, new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType= CardType.Creature, InZone= TargetZone.Battlefield}), typeof(DamageEffect), false) { Damage = new Damage(this, 3) });
+       }
         public Lightning_Bolt(int multiversId) : this()
         {
             MultiverseId = multiversId;

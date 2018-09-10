@@ -1,7 +1,11 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Activated;
+using MTG.Interfaces.Mana_Interfaces;
+using System.Collections.Generic;
+using MTG.Model.Effects;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
@@ -11,10 +15,9 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=29
         *  
         *  Defender (This creature can't attack.)
-{1}: Regenerate Living Wall.
+        *  {1}: Regenerate Living Wall.
         *  
         * Rulings
-
         *
         */
         public Living_Wall() : base()
@@ -26,8 +29,7 @@ namespace MTG.Model.Cards
             Add(SubType.Wall);
             Add(CardType.Artifact);
             Add(CardType.Creature);
-
-            throw new NotImplementedException("Living Wall");
+            Add(new EffectGenerator(false, new List<IManaCost>() { new ManaCost(new Mana(Color.Colorless, 1)) }, typeof(RegenerationEffect), new TargetRequirements(TargetScope.Self, TargetType.None), GamePhase.None));
         }
         public Living_Wall(int multiversId) : this()
         {

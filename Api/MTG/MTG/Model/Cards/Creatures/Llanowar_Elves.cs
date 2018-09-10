@@ -1,7 +1,8 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Activated;
+using System.Collections.Generic;
 
 namespace MTG.Model.Cards
 {
@@ -13,7 +14,6 @@ namespace MTG.Model.Cards
         *  {T}: Add {G} to your mana pool.
         *  
         * Rulings
-
         *
         */
         public Llanowar_Elves() : base()
@@ -26,8 +26,7 @@ namespace MTG.Model.Cards
             Add(SubType.Elf);
             Add(SubType.Druid);
             Add(CardType.Creature);
-
-            throw new NotImplementedException("Llanowar Elves");
+            Add(new ManaSource(true, new List<Mana>() { new Mana(Color.Green, 1) }));
         }
         public Llanowar_Elves(int multiversId) : this()
         {

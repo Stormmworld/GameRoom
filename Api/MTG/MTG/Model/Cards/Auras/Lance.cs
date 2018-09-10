@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
 using MTG.Model.Data_Objects;
+using MTG.Model.Abilities.Triggered;
+using MTG.Model.Abilities.Static;
 
 namespace MTG.Model.Cards
 {
@@ -13,13 +13,13 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=258
         *  
         *  Enchant creature
-Enchanted creature has first strike.
+        *  Enchanted creature has first strike.
         *  
         * Rulings
 
         *
         */
-        public Lance() :  base(new TargetCardRequirements() { })
+        public Lance() : base(new TargetCardRequirements() { HasType = CardType.Creature, InZone = TargetZone.Battlefield });
         {
             MultiverseId = 258;
             Name = "Lance";
@@ -27,8 +27,7 @@ Enchanted creature has first strike.
             Add(Color.White);
             Add(SubType.Aura);
             Add(CardType.Enchantment);
-
-            throw new NotImplementedException("Lance");
+            Add(new AddAbility(EffectTrigger.Aura_Attached, new First_Strike() { BoundCardId = Id}));
         }
         public Lance(int multiversId) : this()
         {

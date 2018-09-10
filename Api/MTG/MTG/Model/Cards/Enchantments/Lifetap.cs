@@ -1,7 +1,9 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Triggered;
+using MTG.Model.Effects;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
@@ -22,12 +24,11 @@ namespace MTG.Model.Cards
         {
             MultiverseId = 109;
             Name = "Lifetap";
-            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
-            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1)));;
+            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1))); ;
+            CastingCost.Add(new ManaCost(new Mana(Color.Blue, 1))); ;
             Add(Color.Blue);
             Add(CardType.Enchantment);
-
-            throw new NotImplementedException("Lifetap");
+            Add(new EffectGeneratorTriggered(EffectTrigger.Opponent_Taps_Forest, new TargetRequirements(TargetScope.Controller, TargetType.Player), typeof(GainLifeEffect)) { AmountType = AmountType.Defined, Value = 1 });
         }
         public Lifetap(int multiversId) : this()
         {

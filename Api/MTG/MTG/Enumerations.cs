@@ -141,6 +141,7 @@ namespace MTG.Enumerations
         Land_EntersGraveYard,
         Player_Discard,
         EnchantedCard_Destroyed,
+        Opponent_Taps_Forest,
     }
     public enum GameEvent {
         None,

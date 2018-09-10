@@ -1,7 +1,9 @@
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
-using System;
+using MTG.Model.Abilities.Activated;
+using MTG.Model.Effects;
+using MTG.Model.Data_Objects;
 
 namespace MTG.Model.Cards
 {
@@ -27,8 +29,7 @@ namespace MTG.Model.Cards
             Add(SubType.Human);
             Add(SubType.Druid);
             Add(CardType.Creature);
-
-            throw new NotImplementedException("Ley Druid");
+            Add(new EffectGenerator(true, typeof(UntapEffect), new TargetRequirements(TargetScope.Single, TargetType.Card, new TargetCardRequirements() { HasType = CardType.Land, InZone= TargetZone.Battlefield}), GamePhase.None));
         }
         public Ley_Druid(int multiversId) : this()
         {
