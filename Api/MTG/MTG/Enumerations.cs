@@ -142,6 +142,7 @@ namespace MTG.Enumerations
         Player_Discard,
         EnchantedCard_Destroyed,
         Opponent_Taps_Forest,
+        ControllerDamaged,
     }
     public enum GameEvent {
         None,

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MTG.Enumerations;
 using MTG.Model.Mana_Objects;
 using MTG.Model.Cards._Base;
@@ -13,9 +12,9 @@ namespace MTG.Model.Cards
         * http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=75
         *  
         *  Enchant creature
-When Paralyze enters the battlefield, tap enchanted creature.
-Enchanted creature doesn't untap during its controller's untap step.
-At the beginning of the upkeep of enchanted creature's controller, that player may pay {4}. If he or she does, untap the creature.
+        *  When Paralyze enters the battlefield, tap enchanted creature.
+        *  Enchanted creature doesn't untap during its controller's untap step.
+        *  At the beginning of the upkeep of enchanted creature's controller, that player may pay {4}. If he or she does, untap the creature.
         *  
         * Rulings
         * 2004-10-04: Paying the cost is optional.
@@ -26,7 +25,7 @@ At the beginning of the upkeep of enchanted creature's controller, that player m
 
         *
         */
-        public Paralyze() :  base(new TargetCardRequirements() { })
+        public Paralyze() :  base(new TargetCardRequirements() { HasType= CardType.Creature })
         {
             MultiverseId = 75;
             Name = "Paralyze";
