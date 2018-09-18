@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MTG.Interfaces.Card_Interfaces;
 using MTG.Interfaces.Game_Interfaces;
 
@@ -33,7 +34,6 @@ namespace MTG.Model.Zones._Base
         {
             throw new NotImplementedException();
         }
-
         public void Add(List<ICard> cards)
         {
             throw new NotImplementedException();
